@@ -7,6 +7,9 @@
         mc:Ignorable="d"
         WindowState="Maximized"
         Title="Магистраль" Height="450" Width="800">
+    <Window.Background>
+        <ImageBrush ImageSource="pack://application:,,,/Resources/background.jpg" Stretch="None" />
+    </Window.Background>
     <Grid>
         
     </Grid>
