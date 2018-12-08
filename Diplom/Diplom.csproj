@@ -55,6 +55,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\StationControl.xaml.cs">
+      <DependentUpon>StationControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WorkWindow.xaml.cs">
       <DependentUpon>WorkWindow.xaml</DependentUpon>
     </Compile>
@@ -70,6 +73,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Models\StationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="WorkWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -121,6 +128,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\Network.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Canvas\pdh_manager.png" />
+    <Resource Include="Resources\Canvas\pdh_relay.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
