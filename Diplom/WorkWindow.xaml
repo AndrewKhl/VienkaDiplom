@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Diplom"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterOwner"
+        WindowStartupLocation="CenterScreen"
         Title="Магистраль" Height="800" Width="1200">
     <Grid Name="main_grid">
         <Grid.RowDefinitions>
@@ -237,7 +237,7 @@
                 <ComboBoxItem>10%</ComboBoxItem>
             </ComboBox>
             <Menu Width="{Binding ElementName=main_grid, Path=ActualWidth}" >
-                <MenuItem Width="25" Height="25">
+                <MenuItem Width="25" Height="25" Click="CreateNetwork_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Network.png"/>
                     </MenuItem.Icon>

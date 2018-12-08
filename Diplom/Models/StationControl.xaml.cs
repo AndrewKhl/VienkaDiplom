@@ -28,14 +28,6 @@ namespace Diplom.Models
             image.Source = new BitmapImage(ImageUri);
         }
 
-        //public StationControl(StationControl sc)
-        //{
-        //image = sc.image;
-        //circleUI.Height = sc.circleUI.Height;
-        //circleUI.Width = sc.circleUI.Height;
-        //circleUI.Fill = sc.circleUI.Fill;
-        //}
-
         protected override void OnMouseMove(MouseEventArgs e)
         {
             base.OnMouseMove(e);
