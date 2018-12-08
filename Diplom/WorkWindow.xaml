@@ -7,8 +7,15 @@
         mc:Ignorable="d"
         WindowState="Maximized"
         Title="Магистраль" Height="450" Width="800">
+    <Window.Background>
+        <ImageBrush ImageSource="pack://application:,,,/Resources/background.jpg" Stretch="None" />
+    </Window.Background>
     <Grid>
-        <Menu Height="25" VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Menu Height="25" VerticalAlignment="Top" Grid.Row="0">
             <MenuItem Header="Файл">
                 <MenuItem Header="Создать"></MenuItem>
                 <MenuItem Header="Открыть"></MenuItem>
