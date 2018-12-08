@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         Title="Магистраль" Height="800" Width="1200">
-    <Grid>
+    <Grid Name="main_grid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -43,41 +43,136 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Правка">
-                <MenuItem Header="Создать сеть"></MenuItem>
-                <MenuItem Header="Создать станцию"></MenuItem>
-                <MenuItem Header="Создать менеджера"></MenuItem>
-                <MenuItem Header="Удалить объект"></MenuItem>
+                <MenuItem Header="Создать сеть">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Network.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Создать станцию">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/NewStation.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Создать менеджера">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/NewManager.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Удалить объект">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="Управление">
                 <MenuItem Header="Макросы">
-                    <MenuItem Header="Начать запись"></MenuItem>
-                    <MenuItem Header="Закончить запись"></MenuItem>
-                    <MenuItem Header="Выполнить"></MenuItem>
-                    <MenuItem Header="Редактировать макрос"></MenuItem>
+                    <MenuItem Header="Начать запись">
+                        <MenuItem.Icon>
+                            <Image Source="pack://application:,,,/Resources/Icons/Start.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Закончить запись">
+                        <MenuItem.Icon>
+                            <Image Source="pack://application:,,,/Resources/Icons/Stop.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Выполнить">
+                        <MenuItem.Icon>
+                            <Image Source="pack://application:,,,/Resources/Icons/Run.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Редактировать макрос">
+                        <MenuItem.Icon>
+                            <Image Source="pack://application:,,,/Resources/Icons/EditMacros.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
                 <MenuItem Header="Сеансы"></MenuItem>
                 <MenuItem Header="Свойства сети"></MenuItem>
-                <MenuItem Header="Свойства объекта"></MenuItem>
-                <MenuItem Header="Параметры"></MenuItem>
-                <MenuItem Header="Маршрутизация"></MenuItem>
-                <MenuItem Header="Пользователи"></MenuItem>
-                <MenuItem Header="Обновить ПО на станции..."></MenuItem>
-                <MenuItem Header="Подключиться к удалённой сети"></MenuItem>
-                <MenuItem Header="Коммутация">
-                    <MenuItem Header="Управление потоками E1 и Enthernet (МД1-1Р)"></MenuItem>
-                    <MenuItem Header="Управление потоками E1 (МД-ДК-1, Мультиплексоры SDH)"></MenuItem>
+                <MenuItem Header="Свойства объекта">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/CustomFile.png"/>
+                    </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Настройка"></MenuItem>
+                <MenuItem Header="Параметры">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Params.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Маршрутизация">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Marsh.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Пользователи">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Users.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Обновить ПО на станции...">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/UpdatePO.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Подключиться к удалённой сети">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/ConnectToRemoteNetwork.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Коммутация">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Commutation.png"/>
+                    </MenuItem.Icon>
+                    <MenuItem Header="Управление потоками E1 и Enthernet (МД1-1Р)">
+                        <MenuItem.Icon>
+                            <Image Source="pack://application:,,,/Resources/Icons/Thread1.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Управление потоками E1 (МД-ДК-1, Мультиплексоры SDH)">
+                        <MenuItem.Icon>
+                            <Image Source="pack://application:,,,/Resources/Icons/Thread2.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="Настройка">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Settings.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="Данные">
-                <MenuItem Header="События системы"></MenuItem>
-                <MenuItem Header="Просмотр базы данных"></MenuItem>
-                <MenuItem Header="Открыть историю мониторинга"></MenuItem>
-                <MenuItem Header="Сводные параметры"></MenuItem>
+                <MenuItem Header="События системы">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/ShowEvents.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Просмотр базы данных">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/dbevent.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Открыть историю мониторинга">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/OpenMonitoringHistory.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Сводные параметры">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/ShowParams.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="Справка">
-                <MenuItem Header="Помощь"></MenuItem>
-                <MenuItem Header="О программе..."></MenuItem>
+                <MenuItem Header="Помощь">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Help.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="О программе...">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Information.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
         </Menu>
 
@@ -87,24 +182,49 @@
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/AddFile.png"/>
                     </MenuItem.Icon>
+                    <MenuItem.ToolTip>
+                        <ToolTip>
+                            Создать новую карту
+                        </ToolTip>
+                    </MenuItem.ToolTip>
                 </MenuItem>
                 <MenuItem Width="25">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/FolderOpen.png"/>
                     </MenuItem.Icon>
+                    <MenuItem.ToolTip>
+                        <ToolTip>
+                            Открыть
+                        </ToolTip>
+                    </MenuItem.ToolTip>
                 </MenuItem>
                 <MenuItem Width="25">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Save.bmp"/>
                     </MenuItem.Icon>
+                    <MenuItem.ToolTip>
+                        <ToolTip>
+                            Сохранить
+                        </ToolTip>
+                    </MenuItem.ToolTip>
                 </MenuItem>
                 <MenuItem Width="25">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/SaveAll.png"/>
                     </MenuItem.Icon>
+                    <MenuItem.ToolTip>
+                        <ToolTip>
+                            Созранить под новым именем
+                        </ToolTip>
+                    </MenuItem.ToolTip>
                 </MenuItem>
             </Menu>
-            <ComboBox Width="60" Grid.Row="1" SelectedIndex="0">
+            <ComboBox Width="60" Grid.Row="1" SelectedIndex="0" Height="25">
+                <ComboBox.ToolTip>
+                    <ToolTip>
+                        Масштаб отображения карты
+                    </ToolTip>
+                </ComboBox.ToolTip>
                 <ComboBoxItem>100%</ComboBoxItem>
                 <ComboBoxItem>90%</ComboBoxItem>
                 <ComboBoxItem>80%</ComboBoxItem>
@@ -116,21 +236,98 @@
                 <ComboBoxItem>20%</ComboBoxItem>
                 <ComboBoxItem>10%</ComboBoxItem>
             </ComboBox>
-            <Menu>
-                <MenuItem Width="25" Click="CreateNetwork_Click">
+            <Menu Width="{Binding ElementName=main_grid, Path=ActualWidth}" >
+                <MenuItem Width="25" Height="25">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Network.png"/>
                     </MenuItem.Icon>
+                    <MenuItem.ToolTip>
+                        <ToolTip>
+                            Создать сеть
+                        </ToolTip>
+                    </MenuItem.ToolTip>
                 </MenuItem>
-                <MenuItem Header="von"></MenuItem>
-                <MenuItem Header="von"></MenuItem>
-                <MenuItem Header="von"></MenuItem>
-                <MenuItem Header="von"></MenuItem>
-                <Separator/>
-                <MenuItem Header="von"></MenuItem>
-                <MenuItem Header="von"></MenuItem>
-                <MenuItem Header="von"></MenuItem>
-                <MenuItem Header="von"></MenuItem>
+                <MenuItem Width="25">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/NewStation.png"/>
+                    </MenuItem.Icon>
+                    <MenuItem.ToolTip>
+                        <ToolTip>
+                            Создать станцию
+                        </ToolTip>
+                    </MenuItem.ToolTip>
+                </MenuItem>
+                <MenuItem Width="25">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/NewManager.png"/>
+                    </MenuItem.Icon>
+                    <MenuItem.ToolTip>
+                        <ToolTip>
+                            Создать новую менеджера
+                        </ToolTip>
+                    </MenuItem.ToolTip>
+                </MenuItem>
+                <MenuItem Width="25">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
+                    </MenuItem.Icon>
+                    <MenuItem.ToolTip>
+                        <ToolTip>
+                            Удалить объект
+                        </ToolTip>
+                    </MenuItem.ToolTip>
+                </MenuItem>
+
+                <MenuItem Width="25">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/CustomFile.png"/>
+                    </MenuItem.Icon>
+                    <MenuItem.ToolTip>
+                        <ToolTip>
+                            Просмотреть свойства объекта
+                        </ToolTip>
+                    </MenuItem.ToolTip>
+                </MenuItem>
+                <MenuItem Width="25">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Params.png"/>
+                    </MenuItem.Icon>
+                    <MenuItem.ToolTip>
+                        <ToolTip>
+                            Открыть окно параметров
+                        </ToolTip>
+                    </MenuItem.ToolTip>
+                </MenuItem>
+                <MenuItem Width="25">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/DBevent.png"/>
+                    </MenuItem.Icon>
+                    <MenuItem.ToolTip>
+                        <ToolTip>
+                            Посмотреть данные и события в БД
+                        </ToolTip>
+                    </MenuItem.ToolTip>
+                </MenuItem>
+                <MenuItem Width="25">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/ShowEvents.png"/>
+                    </MenuItem.Icon>
+                    <MenuItem.ToolTip>
+                        <ToolTip>
+                            Посмотреть события
+                        </ToolTip>
+                    </MenuItem.ToolTip>
+                </MenuItem>
+                <MenuItem Width="25">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Settings.png"/>
+                    </MenuItem.Icon>
+                    <MenuItem.ToolTip>
+                        <ToolTip>
+                            Настройки
+                        </ToolTip>
+                    </MenuItem.ToolTip>
+                </MenuItem>
             </Menu>
         </StackPanel>
         <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">

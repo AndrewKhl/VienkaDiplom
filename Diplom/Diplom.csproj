@@ -132,6 +132,31 @@
   <ItemGroup>
     <Resource Include="Resources\Canvas\pdh_manager.png" />
     <Resource Include="Resources\Canvas\pdh_relay.png" />
+    <Resource Include="Resources\Icons\Commutation.png" />
+    <Resource Include="Resources\Icons\ConnectToRemoteNetwork.png" />
+    <Resource Include="Resources\Icons\CustomFile.png" />
+    <Resource Include="Resources\Icons\DBevent.png" />
+    <Resource Include="Resources\Icons\Help.png" />
+    <Resource Include="Resources\Icons\Information.png" />
+    <Resource Include="Resources\Icons\Marsh.png" />
+    <Resource Include="Resources\Icons\NewManager.png" />
+    <Resource Include="Resources\Icons\NewStation.png" />
+    <Resource Include="Resources\Icons\OpenMonitoringHistory.png" />
+    <Resource Include="Resources\Icons\Params.png" />
+    <Resource Include="Resources\Icons\Removed.png" />
+    <Resource Include="Resources\Icons\Settings.png" />
+    <Resource Include="Resources\Icons\ShowEvents.png" />
+    <Resource Include="Resources\Icons\ShowParams.png" />
+    <Resource Include="Resources\Icons\UpdatePO.png" />
+    <Resource Include="Resources\Icons\Users.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\EditMacros.png" />
+    <Resource Include="Resources\Icons\Run.png" />
+    <Resource Include="Resources\Icons\Start.png" />
+    <Resource Include="Resources\Icons\Stop.png" />
+    <Resource Include="Resources\Icons\Thread1.png" />
+    <Resource Include="Resources\Icons\Thread2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
