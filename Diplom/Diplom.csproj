@@ -55,6 +55,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Models\Focusable.cs" />
+    <Compile Include="Models\ManagerControl.xaml.cs">
+      <DependentUpon>ManagerControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\StationControl.xaml.cs">
       <DependentUpon>StationControl.xaml</DependentUpon>
     </Compile>
@@ -73,6 +77,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Models\ManagerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Models\StationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

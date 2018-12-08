@@ -8,6 +8,9 @@
         WindowStartupLocation="CenterScreen"
         Title="Магистраль" Height="800" Width="1200">
     <Grid Name="main_grid">
+        <Grid.Background>
+            <SolidColorBrush Color="Gray" />
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>

@@ -8,13 +8,13 @@ using System.Windows.Media.Imaging;
 namespace Diplom.Models
 {
     /// <summary>
-    /// Interaction logic for StationControl.xaml
+    /// Interaction logic for ManagerControl.xaml
     /// </summary>
-    public partial class StationControl : UserControl, Focusable
+    public partial class ManagerControl : UserControl, Focusable
     {
-        static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_relay.png");
+        static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_manager.png");
 
-        public StationControl()
+        public ManagerControl()
         {
             InitializeComponent();
             image.Source = new BitmapImage(ImageUri);
@@ -32,7 +32,7 @@ namespace Diplom.Models
         public void SetFocusBorder()
         {
             BorderBrush = new SolidColorBrush(Colors.White);
-            FocusedElement.Invoke();
+            FocusedElement?.Invoke();
         }
 
         public void UnsetFocusBorder()
@@ -46,7 +46,7 @@ namespace Diplom.Models
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 DataObject data = new DataObject();
-                data.SetData("Station", this);
+                data.SetData("Manager", this);
                 data.SetData("shiftX", e.GetPosition(this).X);
                 data.SetData("shiftY", e.GetPosition(this).Y);
                 DragDrop.DoDragDrop(this, data, DragDropEffects.Move);
