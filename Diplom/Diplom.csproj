@@ -101,9 +101,26 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\background.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Save.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\SaveAll.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\FolderOpen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\AddFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Exit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\Network.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

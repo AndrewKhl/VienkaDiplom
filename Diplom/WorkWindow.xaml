@@ -18,11 +18,31 @@
         </Grid.RowDefinitions>
         <Menu VerticalAlignment="Top" Grid.Row="0">
             <MenuItem Header="Файл">
-                <MenuItem Header="Создать"></MenuItem>
-                <MenuItem Header="Открыть"></MenuItem>
-                <MenuItem Header="Созранить"></MenuItem>
-                <MenuItem Header="Сохранить как"></MenuItem>
-                <MenuItem Header="Выход"></MenuItem>
+                <MenuItem Header="Создать">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/AddFile.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Открыть">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/FolderOpen.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Сохранить">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Save.bmp"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Сохранить как">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/SaveAll.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Выход">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Exit.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="Правка">
                 <MenuItem Header="Создать сеть"></MenuItem>
@@ -62,8 +82,58 @@
                 <MenuItem Header="О программе..."></MenuItem>
             </MenuItem>
         </Menu>
-        <Menu VerticalAlignment="Top" Grid.Row="1">
+        
+        <StackPanel Orientation="Horizontal" Grid.Row="1">
+        <Menu VerticalAlignment="Top">
+            <MenuItem Width="25">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/AddFile.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Width="25">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/FolderOpen.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Width="25">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/Save.bmp"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Width="25">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/SaveAll.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+        </Menu>
+        <ComboBox Width="60" Grid.Row="1" SelectedIndex="0">
+                <ComboBoxItem>100%</ComboBoxItem>
+                <ComboBoxItem>90%</ComboBoxItem>
+                <ComboBoxItem>80%</ComboBoxItem>
+                <ComboBoxItem>70%</ComboBoxItem>
+                <ComboBoxItem>60%</ComboBoxItem>
+                <ComboBoxItem>50%</ComboBoxItem>
+                <ComboBoxItem>40%</ComboBoxItem>
+                <ComboBoxItem>30%</ComboBoxItem>
+                <ComboBoxItem>20%</ComboBoxItem>
+                <ComboBoxItem>10%</ComboBoxItem>
+            </ComboBox>
+        <Menu>
+                <MenuItem Width="25">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Network.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="von"></MenuItem>
+            <MenuItem Header="von"></MenuItem>
+            <MenuItem Header="von"></MenuItem>
+            <MenuItem Header="von"></MenuItem>
+            <Separator/>
+            <MenuItem Header="von"></MenuItem>
+            <MenuItem Header="von"></MenuItem>
+            <MenuItem Header="von"></MenuItem>
             <MenuItem Header="von"></MenuItem>
         </Menu>
+        </StackPanel>
     </Grid>
 </Window>
