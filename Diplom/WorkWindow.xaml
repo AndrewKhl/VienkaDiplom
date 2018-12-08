@@ -12,10 +12,11 @@
     </Window.Background>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Menu Height="25" VerticalAlignment="Top" Grid.Row="0">
+        <Menu VerticalAlignment="Top" Grid.Row="0">
             <MenuItem Header="Файл">
                 <MenuItem Header="Создать"></MenuItem>
                 <MenuItem Header="Открыть"></MenuItem>
@@ -60,6 +61,9 @@
                 <MenuItem Header="Помощь"></MenuItem>
                 <MenuItem Header="О программе..."></MenuItem>
             </MenuItem>
+        </Menu>
+        <Menu VerticalAlignment="Top" Grid.Row="1">
+            <MenuItem Header="von"></MenuItem>
         </Menu>
     </Grid>
 </Window>
