@@ -18,7 +18,7 @@ namespace Diplom.Models
         {
             InitializeComponent();
             image.Source = new BitmapImage(ImageUri);
-            BorderThickness = new Thickness(1);
+            BorderThickness = new Thickness(2);
         }
 
         public event Action FocusedElement;

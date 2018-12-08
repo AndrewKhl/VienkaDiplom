@@ -250,7 +250,7 @@
                         </ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
-                <MenuItem Width="25">
+                <MenuItem Width="25" Click="CreateStation_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/NewStation.png"/>
                     </MenuItem.Icon>
@@ -260,7 +260,7 @@
                         </ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
-                <MenuItem Width="25">
+                <MenuItem Width="25" Click="CreateManager_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/NewManager.png"/>
                     </MenuItem.Icon>

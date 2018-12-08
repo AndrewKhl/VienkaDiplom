@@ -27,12 +27,6 @@ namespace Diplom
             InitializeComponent();
 		}
 
-        private void CreateNetwork_Click(object sender, RoutedEventArgs e)
-        {
-            CreateManager();
-            CreateStation();
-        }
-
         private void CreateStation()
         {
             var station = new StationControl();
@@ -80,6 +74,22 @@ namespace Diplom
                 Canvas.SetTop(manager, e.GetPosition(canvas).Y - shiftY);
             }
             e.Handled = true;
+        }
+
+        private void CreateNetwork_Click(object sender, RoutedEventArgs e)
+        {
+            CreateManager();
+            CreateStation();
+        }
+
+        private void CreateStation_Click(object sender, RoutedEventArgs e)
+        {
+            CreateStation();
+        }
+
+        private void CreateManager_Click(object sender, RoutedEventArgs e)
+        {
+            CreateManager();
         }
     }
 }

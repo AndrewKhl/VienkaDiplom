@@ -18,7 +18,7 @@ namespace Diplom.Models
         {
             InitializeComponent();
             image.Source = new BitmapImage(ImageUri);
-            BorderThickness = new Thickness(1);
+            BorderThickness = new Thickness(2);
         }
 
         public event Action FocusedElement;
@@ -32,7 +32,7 @@ namespace Diplom.Models
         public void SetFocusBorder()
         {
             BorderBrush = new SolidColorBrush(Colors.White);
-            FocusedElement.Invoke();
+            FocusedElement?.Invoke();
         }
 
         public void UnsetFocusBorder()
