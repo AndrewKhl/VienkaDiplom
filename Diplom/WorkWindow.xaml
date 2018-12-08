@@ -8,6 +8,51 @@
         WindowState="Maximized"
         Title="Магистраль" Height="450" Width="800">
     <Grid>
-        
+        <Menu Height="25" VerticalAlignment="Top">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Создать"></MenuItem>
+                <MenuItem Header="Открыть"></MenuItem>
+                <MenuItem Header="Созранить"></MenuItem>
+                <MenuItem Header="Сохранить как"></MenuItem>
+                <MenuItem Header="Выход"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Правка">
+                <MenuItem Header="Создать сеть"></MenuItem>
+                <MenuItem Header="Создать станцию"></MenuItem>
+                <MenuItem Header="Создать менеджера"></MenuItem>
+                <MenuItem Header="Удалить объект"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Управление">
+                <MenuItem Header="Макросы">
+                    <MenuItem Header="Начать запись"></MenuItem>
+                    <MenuItem Header="Закончить запись"></MenuItem>
+                    <MenuItem Header="Выполнить"></MenuItem>
+                    <MenuItem Header="Редактировать макрос"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Сеансы"></MenuItem>
+                <MenuItem Header="Свойства сети"></MenuItem>
+                <MenuItem Header="Свойства объекта"></MenuItem>
+                <MenuItem Header="Параметры"></MenuItem>
+                <MenuItem Header="Маршрутизация"></MenuItem>
+                <MenuItem Header="Пользователи"></MenuItem>
+                <MenuItem Header="Обновить ПО на станции..."></MenuItem>
+                <MenuItem Header="Подключиться к удалённой сети"></MenuItem>
+                <MenuItem Header="Коммутация">
+                    <MenuItem Header="Управление потоками E1 и Enthernet (МД1-1Р)"></MenuItem>
+                    <MenuItem Header="Управление потоками E1 (МД-ДК-1, Мультиплексоры SDH)"></MenuItem>
+                </MenuItem>
+                <MenuItem Header="Настройка"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Данные">
+                <MenuItem Header="События системы"></MenuItem>
+                <MenuItem Header="Просмотр базы данных"></MenuItem>
+                <MenuItem Header="Открыть историю мониторинга"></MenuItem>
+                <MenuItem Header="Сводные параметры"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Справка">
+                <MenuItem Header="Помощь"></MenuItem>
+                <MenuItem Header="О программе..."></MenuItem>
+            </MenuItem>
+        </Menu>
     </Grid>
 </Window>

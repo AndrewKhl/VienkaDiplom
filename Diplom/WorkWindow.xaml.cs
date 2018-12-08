@@ -22,11 +22,6 @@ namespace Diplom
         public WorkWindow()
         {
             InitializeComponent();
-			ImageBrush myBrush = new ImageBrush
-			{
-				ImageSource = new BitmapImage(new Uri(Environment.CurrentDirectory + "/Resource/Background.jpg", UriKind.Absolute))
-			};
-			Background = myBrush;
 		}
     }
 }
