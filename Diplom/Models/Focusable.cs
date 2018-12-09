@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace Diplom.Models
 {
-    interface Focusable
+    public interface Focusable
     {
         event Action FocusedElement;
+        void SetFocusBorder();
         void UnsetFocusBorder();
     }
 }

@@ -20,7 +20,7 @@ namespace Diplom
     /// </summary>
     public partial class WorkWindow : Window
     {
-        private UserControl focusedControl { get; set; }
+        public static Focusable FocusedControl { get; set; }
 
         public WorkWindow()
         {
@@ -53,6 +53,12 @@ namespace Diplom
             }
             canvas.Children.Add(manager);
             manager.SetFocusBorder();
+        }
+
+        static public void DropFocus()
+        {
+            FocusedControl?.UnsetFocusBorder();
+            FocusedControl = null;
         }
 
         private void canvas_Drop(object sender, DragEventArgs e)
@@ -90,6 +96,12 @@ namespace Diplom
         private void CreateManager_Click(object sender, RoutedEventArgs e)
         {
             CreateManager();
+        }
+
+        private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            DropFocus();
+            e.Handled = true;
         }
     }
 }

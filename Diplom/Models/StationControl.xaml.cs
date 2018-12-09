@@ -27,6 +27,8 @@ namespace Diplom.Models
         {
             base.OnMouseDown(e);
             SetFocusBorder();
+            WorkWindow.FocusedControl = this;
+            e.Handled = true;
         }
 
         public void SetFocusBorder()
