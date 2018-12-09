@@ -270,7 +270,7 @@
                         </ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
-                <MenuItem Width="25">
+                <MenuItem Width="25" Click="RemoveElement_Click" x:Name="RemoveMenuItem">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
                     </MenuItem.Icon>

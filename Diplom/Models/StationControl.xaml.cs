@@ -10,24 +10,26 @@ namespace Diplom.Models
     /// <summary>
     /// Interaction logic for StationControl.xaml
     /// </summary>
-    public partial class StationControl : UserControl, Focusable
+    public partial class StationControl : UserControl, IFocusable
     {
         static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_relay.png");
 
-        public StationControl()
+        public StationControl(WorkWindow window)
         {
             InitializeComponent();
             image.Source = new BitmapImage(ImageUri);
             BorderThickness = new Thickness(2);
+            this.window = window;
         }
 
+        public WorkWindow window { get; }
         public event Action FocusedElement;
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             base.OnMouseDown(e);
             SetFocusBorder();
-            WorkWindow.FocusedControl = this;
+            window.SetFocus(this);
             e.Handled = true;
         }
 

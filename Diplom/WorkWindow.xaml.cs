@@ -1,17 +1,7 @@
 ﻿using Diplom.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Diplom
 {
@@ -20,7 +10,24 @@ namespace Diplom
     /// </summary>
     public partial class WorkWindow : Window
     {
-        public static Focusable FocusedControl { get; set; }
+        private IFocusable _focusedControl;
+        public IFocusable FocusedControl
+        {
+            get { return _focusedControl; }
+
+            set
+            {
+                if (value == null)
+                {
+                    RemoveMenuItem.IsEnabled = false;
+                }
+                else
+                {
+                    RemoveMenuItem.IsEnabled = true;
+                }
+                _focusedControl = value;
+            }
+        }
 
         public WorkWindow()
         {
@@ -29,10 +36,10 @@ namespace Diplom
 
         private void CreateStation()
         {
-            var station = new StationControl();
+            var station = new StationControl(this);
             Canvas.SetLeft(station, 0);
             Canvas.SetTop(station, 0);
-            foreach (Focusable control in canvas.Children)
+            foreach (IFocusable control in canvas.Children)
             {
                 station.FocusedElement += control.UnsetFocusBorder;
                 control.FocusedElement += station.UnsetFocusBorder;
@@ -43,10 +50,10 @@ namespace Diplom
 
         private void CreateManager()
         {
-            var manager = new ManagerControl();
+            var manager = new ManagerControl(this);
             Canvas.SetLeft(manager, 0);
             Canvas.SetTop(manager, 0);
-            foreach (Focusable control in canvas.Children)
+            foreach (IFocusable control in canvas.Children)
             {
                 manager.FocusedElement += control.UnsetFocusBorder;
                 control.FocusedElement += manager.UnsetFocusBorder;
@@ -55,10 +62,28 @@ namespace Diplom
             manager.SetFocusBorder();
         }
 
-        static public void DropFocus()
+        public void SetFocus(IFocusable control)
+        {
+            FocusedControl = control;
+        }
+
+        public void DropFocus()
         {
             FocusedControl?.UnsetFocusBorder();
             FocusedControl = null;
+        }
+
+        public void RemoveElement()
+        {
+            if (FocusedControl != null)
+            {
+                canvas.Children.Remove(FocusedControl as UserControl);
+                foreach (IFocusable control in canvas.Children)
+                {
+                    control.FocusedElement -= FocusedControl.UnsetFocusBorder;
+                }
+                FocusedControl = null;
+            }
         }
 
         private void canvas_Drop(object sender, DragEventArgs e)
@@ -102,6 +127,11 @@ namespace Diplom
         {
             DropFocus();
             e.Handled = true;
+        }
+
+        private void RemoveElement_Click(object sender, RoutedEventArgs e)
+        {
+            RemoveElement();
         }
     }
 }
