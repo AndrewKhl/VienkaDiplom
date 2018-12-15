@@ -12,13 +12,18 @@ namespace Diplom.Models
     /// </summary>
     public partial class ManagerControl : UserControl, IFocusable
     {
-        static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_manager.png");
+        private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_manager.png");
+		private static int numberManager = 0;
+
 
         public ManagerControl(WorkWindow window)
         {
             InitializeComponent();
             image.Source = new BitmapImage(ImageUri);
             BorderThickness = new Thickness(2);
+
+			managerName.Text = "Безымянный " + (++numberManager).ToString();
+
             this.window = window;
         }
 

@@ -32,6 +32,7 @@ namespace Diplom
         public WorkWindow()
         {
             InitializeComponent();
+			Stock.workWindow = this;
 		}
 
         private void CreateStation()

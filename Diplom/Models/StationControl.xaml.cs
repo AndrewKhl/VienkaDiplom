@@ -12,13 +12,20 @@ namespace Diplom.Models
     /// </summary>
     public partial class StationControl : UserControl, IFocusable
     {
-        static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_relay.png");
+        private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_relay.png");
+		private static int numberStation = 0;
+		public string NameStation { get; set; }
+
 
         public StationControl(WorkWindow window)
         {
             InitializeComponent();
             image.Source = new BitmapImage(ImageUri);
             BorderThickness = new Thickness(2);
+
+			NameStation = "Безымянная " + (++numberStation).ToString();
+			stationName.Text = NameStation;
+
             this.window = window;
         }
 
@@ -56,5 +63,12 @@ namespace Diplom.Models
                 DragDrop.DoDragDrop(this, data, DragDropEffects.Move);
             }
         }
-    }
+
+		private void ShowParametrWindow(object sender, RoutedEventArgs e)
+		{
+			ParamsWindow wnd = new ParamsWindow();
+			wnd.Owner = Stock.workWindow;
+			wnd.Show();
+		}
+	}
 }
