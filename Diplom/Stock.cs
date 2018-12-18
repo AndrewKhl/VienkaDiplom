@@ -9,5 +9,7 @@ namespace Diplom
     static class Stock
     {
 		public static WorkWindow workWindow = null;
+		public static string nameNewNetwork = null;
+
     }
 }

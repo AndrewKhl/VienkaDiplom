@@ -573,8 +573,7 @@
                                 </Grid>
                             </TreeViewItem.Header>
                         </TreeViewItem>
-                    </TreeViewItem>
-
+                    
                     <TreeViewItem>
                         <TreeViewItem.Header>
                             <Grid>
@@ -587,7 +586,7 @@
                             </Grid>
                         </TreeViewItem.Header>
                     </TreeViewItem>
-
+                    </TreeViewItem>
                     <TreeViewItem Header="Захваты">
                         <Grid Margin="-20,0,0,0">
                             <Grid.ColumnDefinitions>

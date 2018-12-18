@@ -17,13 +17,16 @@ namespace Diplom.Models
 		public string NameStation { get; set; }
 
 
-        public StationControl(WorkWindow window)
+        public StationControl(WorkWindow window, string name)
         {
             InitializeComponent();
             image.Source = new BitmapImage(ImageUri);
             BorderThickness = new Thickness(2);
 
-			NameStation = "Безымянная " + (++numberStation).ToString();
+			if (name == "")
+				NameStation = "Безымянная " + (++numberStation).ToString();
+			else
+				NameStation = name;
 			stationName.Text = NameStation;
 
             this.window = window;

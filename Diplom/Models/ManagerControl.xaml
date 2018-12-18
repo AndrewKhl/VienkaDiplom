@@ -10,7 +10,7 @@
             <RowDefinition Height="0.1*"/>
             <RowDefinition Height="0.5*"/>
         </Grid.RowDefinitions>
-        <TextBlock Name="managerName"/>
+        <TextBlock Name="managerName" HorizontalAlignment="Center"/>
         <Image Grid.Row="1" Name="image" Stretch="None" />
 
         <Grid.ContextMenu>

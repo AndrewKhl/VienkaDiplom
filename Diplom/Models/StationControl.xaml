@@ -13,7 +13,7 @@
         <Grid.Background>
             <SolidColorBrush Color="Green" Opacity="0.5" />
         </Grid.Background>
-        <TextBlock Name="stationName"/>
+        <TextBlock Name="stationName" HorizontalAlignment="Center"/>
         <Image Grid.Row="1" Name="image" Stretch="None" />
         
         <Grid.ContextMenu>

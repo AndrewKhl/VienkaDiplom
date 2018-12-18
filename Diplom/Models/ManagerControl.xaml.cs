@@ -16,13 +16,16 @@ namespace Diplom.Models
 		private static int numberManager = 0;
 
 
-        public ManagerControl(WorkWindow window)
+        public ManagerControl(WorkWindow window, string name)
         {
             InitializeComponent();
             image.Source = new BitmapImage(ImageUri);
             BorderThickness = new Thickness(2);
 
-			managerName.Text = "Безымянный " + (++numberManager).ToString();
+			if (name == "")
+				managerName.Text = "Безымянный " + (++numberManager).ToString();
+			else
+				managerName.Text = name;
 
             this.window = window;
         }

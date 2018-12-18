@@ -1,4 +1,5 @@
 ﻿using Diplom.Models;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,6 +11,9 @@ namespace Diplom
     /// </summary>
     public partial class WorkWindow : Window
     {
+
+		public List<int> numberStations;
+
         private IFocusable _focusedControl;
         public IFocusable FocusedControl
         {
@@ -32,12 +36,13 @@ namespace Diplom
         public WorkWindow()
         {
             InitializeComponent();
+			numberStations = new List<int>();
 			Stock.workWindow = this;
 		}
 
-        private void CreateStation()
+        public void CreateStation(string name = "")
         {
-            var station = new StationControl(this);
+            var station = new StationControl(this, name);
             Canvas.SetLeft(station, 0);
             Canvas.SetTop(station, 0);
             foreach (IFocusable control in canvas.Children)
@@ -49,9 +54,9 @@ namespace Diplom
             station.SetFocusBorder();
         }
 
-        private void CreateManager()
+        public void CreateManager(string name = "")
         {
-            var manager = new ManagerControl(this);
+            var manager = new ManagerControl(this, name);
             Canvas.SetLeft(manager, 0);
             Canvas.SetTop(manager, 0);
             foreach (IFocusable control in canvas.Children)
@@ -110,14 +115,33 @@ namespace Diplom
 
         private void CreateNetwork_Click(object sender, RoutedEventArgs e)
         {
-            CreateManager();
-            CreateStation();
+			if (numberStations.Count < 55)
+			{
+				ConfigurationNetwork wnd = new ConfigurationNetwork();
+				wnd.Owner = this;
+				wnd.Show();
+			}
+			else
+				ShowErrorCountStations();
         }
 
         private void CreateStation_Click(object sender, RoutedEventArgs e)
         {
-            CreateStation();
-        }
+			if (numberStations.Count < 55)
+			{
+				ConfigurationStation wnd = new ConfigurationStation();
+				wnd.Owner = this;
+				wnd.Show();
+			}
+			else
+				ShowErrorCountStations();
+		}
+
+		private void ShowErrorCountStations()
+		{
+			MessageBox.Show("Максимальное кол-во станций", "Ошибка",
+			MessageBoxButton.OK, MessageBoxImage.Error);
+		}
 
         private void CreateManager_Click(object sender, RoutedEventArgs e)
         {

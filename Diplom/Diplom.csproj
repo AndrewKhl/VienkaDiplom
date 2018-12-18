@@ -55,6 +55,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ConfigurationNetwork.xaml.cs">
+      <DependentUpon>ConfigurationNetwork.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ConfigurationStation.xaml.cs">
+      <DependentUpon>ConfigurationStation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\IFocusable.cs" />
     <Compile Include="Models\ManagerControl.xaml.cs">
       <DependentUpon>ManagerControl.xaml</DependentUpon>
@@ -69,6 +75,14 @@
     <Compile Include="WorkWindow.xaml.cs">
       <DependentUpon>WorkWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="ConfigurationNetwork.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ConfigurationStation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
