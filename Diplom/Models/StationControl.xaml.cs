@@ -49,7 +49,6 @@ namespace Diplom.Models
             stationNameBorder.BorderBrush = new SolidColorBrush(Colors.White);
             stationImageBorder.Background.Opacity = 0.5;
             stationNameBorder.Background.Opacity = 0.5;
-
             FocusedElement?.Invoke();
         }
 
@@ -80,5 +79,10 @@ namespace Diplom.Models
 			wnd.Owner = Stock.workWindow;
 			wnd.Show();
 		}
-	}
+
+        private void Connect_Click(object sender, RoutedEventArgs e)
+        {
+            window.ConnectionAttempt(this);
+        }
+    }
 }

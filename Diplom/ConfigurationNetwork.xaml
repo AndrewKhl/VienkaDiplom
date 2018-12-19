@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Diplom"
         mc:Ignorable="d"
+        Icon="pack://application:,,,/Resources/icon.png"
         WindowStartupLocation="CenterScreen"
         Title="Конфигурация сети" Height="160" Width="320">
 

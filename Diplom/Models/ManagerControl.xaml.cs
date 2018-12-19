@@ -70,5 +70,10 @@ namespace Diplom.Models
                 DragDrop.DoDragDrop(this, data, DragDropEffects.Move);
             }
         }
+
+        private void Connect_Click(object sender, RoutedEventArgs e)
+        {
+            window.ConnectionAttempt(this);
+        }
     }
 }
