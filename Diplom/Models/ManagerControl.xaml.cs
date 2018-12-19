@@ -43,13 +43,19 @@ namespace Diplom.Models
 
         public void SetFocusBorder()
         {
-            BorderBrush = new SolidColorBrush(Colors.White);
+            managerImageBorder.BorderBrush = new SolidColorBrush(Colors.White);
+            managerNameBorder.BorderBrush = new SolidColorBrush(Colors.White);
+            managerImageBorder.Background.Opacity = 0.5;
+            managerNameBorder.Background.Opacity = 0.5;
             FocusedElement?.Invoke();
         }
 
         public void UnsetFocusBorder()
         {
-            BorderBrush = new SolidColorBrush(Colors.Black);
+            managerImageBorder.BorderBrush = new SolidColorBrush(Colors.Black);
+            managerNameBorder.BorderBrush = new SolidColorBrush(Colors.Black);
+            managerImageBorder.Background.Opacity = 0.3;
+            managerNameBorder.Background.Opacity = 0.3;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
