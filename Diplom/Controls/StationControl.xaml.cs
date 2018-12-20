@@ -8,24 +8,31 @@ using System.Windows.Media.Imaging;
 namespace Diplom.Models
 {
     /// <summary>
-    /// Interaction logic for ManagerControl.xaml
+    /// Interaction logic for StationControl.xaml
     /// </summary>
-    public partial class ManagerControl : UserControl, IFocusable
+    public partial class StationControl : UserControl, IFocusable
     {
-        private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_manager.png");
-		private static int numberManager = 0;
+        private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_relay.png");
+		private static int numberStation = 0;
+		public DataStation Data;
 
 
-        public ManagerControl(WorkWindow window, string name)
+        public StationControl(WorkWindow window, string name, int number)
         {
             InitializeComponent();
             image.Source = new BitmapImage(ImageUri);
             BorderThickness = new Thickness(2);
+			Data = new DataStation();
 
 			if (name == "")
-				managerName.Text = "Безымянный " + (++numberManager).ToString();
+				stationName.Text = "Безымянная " + (++numberStation).ToString();
 			else
-				managerName.Text = name;
+				stationName.Text = name;
+
+			Data.Name = stationName.Text;
+			Data.Number = number;
+
+			DataNetwork.Stations.Add(this);
 
             this.window = window;
         }
@@ -58,11 +65,18 @@ namespace Diplom.Models
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 DataObject data = new DataObject();
-                data.SetData("Manager", this);
+                data.SetData("Station", this);
                 data.SetData("shiftX", e.GetPosition(this).X);
                 data.SetData("shiftY", e.GetPosition(this).Y);
                 DragDrop.DoDragDrop(this, data, DragDropEffects.Move);
             }
         }
-    }
+
+		private void ShowParametrWindow(object sender, RoutedEventArgs e)
+		{
+			ParamsWindow wnd = new ParamsWindow();
+			wnd.Owner = Stock.workWindow;
+			wnd.Show();
+		}
+	}
 }

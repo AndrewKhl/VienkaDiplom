@@ -46,24 +46,24 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Правка">
-                <MenuItem Header="Создать сеть">
+                <MenuItem Header="Создать сеть" Click="CreateNetwork_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Network.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Создать станцию">
+                <MenuItem Name="btnCreateStationMenu" Header="Создать станцию" Click="CreateStation_Click">
                     <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/NewStation.png"/>
+                        <Image Source="pack://application:,,,/Resources/Icons/DisabledCreateStation.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Создать менеджера">
+                <MenuItem Name="btnCreateManagerMenu" Header="Создать менеджера" Click="CreateManager_Click">
                     <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/NewManager.png"/>
+                        <Image Source="pack://application:,,,/Resources/Icons/DisabledCreateManager.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Удалить объект">
+                <MenuItem Name="btnRemovedMenu" Header="Удалить объект">
                     <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
+                        <Image Source="pack://application:,,,/Resources/Icons/DisableRemoved.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
@@ -250,9 +250,9 @@
                         </ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
-                <MenuItem Width="25" Click="CreateStation_Click">
+                <MenuItem Name="btnCreateStationFast" Width="25" Click="CreateStation_Click">
                     <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/NewStation.png"/>
+                        <Image Source="pack://application:,,,/Resources/Icons/DisabledCreateStation.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
                         <ToolTip>
@@ -260,9 +260,9 @@
                         </ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
-                <MenuItem Width="25" Click="CreateManager_Click">
+                <MenuItem Name="btnCreateManagerFast" Width="25" Click="CreateManager_Click">
                     <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/NewManager.png"/>
+                        <Image Source="pack://application:,,,/Resources/Icons/DisabledCreateManager.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
                         <ToolTip>
@@ -270,9 +270,9 @@
                         </ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
-                <MenuItem Width="25" Click="RemoveElement_Click" x:Name="RemoveMenuItem">
+                <MenuItem Width="25" Click="RemoveElement_Click" x:Name="btnRemoveMenuItem">
                     <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
+                        <Image Source="pack://application:,,,/Resources/Icons/DisableRemoved.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
                         <ToolTip>
@@ -338,6 +338,22 @@
                 <Canvas.Background>
                     <ImageBrush ImageSource="pack://application:,,,/Resources/background.jpg" Stretch="Uniform" />
                 </Canvas.Background>
+
+                <Canvas.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Выделить всё"/>
+                        <MenuItem Header="Создать сеть" Click="CreateNetwork_Click">
+                            <MenuItem.Icon>
+                                <Image Source="pack://application:,,,/Resources/Icons/Network.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Подключиться к удалённой сети">
+                            <MenuItem.Icon>
+                                <Image Source="pack://application:,,,/Resources/Icons/ConnectToRemoteNetwork.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </Canvas.ContextMenu>
             </Canvas>
         </ScrollViewer>
         </Grid>

@@ -61,13 +61,16 @@
     <Compile Include="ConfigurationStation.xaml.cs">
       <DependentUpon>ConfigurationStation.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\IFocusable.cs" />
-    <Compile Include="Models\ManagerControl.xaml.cs">
+    <Compile Include="Controls\IFocusable.cs" />
+    <Compile Include="Controls\ManagerControl.xaml.cs">
       <DependentUpon>ManagerControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Models\StationControl.xaml.cs">
+    <Compile Include="Controls\StationControl.xaml.cs">
       <DependentUpon>StationControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Models\DataManagers.cs" />
+    <Compile Include="Models\DataNetwork.cs" />
+    <Compile Include="Models\DataStation.cs" />
     <Compile Include="ParamsWindow.xaml.cs">
       <DependentUpon>ParamsWindow.xaml</DependentUpon>
     </Compile>
@@ -95,11 +98,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Models\ManagerControl.xaml">
+    <Page Include="Controls\ManagerControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Models\StationControl.xaml">
+    <Page Include="Controls\StationControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

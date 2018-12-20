@@ -8,26 +8,30 @@ using System.Windows.Media.Imaging;
 namespace Diplom.Models
 {
     /// <summary>
-    /// Interaction logic for StationControl.xaml
+    /// Interaction logic for ManagerControl.xaml
     /// </summary>
-    public partial class StationControl : UserControl, IFocusable
+    public partial class ManagerControl : UserControl, IFocusable
     {
-        private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_relay.png");
-		private static int numberStation = 0;
-		public string NameStation { get; set; }
+        private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_manager.png");
+		private static int numberManager = 0;
+		public DataManagers Data;
 
-
-        public StationControl(WorkWindow window, string name)
+        public ManagerControl(WorkWindow window, string name, int number)
         {
             InitializeComponent();
             image.Source = new BitmapImage(ImageUri);
             BorderThickness = new Thickness(2);
+			Data = new DataManagers();
 
 			if (name == "")
-				NameStation = "Безымянная " + (++numberStation).ToString();
+				managerName.Text = "Безымянный " + (++numberManager).ToString();
 			else
-				NameStation = name;
-			stationName.Text = NameStation;
+				managerName.Text = name;
+
+			Data.Name = managerName.Text;
+			Data.Number = number;
+
+			DataNetwork.Managers.Add(this);
 
             this.window = window;
         }
@@ -60,18 +64,11 @@ namespace Diplom.Models
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 DataObject data = new DataObject();
-                data.SetData("Station", this);
+                data.SetData("Manager", this);
                 data.SetData("shiftX", e.GetPosition(this).X);
                 data.SetData("shiftY", e.GetPosition(this).Y);
                 DragDrop.DoDragDrop(this, data, DragDropEffects.Move);
             }
         }
-
-		private void ShowParametrWindow(object sender, RoutedEventArgs e)
-		{
-			ParamsWindow wnd = new ParamsWindow();
-			wnd.Owner = Stock.workWindow;
-			wnd.Show();
-		}
-	}
+    }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Diplom.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,7 +27,7 @@ namespace Diplom
 			List<string> list = new List<string>();
 			for (int i = 1; i <= 55; ++i)
 			{
-				if (!Stock.workWindow.numberStations.Contains(i))
+				if (!Stock.workWindow.numbersManagers.Contains(i))
 					list.Add(i.ToString());
 			}
 				
@@ -41,10 +42,14 @@ namespace Diplom
 
 		private void CreateNetwork(object sender, RoutedEventArgs e)
 		{
-			Stock.workWindow.numberStations.Add(int.Parse(listOfAdress.SelectedItem.ToString()));
-			Stock.workWindow.CreateManager();
-			Stock.workWindow.CreateStation(nameNewStation.Text.Trim());
+			int number = int.Parse(listOfAdress.SelectedItem.ToString());
+			Stock.workWindow.numbersManagers.Add(number);
+			Stock.workWindow.CreateManager("", number);
+			DataNetwork.Name = nameNewNetwork.Text.Trim();
+			DataNetwork.IsCreate = true;
+			Stock.workWindow.EnabledButton(true);
 			Close();
+			Stock.workWindow.CreateStation_Click(sender, e);
 		}
 
 	}

@@ -1,8 +1,10 @@
 ﻿using Diplom.Models;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 
 namespace Diplom
 {
@@ -12,7 +14,8 @@ namespace Diplom
     public partial class WorkWindow : Window
     {
 
-		public List<int> numberStations;
+		public List<int> numbersStations;
+		public List<int> numbersManagers;
 
         private IFocusable _focusedControl;
         public IFocusable FocusedControl
@@ -23,11 +26,11 @@ namespace Diplom
             {
                 if (value == null)
                 {
-                    RemoveMenuItem.IsEnabled = false;
+                    btnRemoveMenuItem.IsEnabled = false;
                 }
                 else
                 {
-                    RemoveMenuItem.IsEnabled = true;
+                    btnRemoveMenuItem.IsEnabled = true;
                 }
                 _focusedControl = value;
             }
@@ -36,13 +39,61 @@ namespace Diplom
         public WorkWindow()
         {
             InitializeComponent();
-			numberStations = new List<int>();
+			numbersStations = new List<int>();
+			numbersManagers = new List<int>();
 			Stock.workWindow = this;
+			EnabledButton(false);
 		}
 
-        public void CreateStation(string name = "")
+		public void EnabledButton(bool enabled)
+		{
+			btnCreateManagerFast.IsEnabled = enabled;
+			btnCreateManagerMenu.IsEnabled = enabled;
+			btnCreateStationFast.IsEnabled = enabled;
+			btnCreateStationMenu.IsEnabled = enabled;
+			btnRemovedMenu.IsEnabled = enabled;
+			btnRemoveMenuItem.IsEnabled = enabled;
+
+			if (!enabled)
+			{
+
+			}
+			else
+			{
+				btnRemoveMenuItem.Icon = new Image {
+					Source = new BitmapImage(new Uri(@"pack://application:,,,/Resources/Icons/Removed.png"))
+				};
+
+				btnRemovedMenu.Icon = new Image
+				{
+					Source = new BitmapImage(new Uri(@"pack://application:,,,/Resources/Icons/Removed.png"))
+				};
+
+				btnCreateManagerFast.Icon = new Image
+				{
+					Source = new BitmapImage(new Uri(@"pack://application:,,,/Resources/Icons/NewManager.png"))
+				};
+
+				btnCreateManagerMenu.Icon = new Image
+				{
+					Source = new BitmapImage(new Uri(@"pack://application:,,,/Resources/Icons/NewManager.png"))
+				};
+
+				btnCreateStationFast.Icon = new Image
+				{
+					Source = new BitmapImage(new Uri(@"pack://application:,,,/Resources/Icons/NewStation.png"))
+				};
+
+				btnCreateStationMenu.Icon = new Image
+				{
+					Source = new BitmapImage(new Uri(@"pack://application:,,,/Resources/Icons/NewStation.png"))
+				};
+			}
+		}
+
+        public void CreateStation(string name = "", int number = 0)
         {
-            var station = new StationControl(this, name);
+            var station = new StationControl(this, name, number);
             Canvas.SetLeft(station, 0);
             Canvas.SetTop(station, 0);
             foreach (IFocusable control in canvas.Children)
@@ -54,9 +105,9 @@ namespace Diplom
             station.SetFocusBorder();
         }
 
-        public void CreateManager(string name = "")
+        public void CreateManager(string name = "", int number = 0)
         {
-            var manager = new ManagerControl(this, name);
+            var manager = new ManagerControl(this, name, number);
             Canvas.SetLeft(manager, 0);
             Canvas.SetTop(manager, 0);
             foreach (IFocusable control in canvas.Children)
@@ -115,7 +166,12 @@ namespace Diplom
 
         private void CreateNetwork_Click(object sender, RoutedEventArgs e)
         {
-			if (numberStations.Count < 55)
+			if (DataNetwork.IsCreate)
+			{
+				ShowErrorCreateNetwork();
+				return;
+			}
+			if (numbersStations.Count < 55)
 			{
 				ConfigurationNetwork wnd = new ConfigurationNetwork();
 				wnd.Owner = this;
@@ -125,9 +181,9 @@ namespace Diplom
 				ShowErrorCountStations();
         }
 
-        private void CreateStation_Click(object sender, RoutedEventArgs e)
+        public void CreateStation_Click(object sender, RoutedEventArgs e)
         {
-			if (numberStations.Count < 55)
+			if (numbersStations.Count < 55)
 			{
 				ConfigurationStation wnd = new ConfigurationStation();
 				wnd.Owner = this;
@@ -140,6 +196,12 @@ namespace Diplom
 		private void ShowErrorCountStations()
 		{
 			MessageBox.Show("Максимальное кол-во станций", "Ошибка",
+			MessageBoxButton.OK, MessageBoxImage.Error);
+		}
+
+		private void ShowErrorCreateNetwork()
+		{
+			MessageBox.Show("Максимальное кол-во сетей", "Ошибка",
 			MessageBoxButton.OK, MessageBoxImage.Error);
 		}
 

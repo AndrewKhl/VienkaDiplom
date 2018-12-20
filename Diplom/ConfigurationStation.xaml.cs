@@ -26,7 +26,7 @@ namespace Diplom
 			List<string> list = new List<string>();
 			for (int i = 1; i <= 55; ++i)
 			{
-				if (!Stock.workWindow.numberStations.Contains(i))
+				if (!Stock.workWindow.numbersStations.Contains(i))
 					list.Add(i.ToString());
 			}
 
@@ -42,8 +42,9 @@ namespace Diplom
 
 		private void CreateNetwork(object sender, RoutedEventArgs e)
 		{
-			Stock.workWindow.numberStations.Add(int.Parse(listOfAdress.SelectedItem.ToString()));
-			Stock.workWindow.CreateStation(nameNewStation.Text.Trim());
+			int number = int.Parse(listOfAdress.SelectedItem.ToString());
+			Stock.workWindow.numbersStations.Add(number);
+			Stock.workWindow.CreateStation(nameNewStation.Text.Trim(), number);
 			Close();
 		}
 	}
