@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Diplom"
         mc:Ignorable="d"
+        Icon="pack://application:,,,/Resources/icon.png"
         WindowStartupLocation="CenterScreen"
-        Title="ConfigurationStation" Height="160" Width="320">
+        Title="Свойства станции" Height="160" Width="320">
 
     <Window.Resources>
         <Style TargetType="TextBlock">

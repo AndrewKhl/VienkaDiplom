@@ -213,5 +213,11 @@
     <Resource Include="Resources\Icons\DisableRemoved.png" />
     <Resource Include="Resources\Icons\RefreshConfiguration.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\gauge_1_30.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

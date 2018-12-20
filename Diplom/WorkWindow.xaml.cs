@@ -4,7 +4,13 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+<<<<<<< HEAD
 using System.Windows.Media.Imaging;
+=======
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+>>>>>>> 2c18260912de3f77c837e3c41d4fcca55a75b785
 
 namespace Diplom
 {
@@ -13,9 +19,13 @@ namespace Diplom
     /// </summary>
     public partial class WorkWindow : Window
     {
+<<<<<<< HEAD
 
 		public List<int> numbersStations;
 		public List<int> numbersManagers;
+=======
+		public List<int> numberStations;
+>>>>>>> 2c18260912de3f77c837e3c41d4fcca55a75b785
 
         private IFocusable _focusedControl;
         public IFocusable FocusedControl
@@ -96,10 +106,14 @@ namespace Diplom
             var station = new StationControl(this, name, number);
             Canvas.SetLeft(station, 0);
             Canvas.SetTop(station, 0);
-            foreach (IFocusable control in canvas.Children)
+            foreach (Control control in canvas.Children)
             {
-                station.FocusedElement += control.UnsetFocusBorder;
-                control.FocusedElement += station.UnsetFocusBorder;
+                if (control is IFocusable)
+                {
+                    IFocusable focusable = control as IFocusable;
+                    station.FocusedElement += focusable.UnsetFocusBorder;
+                    focusable.FocusedElement += station.UnsetFocusBorder;
+                }
             }
             canvas.Children.Add(station);
             station.SetFocusBorder();
@@ -110,10 +124,14 @@ namespace Diplom
             var manager = new ManagerControl(this, name, number);
             Canvas.SetLeft(manager, 0);
             Canvas.SetTop(manager, 0);
-            foreach (IFocusable control in canvas.Children)
+            foreach (Control control in canvas.Children)
             {
-                manager.FocusedElement += control.UnsetFocusBorder;
-                control.FocusedElement += manager.UnsetFocusBorder;
+                if (control is IFocusable)
+                {
+                    IFocusable focusable = control as IFocusable;
+                    manager.FocusedElement += focusable.UnsetFocusBorder;
+                    focusable.FocusedElement += manager.UnsetFocusBorder;
+                }
             }
             canvas.Children.Add(manager);
             manager.SetFocusBorder();
@@ -196,7 +214,7 @@ namespace Diplom
 		private void ShowErrorCountStations()
 		{
 			MessageBox.Show("Максимальное кол-во станций", "Ошибка",
-			MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBoxButton.OK, MessageBoxImage.Error);
 		}
 
 		private void ShowErrorCreateNetwork()
@@ -219,6 +237,45 @@ namespace Diplom
         private void RemoveElement_Click(object sender, RoutedEventArgs e)
         {
             RemoveElement();
+        }
+
+        public UserControl connector = null;
+        public bool ConnectionAttempt(UserControl control)
+        {
+            if (connector == null) connector = control;
+            else {
+                if (connector is ManagerControl && control is ManagerControl) return false;
+
+                //if ((connector is ManagerControl && control is StationControl) || (connector is StationControl && control is ManagerControl)) {
+                SolidColorBrush brush;
+                if (connector is StationControl && control is StationControl)
+                {
+                    brush = new SolidColorBrush(Colors.Green);
+
+                    BitmapImage gauge = new BitmapImage();
+                    gauge.BeginInit();
+                    gauge.UriSource = new Uri("pack://application:,,,/Resources/gauge_1_30.png");
+                    gauge.EndInit();
+                    (connector as StationControl).stationGauge.Source = gauge;
+                    (control as StationControl).stationGauge.Source = gauge;
+                }
+                else
+                    brush = new SolidColorBrush(Colors.Blue);
+
+                Line line = new Line();
+                line.X1 = (double)connector.GetValue(Canvas.LeftProperty) + connector.ActualWidth / 2;
+                line.Y1 = (double)connector.GetValue(Canvas.TopProperty) + connector.ActualHeight / 2;
+                line.X2 = (double)control.GetValue(Canvas.LeftProperty) + connector.ActualWidth / 2;
+                line.Y2 = (double)control.GetValue(Canvas.TopProperty) + connector.ActualHeight / 2;
+                line.Stroke = brush;
+                line.StrokeThickness = 3;
+                Canvas.SetLeft(line, 0);
+                Canvas.SetTop(line, 0);
+                canvas.Children.Insert(0, line);
+                connector = null;
+                return true;
+            }
+            return false;
         }
     }
 }

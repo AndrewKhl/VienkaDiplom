@@ -5,8 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Diplom"
         mc:Ignorable="d"
+        Icon="pack://application:,,,/Resources/icon.png"
         WindowStartupLocation="CenterScreen"
-        Title="Магистраль" Height="800" Width="1200">
+        Title="Мастер Link 3" Height="800" Width="1200">
     <Grid Name="main_grid">
         <Grid.Background>
             <SolidColorBrush Color="Gray" />
