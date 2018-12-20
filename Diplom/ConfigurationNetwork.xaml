@@ -48,7 +48,7 @@
         <TextBlock Text="Имя: " Grid.Row="1"/>
         <TextBlock Text="Адрес: " Grid.Row="2"/>
 
-        <ComboBox Grid.Column="1" SelectedIndex="0" FontSize="12" Style="{StaticResource windObject}" VerticalAlignment="Center">
+        <ComboBox Grid.Column="1" SelectedIndex="0" FontSize="12" Style="{StaticResource windObject}" VerticalAlignment="Center" Name="typeNetwork">
             <ComboBoxItem>PDH</ComboBoxItem>
             <ComboBoxItem>PDH+</ComboBoxItem>
             <ComboBoxItem>WiMAX</ComboBoxItem>

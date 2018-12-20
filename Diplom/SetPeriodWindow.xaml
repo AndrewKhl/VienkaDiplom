@@ -1,0 +1,23 @@
+﻿<Window x:Class="Diplom.SetPeriodWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Diplom"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="ППУ1::Номер рабочей частоты ППУ" Height="160" Width="320">
+
+    <StackPanel>
+        <TextBlock Text="Номера рабочей частоты ППУ:" HorizontalAlignment="Left" Margin="20 5 0 5"/>
+        <TextBox Name="selectPeriod" FontSize="12" Width="270" Height="20"/>
+        <StackPanel Orientation="Horizontal" Margin="15 10">
+            <CheckBox Name="setChanged" Click="SetChanged_Click"/>
+            <TextBlock Text="Временное изменение (мир):" Margin="10 0"/>
+            <TextBox Height="20" Width="60" Margin="15 0 0 0" FontSize="12" Name="temporaryChange" IsEnabled="False"/>
+        </StackPanel>
+
+        <Button Click="SetNewPeriod" Height="20" Width="80" HorizontalAlignment="Right" Margin="20 10">Применить</Button>
+    </StackPanel>
+</Window>
+

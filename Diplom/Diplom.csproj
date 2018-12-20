@@ -74,6 +74,12 @@
     <Compile Include="ParamsWindow.xaml.cs">
       <DependentUpon>ParamsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SetMainStationWindow.xaml.cs">
+      <DependentUpon>SetMainStationWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SetPeriodWindow.xaml.cs">
+      <DependentUpon>SetPeriodWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Stock.cs" />
     <Compile Include="WorkWindow.xaml.cs">
       <DependentUpon>WorkWindow.xaml</DependentUpon>
@@ -107,6 +113,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ParamsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SetMainStationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SetPeriodWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

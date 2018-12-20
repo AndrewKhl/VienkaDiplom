@@ -46,6 +46,7 @@ namespace Diplom
 			Stock.workWindow.numbersManagers.Add(number);
 			Stock.workWindow.CreateManager("", number);
 			DataNetwork.Name = nameNewNetwork.Text.Trim();
+			DataNetwork.Type = typeNetwork.SelectedItem.ToString();
 			DataNetwork.IsCreate = true;
 			Stock.workWindow.EnabledButton(true);
 			Close();

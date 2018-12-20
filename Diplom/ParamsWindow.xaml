@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Diplom"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        Title="Параметры" Height="1000" Width="600" >
+        Title="Параметры" Height="800" Width="600" >
 
     <Window.Resources>
         <Style x:Key="TextViewStyle1Column">
@@ -24,6 +24,15 @@
     <Grid>
         <TreeView >
             <TreeViewItem Header="МД-1Р">
+                <TreeViewItem.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Обновить" Click="RefreshParams">
+                            <MenuItem.Icon>
+                                <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </TreeViewItem.ContextMenu>
                 <TreeViewItem Header="Паспорт">
                     <TreeViewItem Header="Режим работы"></TreeViewItem>
                     <TreeViewItem Header="Слот 1"></TreeViewItem>
@@ -450,6 +459,15 @@
             
             
             <TreeViewItem Header="ППУ">
+                <TreeViewItem.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Обновить" Click="RefreshParams">
+                            <MenuItem.Icon>
+                                <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </TreeViewItem.ContextMenu>
                 <TreeViewItem Header="Паспорт">
                     <TreeViewItem>
                         <TreeViewItem.Header>
@@ -667,13 +685,35 @@
                         <TextBlock Text="35 Дбм" Style="{StaticResource TextViewStyle1Column}"/>
 
                         <TextBlock Text="Режим ППУ" Grid.Row="1"/>
-                        <TextBlock Text="Ведомый" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
+                        <TextBlock Text="{Binding Path=Main, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}">
+                            <TextBlock.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Изменить" Click="SetNewMainStatusStation"/>
+                                    <MenuItem Header="Обновить" Click="RefreshParams">
+                                        <MenuItem.Icon>
+                                            <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </TextBlock.ContextMenu>
+                        </TextBlock>
 
                         <TextBlock Text="Шлейф ЦС ВАСК" Grid.Row="2"/>
                         <TextBlock Text="Выключен" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
 
                         <TextBlock Text="Номер частоты" Grid.Row="3"/>
-                        <TextBlock Text="320 МГц" Grid.Row="3" Style="{StaticResource TextViewStyle1Column}"/>
+                        <TextBlock Text="{Binding Path=Period, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0} МГц}" Grid.Row="3" Style="{StaticResource TextViewStyle1Column}" Name="periodStationTextBlock">
+                            <TextBlock.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Изменить" Click="SetNewPeriodStation"/>
+                                    <MenuItem Header="Обновить" Click="RefreshParams">
+                                        <MenuItem.Icon>
+                                            <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </ContextMenu>
+                            </TextBlock.ContextMenu>
+                        </TextBlock>
 
                         <TextBlock Text="Скорость ЦП" Grid.Row="4"/>
                         <TextBlock Text="2048 кбис/с" Grid.Row="4" Style="{StaticResource TextViewStyle1Column}"/>
@@ -685,6 +725,15 @@
             
             
             <TreeViewItem Header="БИ-RS">
+                <TreeViewItem.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Обновить" Click="RefreshParams">
+                            <MenuItem.Icon>
+                                <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </TreeViewItem.ContextMenu>
                 <TreeViewItem Header="Паспорт">
                     <TreeViewItem>
                         <TreeViewItem.Header>
@@ -744,6 +793,15 @@
             
             
             <TreeViewItem Header="БИ-ETH">
+                <TreeViewItem.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Обновить" Click="RefreshParams">
+                            <MenuItem.Icon>
+                                <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </TreeViewItem.ContextMenu>
                 <TreeViewItem Header="Паспорт">
                     <TreeViewItem>
                         <TreeViewItem.Header>

@@ -1,0 +1,19 @@
+﻿<Window x:Class="Diplom.SetMainStationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="ППУ1::Номер рабочей частоты ППУ" Height="120" Width="320">
+
+    <StackPanel>
+        <TextBlock Text="Тип станции:" HorizontalAlignment="Left" Margin="20 5 0 5"/>
+        <ComboBox Name="selectType" FontSize="12" Width="270" Height="20">
+            <ComboBoxItem>Ведомая</ComboBoxItem>
+            <ComboBoxItem>Ведущая</ComboBoxItem>
+        </ComboBox>
+        
+        <Button Click="SetTypeStation"  Height="20" Width="80" HorizontalAlignment="Right" Margin="20 10">Применить</Button>
+    </StackPanel>
+</Window>
