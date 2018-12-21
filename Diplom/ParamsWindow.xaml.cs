@@ -49,5 +49,12 @@ namespace Diplom
 			wnd.Owner = this;
 			wnd.Show();
 		}
+
+		private void SetNewSynhronizationStation(object sender, RoutedEventArgs e)
+		{
+			SetSynhronizationStation wnd = new SetSynhronizationStation(_currentStation);
+			wnd.Owner = this;
+			wnd.Show();
+		}
 	}
 }

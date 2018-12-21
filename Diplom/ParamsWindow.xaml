@@ -325,7 +325,19 @@
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="Синхронизация" Grid.Column="0"/>
-                                <TextBlock Text="РК" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                <!--<TextBlock Text="РК" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"-->
+                                <TextBlock Text="{Binding Path=Synhronization, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Style="{StaticResource TextViewStyle1Column}" Name="synhronizationStationTextBlock">
+                                    <TextBlock.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="Изменить" Click="SetNewSynhronizationStation"/>
+                                            <MenuItem Header="Обновить" Click="RefreshParams">
+                                                <MenuItem.Icon>
+                                                    <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                        </ContextMenu>
+                                    </TextBlock.ContextMenu>
+                                </TextBlock>
                             </Grid>
                         </TreeViewItem.Header>
                     </TreeViewItem>

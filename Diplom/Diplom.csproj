@@ -80,6 +80,9 @@
     <Compile Include="SetPeriodWindow.xaml.cs">
       <DependentUpon>SetPeriodWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SetSynhronizationStation.xaml.cs">
+      <DependentUpon>SetSynhronizationStation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Stock.cs" />
     <Compile Include="WorkWindow.xaml.cs">
       <DependentUpon>WorkWindow.xaml</DependentUpon>
@@ -121,6 +124,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SetPeriodWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SetSynhronizationStation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

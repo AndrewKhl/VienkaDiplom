@@ -12,6 +12,8 @@ namespace Diplom.Models
 	{
 		private int _period = 0;
 		private string _main = "Ведомая";
+		private string _synchronization = "Внутренняя";
+
 
 		public string Name { get; set; }
 		public int Number { get; set; }
@@ -32,6 +34,16 @@ namespace Diplom.Models
 			{
 				_main = value;
 				OnPropertyChanged("Main");
+			}
+		}
+
+		public string Synhronization
+		{
+			get { return _synchronization; }
+			set
+			{
+				_synchronization = value;
+				OnPropertyChanged("Synhronization");
 			}
 		}
 

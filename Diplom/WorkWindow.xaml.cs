@@ -4,13 +4,9 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-<<<<<<< HEAD
-using System.Windows.Media.Imaging;
-=======
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
->>>>>>> 2c18260912de3f77c837e3c41d4fcca55a75b785
 
 namespace Diplom
 {
@@ -19,13 +15,9 @@ namespace Diplom
     /// </summary>
     public partial class WorkWindow : Window
     {
-<<<<<<< HEAD
 
 		public List<int> numbersStations;
 		public List<int> numbersManagers;
-=======
-		public List<int> numberStations;
->>>>>>> 2c18260912de3f77c837e3c41d4fcca55a75b785
 
         private IFocusable _focusedControl;
         public IFocusable FocusedControl
