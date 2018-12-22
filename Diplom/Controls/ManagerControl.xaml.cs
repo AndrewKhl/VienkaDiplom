@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,11 +11,13 @@ namespace Diplom.Models
     /// <summary>
     /// Interaction logic for ManagerControl.xaml
     /// </summary>
-    public partial class ManagerControl : UserControl, IFocusable
+    public partial class ManagerControl : UserControl, IFocusable, IConnectable
     {
         private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_manager.png");
 		private static int numberManager = 0;
 		public DataManagers Data;
+
+		public List<ConnectionLine> connectionLines { get; } = new List<ConnectionLine>();
 
         public ManagerControl(WorkWindow window, string name, int number)
         {

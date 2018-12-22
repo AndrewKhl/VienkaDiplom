@@ -54,7 +54,7 @@
 
         <StackPanel Grid.Column="2" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
             <Button Click="CloseWindow">Отмена</Button>
-            <Button Click="CreateNetwork">ОК</Button>
+            <Button Click="CreateNetwork" IsDefault="True">ОК</Button>
         </StackPanel>
 
     </Grid>

@@ -56,7 +56,7 @@
                 <MenuItem Header="Связаться по локальному порту" Click="Connect_Click"></MenuItem>
                 <MenuItem Header="Связаться по порту А"></MenuItem>
                 <MenuItem Header="Связаться по порту Б"></MenuItem>
-                <MenuItem Header="Свзяаться по радиоканалу"></MenuItem>
+                <MenuItem Header="Свзяаться по радиоканалу" Click="Connect_Click"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="Обновить конфигурацию">
                     <MenuItem.Icon>

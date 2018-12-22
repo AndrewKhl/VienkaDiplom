@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -10,14 +11,15 @@ namespace Diplom.Models
     /// <summary>
     /// Interaction logic for StationControl.xaml
     /// </summary>
-    public partial class StationControl : UserControl, IFocusable
+    public partial class StationControl : UserControl, IFocusable, IConnectable
     {
         private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_relay.png");
 		private static int numberStation = 0;
 		public DataStation Data;
 
+		public List<ConnectionLine> connectionLines { get; } = new List<ConnectionLine>();
 
-        public StationControl(WorkWindow window, string name, int number)
+		public StationControl(WorkWindow window, string name, int number)
         {
             InitializeComponent();
             image.Source = new BitmapImage(ImageUri);
@@ -35,10 +37,18 @@ namespace Diplom.Models
 			DataNetwork.Stations.Add(this);
 
             this.window = window;
-        }
+
+			BitmapImage gauge = new BitmapImage();
+			gauge.BeginInit();
+			gauge.UriSource = new Uri("pack://application:,,,/Resources/gauge_1_30.png");
+			gauge.EndInit();
+			this.stationGauge.Source = gauge;
+			this.stationGauge.Visibility = Visibility.Hidden;
+		}
 
         public WorkWindow window { get; }
-        public event Action FocusedElement;
+
+		public event Action FocusedElement;
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
@@ -85,9 +95,9 @@ namespace Diplom.Models
 			wnd.Show();
 		}
 
-        private void Connect_Click(object sender, RoutedEventArgs e)
-        {
-            window.ConnectionAttempt(this);
-        }
+		private void Connect_Click(object sender, RoutedEventArgs e)
+		{
+			window.ConnectionAttempt(this);
+		}
     }
 }

@@ -98,7 +98,7 @@ namespace Diplom
             var station = new StationControl(this, name, number);
             Canvas.SetLeft(station, 0);
             Canvas.SetTop(station, 0);
-            foreach (Control control in canvas.Children)
+            foreach (var control in canvas.Children)
             {
                 if (control is IFocusable)
                 {
@@ -142,12 +142,33 @@ namespace Diplom
 
         public void RemoveElement()
         {
+			IConnectable connectable = FocusedControl as IConnectable;
+
             if (FocusedControl != null)
             {
+				foreach (var line in (FocusedControl as IConnectable).connectionLines)
+				{
+					if (line.firstControl == connectable)
+					{
+						(line.secondControl as IConnectable).connectionLines.Remove(line);
+						if (line.secondControl is StationControl)
+							(line.secondControl as StationControl).stationGauge.Visibility = Visibility.Hidden;
+					}
+					else
+					{
+						(line.firstControl as IConnectable).connectionLines.Remove(line);
+						if (line.firstControl is StationControl)
+							(line.firstControl as StationControl).stationGauge.Visibility = Visibility.Hidden;
+					}
+					canvas.Children.Remove(line.line);
+				}
+				connectable.connectionLines.Clear();
+
                 canvas.Children.Remove(FocusedControl as UserControl);
-                foreach (IFocusable control in canvas.Children)
+                foreach (var control in canvas.Children)
                 {
-                    control.FocusedElement -= FocusedControl.UnsetFocusBorder;
+					if (control is IFocusable)
+						(control as IFocusable).FocusedElement -= FocusedControl.UnsetFocusBorder;
                 }
                 FocusedControl = null;
             }
@@ -155,23 +176,25 @@ namespace Diplom
 
         private void canvas_Drop(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent("Station"))
-            {
-                var station = (StationControl)e.Data.GetData("Station");
-                double shiftX = (double)e.Data.GetData("shiftX");
-                double shiftY = (double)e.Data.GetData("shiftY");
-                Canvas.SetLeft(station, e.GetPosition(canvas).X - shiftX);
-                Canvas.SetTop(station, e.GetPosition(canvas).Y - shiftY);
-            }
-            else if (e.Data.GetDataPresent("Manager"))
-            {
-                var manager = (ManagerControl)e.Data.GetData("Manager");
-                double shiftX = (double)e.Data.GetData("shiftX");
-                double shiftY = (double)e.Data.GetData("shiftY");
-                Canvas.SetLeft(manager, e.GetPosition(canvas).X - shiftX);
-                Canvas.SetTop(manager, e.GetPosition(canvas).Y - shiftY);
-            }
-            e.Handled = true;
+			UserControl control;
+			if (e.Data.GetDataPresent("Station"))
+			{
+				control = (StationControl)e.Data.GetData("Station");
+			}
+			else if (e.Data.GetDataPresent("Manager"))
+			{
+				control = (ManagerControl)e.Data.GetData("Manager");
+			}
+			else return;
+			double shiftX = (double)e.Data.GetData("shiftX");
+			double shiftY = (double)e.Data.GetData("shiftY");
+			Canvas.SetLeft(control, e.GetPosition(canvas).X - shiftX);
+			Canvas.SetTop(control, e.GetPosition(canvas).Y - shiftY);
+			foreach (var line in (control as IConnectable).connectionLines)
+			{
+				line.UpdatePosition();
+			}
+			e.Handled = true;
         }
 
         private void CreateNetwork_Click(object sender, RoutedEventArgs e)
@@ -234,38 +257,29 @@ namespace Diplom
         public UserControl connector = null;
         public bool ConnectionAttempt(UserControl control)
         {
-            if (connector == null) connector = control;
-            else {
-                if (connector is ManagerControl && control is ManagerControl) return false;
+			if (connector == null) connector = control;
+			else {
+				if (connector is ManagerControl && control is ManagerControl) return false;
 
-                //if ((connector is ManagerControl && control is StationControl) || (connector is StationControl && control is ManagerControl)) {
-                SolidColorBrush brush;
-                if (connector is StationControl && control is StationControl)
-                {
-                    brush = new SolidColorBrush(Colors.Green);
+				SolidColorBrush brush;
+				ConnectionLine line;
 
-                    BitmapImage gauge = new BitmapImage();
-                    gauge.BeginInit();
-                    gauge.UriSource = new Uri("pack://application:,,,/Resources/gauge_1_30.png");
-                    gauge.EndInit();
-                    (connector as StationControl).stationGauge.Source = gauge;
-                    (control as StationControl).stationGauge.Source = gauge;
-                }
-                else
-                    brush = new SolidColorBrush(Colors.Blue);
+				if (connector is StationControl && control is StationControl)
+				{
+					brush = new SolidColorBrush(Colors.Green);
 
-                Line line = new Line();
-                line.X1 = (double)connector.GetValue(Canvas.LeftProperty) + connector.ActualWidth / 2;
-                line.Y1 = (double)connector.GetValue(Canvas.TopProperty) + connector.ActualHeight / 2;
-                line.X2 = (double)control.GetValue(Canvas.LeftProperty) + connector.ActualWidth / 2;
-                line.Y2 = (double)control.GetValue(Canvas.TopProperty) + connector.ActualHeight / 2;
-                line.Stroke = brush;
-                line.StrokeThickness = 3;
-                Canvas.SetLeft(line, 0);
-                Canvas.SetTop(line, 0);
-                canvas.Children.Insert(0, line);
-                connector = null;
-                return true;
+					(connector as StationControl).stationGauge.Visibility = Visibility.Visible;
+					(control as StationControl).stationGauge.Visibility = Visibility.Visible;
+
+					line = new ConnectionLine(connector, control, canvas);
+				}
+				else {
+					brush = new SolidColorBrush(Colors.Blue);
+					line = new ConnectionLine(connector, control, canvas, true);
+				}
+
+				connector = null;
+				return true;
             }
             return false;
         }

@@ -10,7 +10,7 @@
 
     <StackPanel>
         <TextBlock Text="Синхронизация по:" HorizontalAlignment="Left" Margin="20 5 0 5"/>
-        <ComboBox Name="selectType" FontSize="12" Width="270" Height="20">
+        <ComboBox Name="selectType" FontSize="12" Width="270" Height="22">
             <ComboBoxItem>Внутренняя</ComboBoxItem>
             <ComboBoxItem>РК</ComboBoxItem>
         </ComboBox>
