@@ -282,9 +282,9 @@
                     </MenuItem.ToolTip>
                 </MenuItem>
 
-                <MenuItem Width="25">
+                <MenuItem Width="25" x:Name="btnProperties" IsEnabled="False">
                     <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/CustomFile.png"/>
+                        <Image Source="pack://application:,,,/Resources/Icons/DisabledShowProperty.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
                         <ToolTip>
@@ -292,9 +292,9 @@
                         </ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
-                <MenuItem Width="25">
+                <MenuItem Width="25" x:Name="btnParameters" Click="btnParameters_Click" IsEnabled="False">
                     <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/Params.png"/>
+                        <Image Source="pack://application:,,,/Resources/Icons/DisabledShow.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
                         <ToolTip>
@@ -304,7 +304,7 @@
                 </MenuItem>
                 <MenuItem Width="25">
                     <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/DBevent.png"/>
+                        <Image Source="pack://application:,,,/Resources/Icons/DisableDB.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
                         <ToolTip>

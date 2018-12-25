@@ -32,7 +32,7 @@
         <StackPanel.ContextMenu>
             <ContextMenu>
                 <MenuItem Header="Станция">
-                    <MenuItem Header="Свойсва">
+                    <MenuItem Header="Свойства">
                         <MenuItem.Icon>
                             <Image Source="pack://application:,,,/Resources/Icons/CustomFile.png"/>
                         </MenuItem.Icon>

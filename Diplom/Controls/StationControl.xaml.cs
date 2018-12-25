@@ -88,7 +88,7 @@ namespace Diplom.Models
             }
         }
 
-		private void ShowParametrWindow(object sender, RoutedEventArgs e)
+		public void ShowParametrWindow(object sender, RoutedEventArgs e)
 		{
 			ParamsWindow wnd = new ParamsWindow(this);
 			wnd.Owner = Stock.workWindow;

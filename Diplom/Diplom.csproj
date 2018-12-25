@@ -228,5 +228,8 @@
   <ItemGroup>
     <Resource Include="Resources\gauge_1_30.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\DisableDB.PNG" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

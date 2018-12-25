@@ -15,9 +15,21 @@ namespace Diplom
     /// </summary>
     public partial class WorkWindow : Window
     {
-
 		public List<int> numbersStations;
 		public List<int> numbersManagers;
+
+        private Uri enableRemove = new Uri(@"pack://application:,,,/Resources/Icons/Removed.png");
+        private Uri disableRemove = new Uri(@"pack://application:,,,/Resources/Icons/DisableRemoved.png");
+        private Uri enableManager = new Uri(@"pack://application:,,,/Resources/Icons/NewManager.png");
+        private Uri disableManager = new Uri(@"pack://application:,,,/Resources/Icons/DisableCreateManager.png");
+        private Uri enableStation = new Uri(@"pack://application:,,,/Resources/Icons/NewStation.png");
+        private Uri disableStation = new Uri(@"pack://application:,,,/Resources/Icons/DisableCreateManager.png");
+        private Uri enableProperties = new Uri(@"pack://application:,,,/Resources/Icons/CustomFile.png");
+        private Uri disableProperties = new Uri(@"pack://application:,,,/Resources/Icons/DisabledShowProperty.png");
+        private Uri enableParameters = new Uri(@"pack://application:,,,/Resources/Icons/Params.png");
+        private Uri disableParameters = new Uri(@"pack://application:,,,/Resources/Icons/DisabledShow.png");
+        private Uri enableDB = new Uri(@"pack://application:,,,/Resources/Icons/DBevent.png");
+        private Uri disableDB = new Uri(@"pack://application:,,,/Resources/Icons/DisableDB.png");
 
         private IFocusable _focusedControl;
         public IFocusable FocusedControl
@@ -26,13 +38,30 @@ namespace Diplom
 
             set
             {
-                if (value == null)
+                if (value != null)
                 {
-                    btnRemoveMenuItem.IsEnabled = false;
+                    btnRemoveMenuItem.IsEnabled = true;
+                    btnRemoveMenuItem.Icon = new Image {Source = new BitmapImage(enableRemove) };
+
+                    btnProperties.IsEnabled = true;
+                    btnProperties.Icon = new Image { Source = new BitmapImage(enableProperties) };
+
+                    if (value is StationControl)
+                    {
+                        btnParameters.IsEnabled = true;
+                        btnParameters.Icon = new Image { Source = new BitmapImage(enableParameters) };
+                    }
                 }
                 else
                 {
-                    btnRemoveMenuItem.IsEnabled = true;
+                    btnRemoveMenuItem.IsEnabled = false;
+                    btnRemoveMenuItem.Icon = new Image { Source = new BitmapImage(disableRemove) };
+
+                    btnProperties.IsEnabled = false;
+                    btnProperties.Icon = new Image { Source = new BitmapImage(disableProperties) };
+
+                    btnParameters.IsEnabled = false;
+                    btnParameters.Icon = new Image { Source = new BitmapImage(disableParameters) };
                 }
                 _focusedControl = value;
             }
@@ -56,40 +85,14 @@ namespace Diplom
 			btnRemovedMenu.IsEnabled = enabled;
 			btnRemoveMenuItem.IsEnabled = enabled;
 
-			if (!enabled)
+			if (enabled)
 			{
-
-			}
-			else
-			{
-				btnRemoveMenuItem.Icon = new Image {
-					Source = new BitmapImage(new Uri(@"pack://application:,,,/Resources/Icons/Removed.png"))
-				};
-
-				btnRemovedMenu.Icon = new Image
-				{
-					Source = new BitmapImage(new Uri(@"pack://application:,,,/Resources/Icons/Removed.png"))
-				};
-
-				btnCreateManagerFast.Icon = new Image
-				{
-					Source = new BitmapImage(new Uri(@"pack://application:,,,/Resources/Icons/NewManager.png"))
-				};
-
-				btnCreateManagerMenu.Icon = new Image
-				{
-					Source = new BitmapImage(new Uri(@"pack://application:,,,/Resources/Icons/NewManager.png"))
-				};
-
-				btnCreateStationFast.Icon = new Image
-				{
-					Source = new BitmapImage(new Uri(@"pack://application:,,,/Resources/Icons/NewStation.png"))
-				};
-
-				btnCreateStationMenu.Icon = new Image
-				{
-					Source = new BitmapImage(new Uri(@"pack://application:,,,/Resources/Icons/NewStation.png"))
-				};
+				btnRemoveMenuItem.Icon = new Image { Source = new BitmapImage(enableRemove) };
+				btnRemovedMenu.Icon = new Image { Source = new BitmapImage(enableRemove) };
+				btnCreateManagerFast.Icon = new Image { Source = new BitmapImage(enableManager) };
+				btnCreateManagerMenu.Icon = new Image { Source = new BitmapImage(enableManager) };
+                btnCreateStationFast.Icon = new Image { Source = new BitmapImage(enableStation) };
+                btnCreateStationMenu.Icon = new Image { Source = new BitmapImage(enableStation) };
 			}
 		}
 
@@ -282,6 +285,11 @@ namespace Diplom
 				return true;
             }
             return false;
+        }
+
+        private void btnParameters_Click(object sender, RoutedEventArgs e)
+        {
+            (FocusedControl as StationControl).ShowParametrWindow(sender, e);
         }
     }
 }
