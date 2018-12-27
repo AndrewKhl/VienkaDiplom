@@ -50,10 +50,10 @@
                     </MenuItem>
                 </MenuItem>
                 <Separator></Separator>
-                <MenuItem Header="Связаться по локальному порту" Click="Connect_Click"></MenuItem>
+                <MenuItem Header="Связаться по локальному порту" Click="LocalConnect_Click"></MenuItem>
                 <MenuItem Header="Связаться по порту А"></MenuItem>
                 <MenuItem Header="Связаться по порту Б"></MenuItem>
-                <MenuItem Header="Связаться по радиоканалу" Click="Connect_Click"></MenuItem>
+                <MenuItem Header="Связаться по радиоканалу" Click="RadioConnect_Click"></MenuItem>
                 <Separator></Separator>
                 <MenuItem Header="Обновить конфигурацию">
                     <MenuItem.Icon>

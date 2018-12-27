@@ -73,6 +73,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ConfigurationManager.xaml.cs">
+      <DependentUpon>ConfigurationManager.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ConfigurationNetwork.xaml.cs">
       <DependentUpon>ConfigurationNetwork.xaml</DependentUpon>
     </Compile>
@@ -106,6 +109,10 @@
     <Compile Include="WorkWindow.xaml.cs">
       <DependentUpon>WorkWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="ConfigurationManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ConfigurationNetwork.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

@@ -20,6 +20,7 @@ namespace Diplom
         public int maxManagerNumber = 1;
         public UserControl connector = null;
         public Color currentColor;
+        private bool isRadioConnection = false;
 
         private Uri enableRemove = new Uri(@"pack://application:,,,/Resources/Icons/Removed.png");
         private Uri disableRemove = new Uri(@"pack://application:,,,/Resources/Icons/DisableRemoved.png");
@@ -96,7 +97,7 @@ namespace Diplom
 			}
 		}
 
-        public void CreateStation(string name = "", int number = 0)
+        public void CreateStation(string name, int number = 0)
         {
 			numbersStations.Add(number);
             numbersStations.Sort();
@@ -116,10 +117,9 @@ namespace Diplom
             station.SetFocusBorder();
         }
 
-        public void CreateManager(string name = "", int number = 0)
+        public void CreateManager(string name, int number = 0)
         {
             numbersManagers.Add(number);
-            numbersManagers.Sort();
             var manager = new ManagerControl(this, name, number, currentColor);
             Canvas.SetLeft(manager, 0);
             Canvas.SetTop(manager, 0);
@@ -204,7 +204,6 @@ namespace Diplom
             {
                 var manager = FocusedControl as ManagerControl;
                 numbersManagers.Remove(manager.Data.Number);
-                numbersManagers.Sort();
                 if (manager.line != null)
                 {
                     canvas.Children.Remove(manager.line.line);
@@ -298,7 +297,18 @@ namespace Diplom
 
         private void CreateManager_Click(object sender, RoutedEventArgs e)
         {
-            CreateManager();
+            if (numbersManagers.Count < 1)
+            {
+                ConfigurationManager wnd = new ConfigurationManager { Owner = this };
+                wnd.Show();
+            }
+            else
+            {
+                MessageBox.Show("В данной версии существует ограничение на количество " +
+                    "одновременно существующих менеджеров сети: не более одного", 
+                    "Ограничения версии", 
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
@@ -312,16 +322,19 @@ namespace Diplom
             RemoveElement();
         }
 
-        public void ConnectControls(StationControl control)
+        public void ConnectControls(StationControl control, bool isRadio = true)
         {
             if (connector == null)
             {
                 if (control.firstLine == null || control.secondLine == null)
+                {
                     connector = control;
+                    isRadioConnection = isRadio;
+                }
             }
             else if (connector != control)
             {
-                if (connector is StationControl)
+                if (connector is StationControl && isRadio && isRadioConnection)
                 {
                     var first = connector as StationControl;
                     ConnectionLine line;
@@ -332,6 +345,7 @@ namespace Diplom
                         first.stationGauge.Visibility = Visibility.Visible;
                         control.firstLine = line;
                         control.stationGauge.Visibility = Visibility.Visible;
+                        connector = null;
                     }
                     else if (first.secondLine == null && control.firstLine == null)
                     {
@@ -340,6 +354,7 @@ namespace Diplom
                         first.stationGauge.Visibility = Visibility.Visible;
                         control.firstLine = line;
                         control.stationGauge.Visibility = Visibility.Visible;
+                        connector = null;
                     }
                     else if (first.firstLine == null && control.secondLine == null)
                     {
@@ -348,6 +363,7 @@ namespace Diplom
                         first.stationGauge.Visibility = Visibility.Visible;
                         control.secondLine = line;
                         control.stationGauge.Visibility = Visibility.Visible;
+                        connector = null;
                     }
                     else if (first.secondLine == null && control.secondLine == null) 
                     {
@@ -356,9 +372,10 @@ namespace Diplom
                         first.stationGauge.Visibility = Visibility.Visible;
                         control.secondLine = line;
                         control.stationGauge.Visibility = Visibility.Visible;
+                        connector = null;
                     }
                 }
-                else
+                else if (connector is ManagerControl && !isRadio)
                 {
                     var first = connector as ManagerControl;
                     ConnectionLine line;
@@ -369,18 +386,17 @@ namespace Diplom
                             line = new ConnectionLine(first, control, canvas, true);
                             first.line = line;
                             control.firstLine = line;
-                            control.stationGauge.Visibility = Visibility.Visible;
+                            connector = null;
                         }
                         else if (control.secondLine == null)
                         {
                             line = new ConnectionLine(first, control, canvas, true);
                             first.line = line;
                             control.secondLine = line;
-                            control.stationGauge.Visibility = Visibility.Visible;
+                            connector = null;
                         }
                     }
                 }
-                connector = null;
             }
         }
 
@@ -388,44 +404,33 @@ namespace Diplom
         {
             if (connector == null)
             {
-                if (control.line == null) connector = control;
-            }
-            else if (connector != control)
-            {
-                if (connector is ManagerControl)
+                if (control.line == null)
                 {
-                    var first = connector as ManagerControl;
-                    ConnectionLine line;
-                    if (first.line == null && control.line == null)
+                    connector = control;
+                    isRadioConnection = false;
+                }
+            }
+            else if (connector != control && connector is StationControl && isRadioConnection == false)
+            {
+                var first = connector as StationControl;
+                ConnectionLine line;
+                if (control.line == null)
+                {
+                    if (first.firstLine == null)
                     {
                         line = new ConnectionLine(first, control, canvas, true);
-                        first.line = line;
+                        first.firstLine = line;
                         control.line = line;
+                        connector = null;
                     }
-                }
-                else
-                {
-                    var first = connector as StationControl;
-                    ConnectionLine line;
-                    if (control.line == null)
+                    else if (first.secondLine == null)
                     {
-                        if (first.firstLine == null)
-                        {
-                            line = new ConnectionLine(first, control, canvas, true);
-                            first.firstLine = line;
-                            first.stationGauge.Visibility = Visibility.Visible;
-                            control.line = line;
-                        }
-                        else if (first.secondLine == null)
-                        {
-                            line = new ConnectionLine(first, control, canvas, true);
-                            first.secondLine = line;
-                            first.stationGauge.Visibility = Visibility.Visible;
-                            control.line = line;
-                        }
+                        line = new ConnectionLine(first, control, canvas, true);
+                        first.secondLine = line;
+                        control.line = line;
+                        connector = null;
                     }
                 }
-                connector = null;
             }
         }
 

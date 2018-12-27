@@ -267,7 +267,7 @@
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
                         <ToolTip>
-                            Создать новую менеджера
+                            Создать менеджера
                         </ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>

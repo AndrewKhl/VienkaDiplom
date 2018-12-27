@@ -90,9 +90,14 @@ namespace Diplom.Models
 			wnd.Show();
 		}
 
-		private void Connect_Click(object sender, RoutedEventArgs e)
-		{
+        private void RadioConnect_Click(object sender, RoutedEventArgs e)
+        {
 			window.ConnectControls(this);
-		}
+        }
+
+        private void LocalConnect_Click(object sender, RoutedEventArgs e)
+        {
+			window.ConnectControls(this, false);
+        }
     }
 }
