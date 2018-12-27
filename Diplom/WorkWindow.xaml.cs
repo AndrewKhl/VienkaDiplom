@@ -332,71 +332,89 @@ namespace Diplom
                     isRadioConnection = isRadio;
                 }
             }
-            else if (connector != control)
+            else
             {
-                if (connector is StationControl && isRadio && isRadioConnection)
+                if (connector != control)
                 {
-                    var first = connector as StationControl;
-                    ConnectionLine line;
-                    if (first.firstLine == null && control.firstLine == null)
+                    if (connector is StationControl && isRadio && isRadioConnection)
                     {
-                        line = new ConnectionLine(first, control, canvas);
-                        first.firstLine = line;
-                        first.stationGauge.Visibility = Visibility.Visible;
-                        control.firstLine = line;
-                        control.stationGauge.Visibility = Visibility.Visible;
-                        connector = null;
+                        var first = connector as StationControl;
+                        bool showGauges = false;
+
+                        if ((first.firstLine != null && (first.firstLine.firstControl is ManagerControl || first.firstLine.secondControl is ManagerControl))
+                            || (first.secondLine != null && (first.secondLine.firstControl is ManagerControl || first.secondLine.secondControl is ManagerControl))
+                            || (control.firstLine != null && (control.firstLine.firstControl is ManagerControl || control.firstLine.secondControl is ManagerControl))
+                            || (control.secondLine != null && (control.secondLine.firstControl is ManagerControl || control.secondLine.secondControl is ManagerControl)))
+                            showGauges = true;
+
+                            ConnectionLine line;
+                            if (first.firstLine == null && control.firstLine == null)
+                            {
+                                line = new ConnectionLine(first, control, canvas);
+                                first.firstLine = line;
+                                control.firstLine = line;
+                                if (showGauges)
+                                {
+                                    first.stationGauge.Visibility = Visibility.Visible;
+                                    control.stationGauge.Visibility = Visibility.Visible;
+                                }
+                            }
+                            else if (first.secondLine == null && control.firstLine == null)
+                            {
+                                line = new ConnectionLine(first, control, canvas);
+                                first.secondLine = line;
+                                if (showGauges)
+                                {
+                                    first.stationGauge.Visibility = Visibility.Visible;
+                                    control.stationGauge.Visibility = Visibility.Visible;
+                                }
+                                control.firstLine = line;
+                            }
+                            else if (first.firstLine == null && control.secondLine == null)
+                            {
+                                line = new ConnectionLine(first, control, canvas);
+                                first.firstLine = line;
+                                if (showGauges)
+                                {
+                                    first.stationGauge.Visibility = Visibility.Visible;
+                                    control.stationGauge.Visibility = Visibility.Visible;
+                                }
+                                control.secondLine = line;
+                            }
+                            else if (first.secondLine == null && control.secondLine == null)
+                            {
+                                line = new ConnectionLine(first, control, canvas);
+                                first.secondLine = line;
+                                control.secondLine = line;
+                                if (showGauges)
+                                {
+                                    first.stationGauge.Visibility = Visibility.Visible;
+                                    control.stationGauge.Visibility = Visibility.Visible;
+                                }
+                            }
                     }
-                    else if (first.secondLine == null && control.firstLine == null)
+                    else if (connector is ManagerControl && !isRadio)
                     {
-                        line = new ConnectionLine(first, control, canvas);
-                        first.secondLine = line;
-                        first.stationGauge.Visibility = Visibility.Visible;
-                        control.firstLine = line;
-                        control.stationGauge.Visibility = Visibility.Visible;
-                        connector = null;
-                    }
-                    else if (first.firstLine == null && control.secondLine == null)
-                    {
-                        line = new ConnectionLine(first, control, canvas);
-                        first.firstLine = line;
-                        first.stationGauge.Visibility = Visibility.Visible;
-                        control.secondLine = line;
-                        control.stationGauge.Visibility = Visibility.Visible;
-                        connector = null;
-                    }
-                    else if (first.secondLine == null && control.secondLine == null) 
-                    {
-                        line = new ConnectionLine(first, control, canvas);
-                        first.secondLine = line;
-                        first.stationGauge.Visibility = Visibility.Visible;
-                        control.secondLine = line;
-                        control.stationGauge.Visibility = Visibility.Visible;
-                        connector = null;
+                        var first = connector as ManagerControl;
+                        ConnectionLine line;
+                        if (first.line == null)
+                        {
+                            if (control.firstLine == null)
+                            {
+                                line = new ConnectionLine(first, control, canvas, true);
+                                first.line = line;
+                                control.firstLine = line;
+                            }
+                            else if (control.secondLine == null)
+                            {
+                                line = new ConnectionLine(first, control, canvas, true);
+                                first.line = line;
+                                control.secondLine = line;
+                            }
+                        }
                     }
                 }
-                else if (connector is ManagerControl && !isRadio)
-                {
-                    var first = connector as ManagerControl;
-                    ConnectionLine line;
-                    if (first.line == null)
-                    {
-                        if (control.firstLine == null)
-                        {
-                            line = new ConnectionLine(first, control, canvas, true);
-                            first.line = line;
-                            control.firstLine = line;
-                            connector = null;
-                        }
-                        else if (control.secondLine == null)
-                        {
-                            line = new ConnectionLine(first, control, canvas, true);
-                            first.line = line;
-                            control.secondLine = line;
-                            connector = null;
-                        }
-                    }
-                }
+                connector = null;
             }
         }
 
@@ -410,27 +428,31 @@ namespace Diplom
                     isRadioConnection = false;
                 }
             }
-            else if (connector != control && connector is StationControl && isRadioConnection == false)
+            else
             {
-                var first = connector as StationControl;
-                ConnectionLine line;
-                if (control.line == null)
+                if (connector != control && connector is StationControl && isRadioConnection == false)
                 {
-                    if (first.firstLine == null)
+                    var first = connector as StationControl;
+                    ConnectionLine line;
+                    if (control.line == null)
                     {
-                        line = new ConnectionLine(first, control, canvas, true);
-                        first.firstLine = line;
-                        control.line = line;
-                        connector = null;
-                    }
-                    else if (first.secondLine == null)
-                    {
-                        line = new ConnectionLine(first, control, canvas, true);
-                        first.secondLine = line;
-                        control.line = line;
-                        connector = null;
+                        if (first.firstLine == null)
+                        {
+                            line = new ConnectionLine(first, control, canvas, true);
+                            first.firstLine = line;
+                            control.line = line;
+                            //connector = null;
+                        }
+                        else if (first.secondLine == null)
+                        {
+                            line = new ConnectionLine(first, control, canvas, true);
+                            first.secondLine = line;
+                            control.line = line;
+                            //connector = null;
+                        }
                     }
                 }
+                connector = null;
             }
         }
 
