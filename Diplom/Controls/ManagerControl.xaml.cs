@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -14,7 +13,6 @@ namespace Diplom.Models
     public partial class ManagerControl : UserControl, IFocusable
     {
         private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_manager.png");
-		private static int numberManager = 0;
 		public DataManagers Data;
         public ConnectionLine line;
 
@@ -25,12 +23,8 @@ namespace Diplom.Models
             BorderThickness = new Thickness(2);
 			Data = new DataManagers();
 
-			if (name == "")
-				managerName.Text = "Безымянный " + (++numberManager).ToString();
-			else
-				managerName.Text = name;
-
-			Data.Name = managerName.Text;
+            managerName.Text = $"{name} [{number}]";
+            Data.Name = name;
 			Data.Number = number;
 
 			DataNetwork.Managers.Add(this);

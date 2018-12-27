@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -14,7 +13,6 @@ namespace Diplom.Models
     public partial class StationControl : UserControl, IFocusable
     {
         private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_relay.png");
-		private static int numberStation = 0;
 		public DataStation Data;
         public ConnectionLine firstLine;
         public ConnectionLine secondLine;
@@ -26,12 +24,8 @@ namespace Diplom.Models
             BorderThickness = new Thickness(2);
 			Data = new DataStation();
 
-			if (name == "")
-				stationName.Text = "Безымянная " + (++numberStation).ToString();
-			else
-				stationName.Text = name;
-
-			Data.Name = stationName.Text;
+            stationName.Text = $"{name} [{number}]";
+			Data.Name = name;
 			Data.Number = number;
 
 			DataNetwork.Stations.Add(this);

@@ -1,17 +1,6 @@
 ﻿using Diplom.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Diplom
 {
@@ -25,7 +14,7 @@ namespace Diplom
             InitializeComponent();
 
 			List<string> list = new List<string>();
-			for (int i = 1; i <= 55; ++i)
+			for (int i = 1; i <= Stock.numberLimit; ++i)
 			{
 				if (!Stock.workWindow.numbersManagers.Contains(i))
 					list.Add(i.ToString());
@@ -33,9 +22,12 @@ namespace Diplom
 				
 			listOfAdress.ItemsSource = list;
 			listOfAdress.SelectedIndex = 0;
+
+            //nameNewNetwork.Text = $"Безымянный [{list[0].ToString()}]";
+            nameNewNetwork.Text = $"Безымянный";
         }
 
-		private void CloseWindow(object sender, RoutedEventArgs e)
+        private void CloseWindow(object sender, RoutedEventArgs e)
 		{
 			Close();
 		}
@@ -43,8 +35,7 @@ namespace Diplom
 		private void CreateNetwork(object sender, RoutedEventArgs e)
 		{
 			int number = int.Parse(listOfAdress.SelectedItem.ToString());
-			Stock.workWindow.numbersManagers.Add(number);
-			Stock.workWindow.CreateManager("", number);
+			Stock.workWindow.CreateManager(nameNewNetwork.Text.Trim(), number);
 			DataNetwork.Name = nameNewNetwork.Text.Trim();
 			DataNetwork.Type = typeNetwork.SelectedItem.ToString();
 			DataNetwork.IsCreate = true;
@@ -52,6 +43,5 @@ namespace Diplom
 			Close();
 			Stock.workWindow.CreateStation_Click(sender, e);
 		}
-
 	}
 }

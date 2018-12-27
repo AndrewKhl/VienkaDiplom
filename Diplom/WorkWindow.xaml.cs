@@ -4,9 +4,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Diplom
 {
@@ -17,9 +15,9 @@ namespace Diplom
     {
 		public List<int> numbersStations = new List<int>();
 		public List<int> numbersManagers = new List<int>();
-        public List<ConnectionLine> connectionLines = new List<ConnectionLine>();
+        public int maxStationNumber = 1;
+        public int maxManagerNumber = 1;
         public UserControl connector = null;
-
 
         private Uri enableRemove = new Uri(@"pack://application:,,,/Resources/Icons/Removed.png");
         private Uri disableRemove = new Uri(@"pack://application:,,,/Resources/Icons/DisableRemoved.png");
@@ -98,6 +96,8 @@ namespace Diplom
 
         public void CreateStation(string name = "", int number = 0)
         {
+			numbersStations.Add(number);
+            numbersStations.Sort();
             var station = new StationControl(this, name, number);
             Canvas.SetLeft(station, 0);
             Canvas.SetTop(station, 0);
@@ -116,6 +116,8 @@ namespace Diplom
 
         public void CreateManager(string name = "", int number = 0)
         {
+            numbersManagers.Add(number);
+            numbersManagers.Sort();
             var manager = new ManagerControl(this, name, number);
             Canvas.SetLeft(manager, 0);
             Canvas.SetTop(manager, 0);
@@ -181,6 +183,8 @@ namespace Diplom
             if (FocusedControl is StationControl)
             {
                 var station = FocusedControl as StationControl;
+                numbersStations.Remove(station.Data.Number);
+                numbersStations.Sort();
                 if (station.firstLine != null)
                 {
                     canvas.Children.Remove(station.firstLine.line);
@@ -195,6 +199,8 @@ namespace Diplom
             else if (FocusedControl is ManagerControl)
             {
                 var manager = FocusedControl as ManagerControl;
+                numbersManagers.Remove(manager.Data.Number);
+                numbersManagers.Sort();
                 if (manager.line != null)
                 {
                     canvas.Children.Remove(manager.line.line);
