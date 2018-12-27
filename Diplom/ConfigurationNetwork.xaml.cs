@@ -1,6 +1,7 @@
 ﻿using Diplom.Models;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Media;
 
 namespace Diplom
 {
@@ -23,7 +24,6 @@ namespace Diplom
 			listOfAdress.ItemsSource = list;
 			listOfAdress.SelectedIndex = 0;
 
-            //nameNewNetwork.Text = $"Безымянный [{list[0].ToString()}]";
             nameNewNetwork.Text = $"Безымянный";
         }
 
@@ -35,6 +35,7 @@ namespace Diplom
 		private void CreateNetwork(object sender, RoutedEventArgs e)
 		{
 			int number = int.Parse(listOfAdress.SelectedItem.ToString());
+            Stock.workWindow.currentColor = colorCanvas.SelectedColor ?? Colors.Green;
 			Stock.workWindow.CreateManager(nameNewNetwork.Text.Trim(), number);
 			DataNetwork.Name = nameNewNetwork.Text.Trim();
 			DataNetwork.Type = typeNetwork.SelectedItem.ToString();

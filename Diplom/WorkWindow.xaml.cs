@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace Diplom
@@ -18,6 +19,7 @@ namespace Diplom
         public int maxStationNumber = 1;
         public int maxManagerNumber = 1;
         public UserControl connector = null;
+        public Color currentColor;
 
         private Uri enableRemove = new Uri(@"pack://application:,,,/Resources/Icons/Removed.png");
         private Uri disableRemove = new Uri(@"pack://application:,,,/Resources/Icons/DisableRemoved.png");
@@ -98,7 +100,7 @@ namespace Diplom
         {
 			numbersStations.Add(number);
             numbersStations.Sort();
-            var station = new StationControl(this, name, number);
+            var station = new StationControl(this, name, number, currentColor);
             Canvas.SetLeft(station, 0);
             Canvas.SetTop(station, 0);
             foreach (var control in canvas.Children)
@@ -118,7 +120,7 @@ namespace Diplom
         {
             numbersManagers.Add(number);
             numbersManagers.Sort();
-            var manager = new ManagerControl(this, name, number);
+            var manager = new ManagerControl(this, name, number, currentColor);
             Canvas.SetLeft(manager, 0);
             Canvas.SetTop(manager, 0);
             foreach (Control control in canvas.Children)
@@ -195,6 +197,8 @@ namespace Diplom
                     canvas.Children.Remove(station.secondLine.line);
                     ClearLineControls(station.secondLine);
                 }
+
+                DataNetwork.Stations.Remove(station);
             }
             else if (FocusedControl is ManagerControl)
             {
@@ -206,6 +210,8 @@ namespace Diplom
                     canvas.Children.Remove(manager.line.line);
                     ClearLineControls(manager.line);
                 }
+
+                DataNetwork.Managers.Remove(manager);
             }
 
             canvas.Children.Remove(FocusedControl as UserControl);

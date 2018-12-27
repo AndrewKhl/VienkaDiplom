@@ -17,9 +17,10 @@ namespace Diplom.Models
         public ConnectionLine firstLine;
         public ConnectionLine secondLine;
 
-		public StationControl(WorkWindow window, string name, int number)
+		public StationControl(WorkWindow window, string name, int number, Color color)
         {
             InitializeComponent();
+            (Resources["fontColor"] as SolidColorBrush).Color = color;
             image.Source = new BitmapImage(ImageUri);
             BorderThickness = new Thickness(2);
 			Data = new DataStation();

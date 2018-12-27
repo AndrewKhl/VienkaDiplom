@@ -22,7 +22,6 @@ namespace Diplom
 			listOfAdress.ItemsSource = list;
 			listOfAdress.SelectedIndex = 0;
 
-            //nameNewStation.Text = $"Безымянная [{list[0].ToString()}]";
             nameNewStation.Text = $"Безымянная";
         }
 

@@ -3,12 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:Diplom"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Icon="pack://application:,,,/Resources/icon.png"
         WindowStartupLocation="CenterScreen"
-        Title="Конфигурация сети" Height="160" Width="320">
-
+        Title="Конфигурация сети" Height="440" Width="320">
     <Window.Resources>
         <Style TargetType="TextBlock">
             <Setter Property="FontSize" Value="12"/>
@@ -25,7 +24,7 @@
         </Style>
 
         <Style x:Key="windObject">
-            <Setter Property="ComboBox.Width"  Value="200"/>
+            <Setter Property="ComboBox.Width" Value="200"/>
             <Setter Property="ComboBox.Height" Value="20"/>
             <Setter Property="TextBox.Width" Value="200"/>
             <Setter Property="TextBox.Height" Value="20"/>
@@ -37,6 +36,8 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
 
@@ -60,10 +61,19 @@
 
         <ComboBox x:Name="listOfAdress" Grid.Column="2" Grid.Row="2" Style="{StaticResource windObject}" VerticalAlignment="Center" FontSize="12"/>
 
-        <StackPanel Grid.Column="3" Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Right">
+        <TextBlock Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Text="Цвет сети:" HorizontalAlignment="Center"/>
+        <xctk:ColorCanvas 
+            x:Name="colorCanvas" 
+            Grid.ColumnSpan="3" 
+            Grid.Row="4" HorizontalAlignment="Center" 
+            Grid.Column="0" 
+            SelectedColor="Green" 
+            Margin="0 0 0 10"
+            UsingAlphaChannel="False"/>
+
+        <StackPanel Grid.Column="3" Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0 0 0 5">
             <Button Click="CloseWindow">Отмена</Button>
             <Button Click="CreateNetwork" IsDefault="True">ОК</Button>
         </StackPanel>
-        
     </Grid>
 </Window>

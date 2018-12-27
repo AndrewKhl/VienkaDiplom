@@ -16,9 +16,10 @@ namespace Diplom.Models
 		public DataManagers Data;
         public ConnectionLine line;
 
-        public ManagerControl(WorkWindow window, string name, int number)
+        public ManagerControl(WorkWindow window, string name, int number, Color color)
         {
             InitializeComponent();
+            (Resources["fontColor"] as SolidColorBrush).Color = color;
             image.Source = new BitmapImage(ImageUri);
             BorderThickness = new Thickness(2);
 			Data = new DataManagers();
