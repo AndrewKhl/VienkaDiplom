@@ -22,18 +22,18 @@ namespace Diplom
         public Color currentColor;
         private bool isRadioConnection = false;
 
-        private Uri enableRemove = new Uri(@"pack://application:,,,/Resources/Icons/Removed.png");
-        private Uri disableRemove = new Uri(@"pack://application:,,,/Resources/Icons/DisableRemoved.png");
-        private Uri enableManager = new Uri(@"pack://application:,,,/Resources/Icons/NewManager.png");
-        private Uri disableManager = new Uri(@"pack://application:,,,/Resources/Icons/DisableCreateManager.png");
-        private Uri enableStation = new Uri(@"pack://application:,,,/Resources/Icons/NewStation.png");
-        private Uri disableStation = new Uri(@"pack://application:,,,/Resources/Icons/DisableCreateManager.png");
-        private Uri enableProperties = new Uri(@"pack://application:,,,/Resources/Icons/CustomFile.png");
-        private Uri disableProperties = new Uri(@"pack://application:,,,/Resources/Icons/DisabledShowProperty.png");
-        private Uri enableParameters = new Uri(@"pack://application:,,,/Resources/Icons/Params.png");
-        private Uri disableParameters = new Uri(@"pack://application:,,,/Resources/Icons/DisabledShow.png");
-        private Uri enableDB = new Uri(@"pack://application:,,,/Resources/Icons/DBevent.png");
-        private Uri disableDB = new Uri(@"pack://application:,,,/Resources/Icons/DisableDB.png");
+        private static Uri enableRemove = new Uri(@"pack://application:,,,/Resources/Icons/Removed.png");
+        private static Uri disableRemove = new Uri(@"pack://application:,,,/Resources/Icons/DisableRemoved.png");
+        private static Uri enableManager = new Uri(@"pack://application:,,,/Resources/Icons/NewManager.png");
+        private static Uri disableManager = new Uri(@"pack://application:,,,/Resources/Icons/DisableCreateManager.png");
+        private static Uri enableStation = new Uri(@"pack://application:,,,/Resources/Icons/NewStation.png");
+        private static Uri disableStation = new Uri(@"pack://application:,,,/Resources/Icons/DisableCreateManager.png");
+        private static Uri enableProperties = new Uri(@"pack://application:,,,/Resources/Icons/CustomFile.png");
+        private static Uri disableProperties = new Uri(@"pack://application:,,,/Resources/Icons/DisabledShowProperty.png");
+        private static Uri enableParameters = new Uri(@"pack://application:,,,/Resources/Icons/Params.png");
+        private static Uri disableParameters = new Uri(@"pack://application:,,,/Resources/Icons/DisabledShow.png");
+        private static Uri enableDB = new Uri(@"pack://application:,,,/Resources/Icons/DBevent.png");
+        private static Uri disableDB = new Uri(@"pack://application:,,,/Resources/Icons/DisableDB.png");
 
         private IFocusable _focusedControl;
         public IFocusable FocusedControl
@@ -341,10 +341,7 @@ namespace Diplom
                         var first = connector as StationControl;
                         bool showGauges = false;
 
-                        if ((first.firstLine != null && (first.firstLine.firstControl is ManagerControl || first.firstLine.secondControl is ManagerControl))
-                            || (first.secondLine != null && (first.secondLine.firstControl is ManagerControl || first.secondLine.secondControl is ManagerControl))
-                            || (control.firstLine != null && (control.firstLine.firstControl is ManagerControl || control.firstLine.secondControl is ManagerControl))
-                            || (control.secondLine != null && (control.secondLine.firstControl is ManagerControl || control.secondLine.secondControl is ManagerControl)))
+                        if (first.IsConnectedToManager() || control.IsConnectedToManager())
                             showGauges = true;
 
                             ConnectionLine line;
@@ -464,6 +461,15 @@ namespace Diplom
         private void canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2) CreateNetwork();
+        }
+
+        private void Routing_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (StationControl station in DataNetwork.Stations)
+            {
+                if (station.IsConnectedToStation() && station.IsConnectedToManager())
+                    station.stationGauge.Visibility = Visibility.Visible;
+            }
         }
     }
 }

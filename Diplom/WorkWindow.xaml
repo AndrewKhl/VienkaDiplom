@@ -103,7 +103,7 @@
                         <Image Source="pack://application:,,,/Resources/Icons/Params.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Маршрутизация">
+                <MenuItem Header="Маршрутизация" Click="Routing_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Marsh.png"/>
                     </MenuItem.Icon>

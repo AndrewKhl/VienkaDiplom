@@ -13,6 +13,8 @@ namespace Diplom.Models
     public partial class StationControl : UserControl, IFocusable
     {
         private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_relay.png");
+        private static Uri enableParameters = new Uri(@"pack://application:,,,/Resources/Icons/Params.png");
+        private static Uri disableParameters = new Uri(@"pack://application:,,,/Resources/Icons/DisabledShow.png");
 		public DataStation Data;
         public ConnectionLine firstLine;
         public ConnectionLine secondLine;
@@ -39,6 +41,8 @@ namespace Diplom.Models
 			gauge.EndInit();
 			stationGauge.Source = gauge;
 			stationGauge.Visibility = Visibility.Hidden;
+
+            parameterItem.Icon = new Image { Source = new BitmapImage(disableParameters) };
 		}
 
         public WorkWindow window { get; }
@@ -98,6 +102,33 @@ namespace Diplom.Models
         private void LocalConnect_Click(object sender, RoutedEventArgs e)
         {
 			window.ConnectControls(this, false);
+        }
+
+        private void Update_Click(object sender, RoutedEventArgs e)
+        {
+            if (IsConnectedToManager())
+            {
+                parameterItem.IsEnabled = true;
+                parameterItem.Icon = new Image { Source = new BitmapImage(enableParameters) };
+            }
+            else
+            {
+                MessageBox.Show("Не создано ни одного менеджера для осуществления запроса. " +
+                    "Создайте управляющий элемент и соедините его с сетью.", "Ошибка", 
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public bool IsConnectedToManager()
+        {
+            return (firstLine != null && (firstLine.firstControl is ManagerControl || firstLine.secondControl is ManagerControl))
+                    || (secondLine != null && (secondLine.firstControl is ManagerControl || secondLine.secondControl is ManagerControl));
+        }
+
+        public bool IsConnectedToStation()
+        {
+            return (firstLine != null && (firstLine.firstControl is StationControl || firstLine.secondControl is StationControl))
+                    || (secondLine != null && (secondLine.firstControl is StationControl || secondLine.secondControl is StationControl));
         }
     }
 }

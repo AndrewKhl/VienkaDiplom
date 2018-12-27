@@ -55,7 +55,7 @@
                 <MenuItem Header="Связаться по порту Б"></MenuItem>
                 <MenuItem Header="Связаться по радиоканалу" Click="RadioConnect_Click"></MenuItem>
                 <Separator></Separator>
-                <MenuItem Header="Обновить конфигурацию">
+                <MenuItem Header="Обновить конфигурацию" Click="Update_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
                     </MenuItem.Icon>
@@ -65,11 +65,7 @@
                         <Image Source="pack://application:,,,/Resources/Icons/ShowEvents.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Параметры" Click="ShowParametrWindow">
-                    <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/Params.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
+                <MenuItem Header="Параметры" Click="ShowParametrWindow" Name="parameterItem" IsEnabled="False"/>
             </ContextMenu>
         </StackPanel.ContextMenu>
     </StackPanel>
