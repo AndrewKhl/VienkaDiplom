@@ -11,13 +11,13 @@ namespace Diplom.Models
     /// <summary>
     /// Interaction logic for StationControl.xaml
     /// </summary>
-    public partial class StationControl : UserControl, IFocusable, IConnectable
+    public partial class StationControl : UserControl, IFocusable
     {
         private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_relay.png");
 		private static int numberStation = 0;
 		public DataStation Data;
-
-		public List<ConnectionLine> connectionLines { get; } = new List<ConnectionLine>();
+        public ConnectionLine firstLine;
+        public ConnectionLine secondLine;
 
 		public StationControl(WorkWindow window, string name, int number)
         {
@@ -42,8 +42,8 @@ namespace Diplom.Models
 			gauge.BeginInit();
 			gauge.UriSource = new Uri("pack://application:,,,/Resources/gauge_1_30.png");
 			gauge.EndInit();
-			this.stationGauge.Source = gauge;
-			this.stationGauge.Visibility = Visibility.Hidden;
+			stationGauge.Source = gauge;
+			stationGauge.Visibility = Visibility.Hidden;
 		}
 
         public WorkWindow window { get; }
@@ -97,7 +97,7 @@ namespace Diplom.Models
 
 		private void Connect_Click(object sender, RoutedEventArgs e)
 		{
-			window.ConnectionAttempt(this);
+			window.ConnectControls(this);
 		}
     }
 }

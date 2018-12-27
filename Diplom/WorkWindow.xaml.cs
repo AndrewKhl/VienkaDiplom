@@ -15,8 +15,9 @@ namespace Diplom
     /// </summary>
     public partial class WorkWindow : Window
     {
-		public List<int> numbersStations;
-		public List<int> numbersManagers;
+		public List<int> numbersStations = new List<int>();
+		public List<int> numbersManagers = new List<int>();
+        public List<ConnectionLine> connectionLines = new List<ConnectionLine>();
 
         private Uri enableRemove = new Uri(@"pack://application:,,,/Resources/Icons/Removed.png");
         private Uri disableRemove = new Uri(@"pack://application:,,,/Resources/Icons/DisableRemoved.png");
@@ -34,8 +35,7 @@ namespace Diplom
         private IFocusable _focusedControl;
         public IFocusable FocusedControl
         {
-            get { return _focusedControl; }
-
+            get => _focusedControl;
             set
             {
                 if (value != null)
@@ -70,8 +70,6 @@ namespace Diplom
         public WorkWindow()
         {
             InitializeComponent();
-			numbersStations = new List<int>();
-			numbersManagers = new List<int>();
 			Stock.workWindow = this;
 			EnabledButton(false);
 		}
@@ -257,34 +255,115 @@ namespace Diplom
             RemoveElement();
         }
 
+        //public bool ConnectionAttempt(UserControl control)
+        //{
+			//if (connector == null) connector = control;
+			//else {
+			//	if (connector is ManagerControl && control is ManagerControl) return false;
+
+			//	SolidColorBrush brush;
+			//	ConnectionLine line;
+
+			//	if (connector is StationControl && control is StationControl)
+			//	{
+			//		brush = new SolidColorBrush(Colors.Green);
+
+			//		(connector as StationControl).stationGauge.Visibility = Visibility.Visible;
+			//		(control as StationControl).stationGauge.Visibility = Visibility.Visible;
+
+			//		line = new ConnectionLine(connector, control, canvas);
+			//	}
+			//	else {
+			//		brush = new SolidColorBrush(Colors.Blue);
+			//		line = new ConnectionLine(connector, control, canvas, true);
+			//	}
+
+			//	connector = null;
+			//	return true;
+   //         }
+   //         return false;
+   //     }
         public UserControl connector = null;
-        public bool ConnectionAttempt(UserControl control)
+
+        public void ConnectControls(StationControl control)
         {
-			if (connector == null) connector = control;
-			else {
-				if (connector is ManagerControl && control is ManagerControl) return false;
-
-				SolidColorBrush brush;
-				ConnectionLine line;
-
-				if (connector is StationControl && control is StationControl)
-				{
-					brush = new SolidColorBrush(Colors.Green);
-
-					(connector as StationControl).stationGauge.Visibility = Visibility.Visible;
-					(control as StationControl).stationGauge.Visibility = Visibility.Visible;
-
-					line = new ConnectionLine(connector, control, canvas);
-				}
-				else {
-					brush = new SolidColorBrush(Colors.Blue);
-					line = new ConnectionLine(connector, control, canvas, true);
-				}
-
-				connector = null;
-				return true;
+            if (connector == null)
+            {
+                if (control.firstLine == null || control.secondLine == null)
+                    connector = control;
             }
-            return false;
+            else if (connector != control)
+            {
+                if (connector is StationControl)
+                {
+                    var first = connector as StationControl;
+                    ConnectionLine line;
+                    if (first.firstLine == null && control.firstLine == null)
+                    {
+                        line = new ConnectionLine(first, control, canvas);
+                        first.firstLine = line;
+                        control.firstLine = line;
+                    }
+                    else if (first.secondLine == null && control.firstLine == null)
+                    {
+                        line = new ConnectionLine(first, control, canvas);
+                        first.secondLine = line;
+                        control.firstLine = line;
+                    }
+                    else if (first.firstLine == null && control.secondLine == null)
+                    {
+                        line = new ConnectionLine(first, control, canvas);
+                        first.firstLine = line;
+                        control.secondLine = line;
+                    }
+                    else if (first.secondLine == null && control.secondLine == null) 
+                    {
+                        line = new ConnectionLine(first, control, canvas);
+                        first.secondLine = line;
+                        control.secondLine = line;
+                    }
+                }
+                else
+                {
+                    var first = connector as ManagerControl;
+                    ConnectionLine line;
+                    if (first.line == null)
+                    {
+                        if (control.firstLine == null)
+                        {
+                            line = new ConnectionLine(first, control, canvas, true);
+                            first.line = line;
+                            control.firstLine = line;
+                        }
+                        else if (control.secondLine == null)
+                        {
+                            line = new ConnectionLine(first, control, canvas, true);
+                            first.line = line;
+                            control.secondLine = line;
+                        }
+                    }
+                }
+                connector = null;
+            }
+        }
+
+        public void ConnectControls(ManagerControl control)
+        {
+            if (connector == null)
+            {
+                if (control.line == null) connector = control;
+            }
+            else if (connector != control)
+            {
+                if (connector is ManagerControl)
+                {
+
+                }
+                else
+                {
+
+                }
+            }
         }
 
         private void btnParameters_Click(object sender, RoutedEventArgs e)

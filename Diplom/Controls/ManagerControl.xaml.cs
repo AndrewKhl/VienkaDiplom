@@ -11,13 +11,12 @@ namespace Diplom.Models
     /// <summary>
     /// Interaction logic for ManagerControl.xaml
     /// </summary>
-    public partial class ManagerControl : UserControl, IFocusable, IConnectable
+    public partial class ManagerControl : UserControl, IFocusable
     {
         private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_manager.png");
 		private static int numberManager = 0;
 		public DataManagers Data;
-
-		public List<ConnectionLine> connectionLines { get; } = new List<ConnectionLine>();
+        public ConnectionLine line;
 
         public ManagerControl(WorkWindow window, string name, int number)
         {
@@ -82,7 +81,7 @@ namespace Diplom.Models
 
         private void Connect_Click(object sender, RoutedEventArgs e)
         {
-            window.ConnectionAttempt(this);
+            window.ConnectControls(this);
         }
     }
 }
