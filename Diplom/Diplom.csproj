@@ -69,7 +69,6 @@
     <Compile Include="Controls\StationControl.xaml.cs">
       <DependentUpon>StationControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="IConnectable.cs" />
     <Compile Include="Models\DataManagers.cs" />
     <Compile Include="Models\DataNetwork.cs" />
     <Compile Include="Models\DataStation.cs" />

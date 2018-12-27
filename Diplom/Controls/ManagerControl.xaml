@@ -56,10 +56,10 @@
                 <MenuItem Header="Настройки"></MenuItem>
                 <MenuItem Header="Контроль сети"></MenuItem>
                 <Separator></Separator>
-                <MenuItem Header="Свзязать по COM1"></MenuItem>
-                <MenuItem Header="Свзязать по COM3" Click="Connect_Click"></MenuItem>
-                <MenuItem Header="Свзязать по COM4"></MenuItem>
-                <MenuItem Header="Свзязаться по удалённом COM-порту"></MenuItem>
+                <MenuItem Header="Связать по COM1"></MenuItem>
+                <MenuItem Header="Связать по COM3" Click="Connect_Click"></MenuItem>
+                <MenuItem Header="Связать по COM4"></MenuItem>
+                <MenuItem Header="Связаться по удалённом COM-порту"></MenuItem>
             </ContextMenu>
         </StackPanel.ContextMenu>
     </StackPanel>

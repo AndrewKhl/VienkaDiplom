@@ -26,12 +26,7 @@ namespace Diplom
 			line.StrokeThickness = 3;
 			Canvas.SetLeft(line, 0);
 			Canvas.SetTop(line, 0);
-
-			(firstControl as IConnectable).connectionLines.Add(this);
-			(secondControl as IConnectable).connectionLines.Add(this);
-
 			UpdatePosition();
-
 			canvas.Children.Insert(0, line);
 		}
 

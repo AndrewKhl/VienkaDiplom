@@ -18,6 +18,8 @@ namespace Diplom
 		public List<int> numbersStations = new List<int>();
 		public List<int> numbersManagers = new List<int>();
         public List<ConnectionLine> connectionLines = new List<ConnectionLine>();
+        public UserControl connector = null;
+
 
         private Uri enableRemove = new Uri(@"pack://application:,,,/Resources/Icons/Removed.png");
         private Uri disableRemove = new Uri(@"pack://application:,,,/Resources/Icons/DisableRemoved.png");
@@ -141,38 +143,72 @@ namespace Diplom
             FocusedControl = null;
         }
 
+        private void ClearLineControls(ConnectionLine line)
+        {
+            if (line.firstControl is StationControl && line.secondControl is StationControl)
+            {
+                (line.firstControl as StationControl).stationGauge.Visibility = Visibility.Hidden;
+                (line.secondControl as StationControl).stationGauge.Visibility = Visibility.Hidden;
+            }
+
+            if (line.firstControl is StationControl)
+            {
+                var station = line.firstControl as StationControl;
+                if (station.firstLine == line)
+                    station.firstLine = null;
+                else station.secondLine = null;
+            }
+            else
+            {
+                (line.firstControl as ManagerControl).line = null;
+            }
+
+            if (line.secondControl is StationControl)
+            {
+                var station = line.secondControl as StationControl;
+                if (station.firstLine == line)
+                    station.firstLine = null;
+                else station.secondLine = null;
+            }
+            else
+            {
+                (line.secondControl as ManagerControl).line = null;
+            }
+        }
+
         public void RemoveElement()
         {
-			IConnectable connectable = FocusedControl as IConnectable;
-
-            if (FocusedControl != null)
+            if (FocusedControl is StationControl)
             {
-				foreach (var line in (FocusedControl as IConnectable).connectionLines)
-				{
-					if (line.firstControl == connectable)
-					{
-						(line.secondControl as IConnectable).connectionLines.Remove(line);
-						if (line.secondControl is StationControl)
-							(line.secondControl as StationControl).stationGauge.Visibility = Visibility.Hidden;
-					}
-					else
-					{
-						(line.firstControl as IConnectable).connectionLines.Remove(line);
-						if (line.firstControl is StationControl)
-							(line.firstControl as StationControl).stationGauge.Visibility = Visibility.Hidden;
-					}
-					canvas.Children.Remove(line.line);
-				}
-				connectable.connectionLines.Clear();
-
-                canvas.Children.Remove(FocusedControl as UserControl);
-                foreach (var control in canvas.Children)
+                var station = FocusedControl as StationControl;
+                if (station.firstLine != null)
                 {
-					if (control is IFocusable)
-						(control as IFocusable).FocusedElement -= FocusedControl.UnsetFocusBorder;
+                    canvas.Children.Remove(station.firstLine.line);
+                    ClearLineControls(station.firstLine);
                 }
-                FocusedControl = null;
+                if (station.secondLine != null)
+                {
+                    canvas.Children.Remove(station.secondLine.line);
+                    ClearLineControls(station.secondLine);
+                }
             }
+            else if (FocusedControl is ManagerControl)
+            {
+                var manager = FocusedControl as ManagerControl;
+                if (manager.line != null)
+                {
+                    canvas.Children.Remove(manager.line.line);
+                    ClearLineControls(manager.line);
+                }
+            }
+
+            canvas.Children.Remove(FocusedControl as UserControl);
+            foreach (var control in canvas.Children)
+            {
+                if (control is IFocusable)
+                    (control as IFocusable).FocusedElement -= FocusedControl.UnsetFocusBorder;
+            }
+            FocusedControl = null;
         }
 
         private void canvas_Drop(object sender, DragEventArgs e)
@@ -191,14 +227,25 @@ namespace Diplom
 			double shiftY = (double)e.Data.GetData("shiftY");
 			Canvas.SetLeft(control, e.GetPosition(canvas).X - shiftX);
 			Canvas.SetTop(control, e.GetPosition(canvas).Y - shiftY);
-			foreach (var line in (control as IConnectable).connectionLines)
-			{
-				line.UpdatePosition();
-			}
+            if (control is ManagerControl && (control as ManagerControl).line != null)
+                (control as ManagerControl).line.UpdatePosition();
+            else if (control is StationControl)
+            {
+                var station = control as StationControl;
+                if (station.firstLine != null)
+                    station.firstLine.UpdatePosition();
+                if (station.secondLine != null)
+                    station.secondLine.UpdatePosition();
+            }
 			e.Handled = true;
         }
 
         private void CreateNetwork_Click(object sender, RoutedEventArgs e)
+        {
+            CreateNetwork();
+        }
+
+        private void CreateNetwork()
         {
 			if (DataNetwork.IsCreate)
 			{
@@ -207,9 +254,8 @@ namespace Diplom
 			}
 			if (numbersStations.Count < 55)
 			{
-				ConfigurationNetwork wnd = new ConfigurationNetwork();
-				wnd.Owner = this;
-				wnd.Show();
+                ConfigurationNetwork wnd = new ConfigurationNetwork { Owner = this };
+                wnd.Show();
 			}
 			else
 				ShowErrorCountStations();
@@ -219,9 +265,8 @@ namespace Diplom
         {
 			if (numbersStations.Count < 55)
 			{
-				ConfigurationStation wnd = new ConfigurationStation();
-				wnd.Owner = this;
-				wnd.Show();
+                ConfigurationStation wnd = new ConfigurationStation { Owner = this };
+                wnd.Show();
 			}
 			else
 				ShowErrorCountStations();
@@ -255,36 +300,6 @@ namespace Diplom
             RemoveElement();
         }
 
-        //public bool ConnectionAttempt(UserControl control)
-        //{
-			//if (connector == null) connector = control;
-			//else {
-			//	if (connector is ManagerControl && control is ManagerControl) return false;
-
-			//	SolidColorBrush brush;
-			//	ConnectionLine line;
-
-			//	if (connector is StationControl && control is StationControl)
-			//	{
-			//		brush = new SolidColorBrush(Colors.Green);
-
-			//		(connector as StationControl).stationGauge.Visibility = Visibility.Visible;
-			//		(control as StationControl).stationGauge.Visibility = Visibility.Visible;
-
-			//		line = new ConnectionLine(connector, control, canvas);
-			//	}
-			//	else {
-			//		brush = new SolidColorBrush(Colors.Blue);
-			//		line = new ConnectionLine(connector, control, canvas, true);
-			//	}
-
-			//	connector = null;
-			//	return true;
-   //         }
-   //         return false;
-   //     }
-        public UserControl connector = null;
-
         public void ConnectControls(StationControl control)
         {
             if (connector == null)
@@ -302,25 +317,33 @@ namespace Diplom
                     {
                         line = new ConnectionLine(first, control, canvas);
                         first.firstLine = line;
+                        first.stationGauge.Visibility = Visibility.Visible;
                         control.firstLine = line;
+                        control.stationGauge.Visibility = Visibility.Visible;
                     }
                     else if (first.secondLine == null && control.firstLine == null)
                     {
                         line = new ConnectionLine(first, control, canvas);
                         first.secondLine = line;
+                        first.stationGauge.Visibility = Visibility.Visible;
                         control.firstLine = line;
+                        control.stationGauge.Visibility = Visibility.Visible;
                     }
                     else if (first.firstLine == null && control.secondLine == null)
                     {
                         line = new ConnectionLine(first, control, canvas);
                         first.firstLine = line;
+                        first.stationGauge.Visibility = Visibility.Visible;
                         control.secondLine = line;
+                        control.stationGauge.Visibility = Visibility.Visible;
                     }
                     else if (first.secondLine == null && control.secondLine == null) 
                     {
                         line = new ConnectionLine(first, control, canvas);
                         first.secondLine = line;
+                        first.stationGauge.Visibility = Visibility.Visible;
                         control.secondLine = line;
+                        control.stationGauge.Visibility = Visibility.Visible;
                     }
                 }
                 else
@@ -334,12 +357,14 @@ namespace Diplom
                             line = new ConnectionLine(first, control, canvas, true);
                             first.line = line;
                             control.firstLine = line;
+                            control.stationGauge.Visibility = Visibility.Visible;
                         }
                         else if (control.secondLine == null)
                         {
                             line = new ConnectionLine(first, control, canvas, true);
                             first.line = line;
                             control.secondLine = line;
+                            control.stationGauge.Visibility = Visibility.Visible;
                         }
                     }
                 }
@@ -357,18 +382,49 @@ namespace Diplom
             {
                 if (connector is ManagerControl)
                 {
-
+                    var first = connector as ManagerControl;
+                    ConnectionLine line;
+                    if (first.line == null && control.line == null)
+                    {
+                        line = new ConnectionLine(first, control, canvas, true);
+                        first.line = line;
+                        control.line = line;
+                    }
                 }
                 else
                 {
-
+                    var first = connector as StationControl;
+                    ConnectionLine line;
+                    if (control.line == null)
+                    {
+                        if (first.firstLine == null)
+                        {
+                            line = new ConnectionLine(first, control, canvas, true);
+                            first.firstLine = line;
+                            first.stationGauge.Visibility = Visibility.Visible;
+                            control.line = line;
+                        }
+                        else if (first.secondLine == null)
+                        {
+                            line = new ConnectionLine(first, control, canvas, true);
+                            first.secondLine = line;
+                            first.stationGauge.Visibility = Visibility.Visible;
+                            control.line = line;
+                        }
+                    }
                 }
+                connector = null;
             }
         }
 
         private void btnParameters_Click(object sender, RoutedEventArgs e)
         {
             (FocusedControl as StationControl).ShowParametrWindow(sender, e);
+        }
+
+        private void canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2) CreateNetwork();
         }
     }
 }

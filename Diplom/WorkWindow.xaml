@@ -335,7 +335,7 @@
             </Menu>
         </StackPanel>
         <ScrollViewer Grid.Row="2" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-            <Canvas x:Name="canvas" Width="1000" Height="800" AllowDrop="True" Drop="canvas_Drop" MouseDown="canvas_MouseDown">
+            <Canvas x:Name="canvas" Width="1000" Height="800" AllowDrop="True" Drop="canvas_Drop" MouseDown="canvas_MouseDown" MouseLeftButtonDown="canvas_MouseLeftButtonDown">
                 <Canvas.Background>
                     <ImageBrush ImageSource="pack://application:,,,/Resources/background.jpg" Stretch="Uniform" />
                 </Canvas.Background>
