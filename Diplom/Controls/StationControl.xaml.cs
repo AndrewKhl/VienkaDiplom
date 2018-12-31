@@ -16,8 +16,8 @@ namespace Diplom.Models
         private static Uri enableParameters = new Uri(@"pack://application:,,,/Resources/Icons/Params.png");
         private static Uri disableParameters = new Uri(@"pack://application:,,,/Resources/Icons/DisabledShow.png");
 		public DataStation Data;
-        public ConnectionLine firstLine;
-        public ConnectionLine secondLine;
+        public ConnectionLine stationLine;
+        public ConnectionLine managerLine;
 
 		public StationControl(WorkWindow window, string name, int number, Color color)
         {
@@ -119,16 +119,7 @@ namespace Diplom.Models
             }
         }
 
-        public bool IsConnectedToManager()
-        {
-            return (firstLine != null && (firstLine.firstControl is ManagerControl || firstLine.secondControl is ManagerControl))
-                    || (secondLine != null && (secondLine.firstControl is ManagerControl || secondLine.secondControl is ManagerControl));
-        }
-
-        public bool IsConnectedToStation()
-        {
-            return (firstLine != null && (firstLine.firstControl is StationControl || firstLine.secondControl is StationControl))
-                    || (secondLine != null && (secondLine.firstControl is StationControl || secondLine.secondControl is StationControl));
-        }
+        public bool IsConnectedToManager() => managerLine != null;
+        public bool IsConnectedToStation() => stationLine != null;
     }
 }

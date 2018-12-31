@@ -12,10 +12,10 @@ namespace Diplom
 		SolidColorBrush brush;
 		public Line line = new Line();
 
-		public ConnectionLine(UserControl station1, UserControl station2, Canvas canvas, bool isManager = false)
+		public ConnectionLine(UserControl control1, UserControl control2, Canvas canvas, bool isManager = false)
 		{
-			firstControl = station1;
-			secondControl = station2;
+			firstControl = control1;
+			secondControl = control2;
 			this.canvas = canvas;
 			if (isManager)
 				brush = new SolidColorBrush(Colors.Blue);
