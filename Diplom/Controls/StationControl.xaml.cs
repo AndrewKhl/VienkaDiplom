@@ -18,6 +18,7 @@ namespace Diplom.Models
 		public DataStation Data;
         public ConnectionLine stationLine;
         public ConnectionLine managerLine;
+        public bool IsRightRotation = true;
 
 		public StationControl(WorkWindow window, string name, int number, Color color)
         {
@@ -121,5 +122,20 @@ namespace Diplom.Models
 
         public bool IsConnectedToManager() => managerLine != null;
         public bool IsConnectedToStation() => stationLine != null;
+
+        public void RotateRight()
+        {
+            IsRightRotation = true;
+            ScaleTransform transform = new ScaleTransform(1, 1);
+            image.RenderTransform = transform;
+        }
+
+        public void RotateLeft()
+        {
+            IsRightRotation = false;
+            image.RenderTransformOrigin = new Point(0.5, 0.5);
+            ScaleTransform transform = new ScaleTransform(-1, 1);
+            image.RenderTransform = transform;
+        }
     }
 }

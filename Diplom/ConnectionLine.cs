@@ -1,4 +1,5 @@
-﻿using System.Windows.Controls;
+﻿using Diplom.Models;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -12,10 +13,10 @@ namespace Diplom
 		SolidColorBrush brush;
 		public Line line = new Line();
 
-		public ConnectionLine(UserControl control1, UserControl control2, Canvas canvas, bool isManager = false)
+		public ConnectionLine(UserControl station1, UserControl station2, Canvas canvas, bool isManager = false)
 		{
-			firstControl = control1;
-			secondControl = control2;
+			firstControl = station1;
+			secondControl = station2;
 			this.canvas = canvas;
 			if (isManager)
 				brush = new SolidColorBrush(Colors.Blue);
@@ -32,10 +33,48 @@ namespace Diplom
 
 		public void UpdatePosition()
 		{
-			line.X1 = (double)firstControl.GetValue(Canvas.LeftProperty) + firstControl.ActualWidth / 2;
-			line.Y1 = (double)firstControl.GetValue(Canvas.TopProperty) + firstControl.ActualHeight / 2;
-			line.X2 = (double)secondControl.GetValue(Canvas.LeftProperty) + secondControl.ActualWidth / 2;
-			line.Y2 = (double)secondControl.GetValue(Canvas.TopProperty) + secondControl.ActualHeight / 2;
-		}
+            if (firstControl is StationControl && secondControl is StationControl)
+            {
+                var first = firstControl as StationControl;
+                var second = secondControl as StationControl;
+                if ((double)first.GetValue(Canvas.LeftProperty) < (double)second.GetValue(Canvas.LeftProperty))
+                {
+                    first.RotateRight();
+                    second.RotateLeft();
+                }
+                else
+                {
+                    first.RotateLeft();
+                    second.RotateRight();
+                }
+
+                var station = firstControl as StationControl;
+                line.Y1 = (double)station.GetValue(Canvas.TopProperty) + station.stationNameBorder.ActualHeight
+                    + station.indentText.ActualHeight + station.stationImageBorder.ActualHeight / 2;
+                if ((station as StationControl).IsRightRotation)
+                    line.X1 = (double)station.GetValue(Canvas.LeftProperty) + station.indentLabel.ActualWidth 
+                        + station.stationImageBorder.ActualWidth;
+                else
+                    line.X1 = (double)station.GetValue(Canvas.LeftProperty) + station.indentLabel.ActualWidth;
+
+
+                station = secondControl as StationControl;
+                line.Y2 = (double)station.GetValue(Canvas.TopProperty) + station.stationNameBorder.ActualHeight
+                    + station.indentText.ActualHeight + station.stationImageBorder.ActualHeight / 2;
+                if ((station as StationControl).IsRightRotation)
+                    line.X2 = (double)station.GetValue(Canvas.LeftProperty) + station.indentLabel.ActualWidth 
+                        + station.stationImageBorder.ActualWidth;
+                else
+                    line.X2 = (double)station.GetValue(Canvas.LeftProperty) + station.indentLabel.ActualWidth;
+            }
+            else
+            {
+                line.X1 = (double)firstControl.GetValue(Canvas.LeftProperty) + firstControl.ActualWidth / 2;
+                line.Y1 = (double)firstControl.GetValue(Canvas.TopProperty) + firstControl.ActualHeight / 2;
+                line.X2 = (double)secondControl.GetValue(Canvas.LeftProperty) + secondControl.ActualWidth / 2;
+                line.Y2 = (double)secondControl.GetValue(Canvas.TopProperty) + secondControl.ActualHeight / 2;
+            }
+
+        }
     }
 }
