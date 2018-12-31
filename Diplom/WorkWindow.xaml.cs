@@ -152,7 +152,7 @@ namespace Diplom
             if (line.firstControl is StationControl && line.secondControl is StationControl)
             {
                 var first = line.firstControl as StationControl;
-                var second = line.firstControl as StationControl;
+                var second = line.secondControl as StationControl;
 
                 first.stationGauge.Visibility = Visibility.Hidden;
                 second.stationGauge.Visibility = Visibility.Hidden;
@@ -184,7 +184,14 @@ namespace Diplom
                     (station.stationLine.secondControl as StationControl).stationGauge.Visibility = Visibility.Hidden;
                 }
             }
+        }
 
+        public void RemoveRadioConnection(StationControl station)
+        {
+            canvas.Children.Remove(station.stationLine.line);
+            (station.stationLine.firstControl as StationControl).IsChecked = false;
+            (station.stationLine.secondControl as StationControl).IsChecked = false;
+            ClearLineControls(station.stationLine);
         }
 
         public void RemoveElement()
@@ -337,6 +344,7 @@ namespace Diplom
                 {
                     IsRadioConnection = isRadio;
                     connector = station;
+                    if (isRadio) station.IsChecked = false;
                 }
             }
             else
@@ -354,6 +362,8 @@ namespace Diplom
                             savedStation.stationGauge.Visibility = Visibility.Visible;
                             station.stationGauge.Visibility = Visibility.Visible;
                         }
+                        savedStation.IsChecked = true;
+                        station.IsChecked = true;
                     }
                     else if (IsRadioConnection == false && connector is ManagerControl)
                     {

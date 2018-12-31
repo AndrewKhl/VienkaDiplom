@@ -20,6 +20,17 @@ namespace Diplom.Models
         public ConnectionLine managerLine;
         public bool IsRightRotation = true;
 
+        private bool isChecked = false;
+        public bool IsChecked
+        {
+            get => isChecked;
+            set
+            {
+                RadioItem.IsChecked = value;
+                isChecked = value;
+            }
+        }
+
         private static string[] UpdateMainStationMessages =
         {
             "Идет опрос версии ПО БУКС станции {0}",
@@ -112,7 +123,11 @@ namespace Diplom.Models
 
         private void RadioConnect_Click(object sender, RoutedEventArgs e)
         {
-			window.ConnectControls(this);
+            RadioItem.IsChecked = false;
+            if (!IsChecked)
+                window.ConnectControls(this);
+            else
+                window.RemoveRadioConnection(this);
         }
 
         private void LocalConnect_Click(object sender, RoutedEventArgs e)
@@ -176,6 +191,11 @@ namespace Diplom.Models
             image.RenderTransformOrigin = new Point(0.5, 0.5);
             ScaleTransform transform = new ScaleTransform(-1, 1);
             image.RenderTransform = transform;
+        }
+
+        private void ContextMenu_Opened(object sender, RoutedEventArgs e)
+        {
+            RadioItem.IsChecked = IsChecked;
         }
     }
 }
