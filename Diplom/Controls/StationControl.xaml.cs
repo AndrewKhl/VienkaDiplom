@@ -20,6 +20,21 @@ namespace Diplom.Models
         public ConnectionLine managerLine;
         public bool IsRightRotation = true;
 
+        private static string[] UpdateMainStationMessages =
+        {
+            "Идет опрос версии ПО БУКС станции {0}",
+            "Идет опрос версии ПО ИБЭП станции {0}"
+        };
+        private static string[] UpdateAnotherStationMessages =
+        {
+            "Идет опрос версии ПО БУКС станции {0}",
+            "Идет опрос версии ПО ТУТС станции {0}",
+            "Идет опрос версии ПО ППУ станции {0}",
+            "Идет опрос версии ПО допканалов станции {0}",
+            "Идет опрос версии ПО мультиплексоров станции {0}",
+            "Идет опрос версии ПО ИБЭП станции {0}"
+        };
+
 		public StationControl(WorkWindow window, string name, int number, Color color)
         {
             InitializeComponent();
@@ -109,12 +124,33 @@ namespace Diplom.Models
         {
             if (IsConnectedToManager())
             {
-                LoadingWindow wnd = new LoadingWindow($"Идет опрос версии ПО БУКС станции {stationName.Text}", 3);
-                wnd.ShowDialog();
-                wnd = new LoadingWindow($"Идет опрос версии ПО ИБЭП станции {stationName.Text}", 3);
-                wnd.ShowDialog();
+                LoadingWindow wnd;
+                foreach (string message in UpdateMainStationMessages)
+                {
+                    wnd = new LoadingWindow(string.Format(message, stationName.Text), 1);
+                    wnd.ShowDialog();
+                }
                 parameterItem.IsEnabled = true;
                 parameterItem.Icon = new Image { Source = new BitmapImage(enableParameters) };
+            }
+            else if (IsConnectedToStation())
+            {
+                //TODO check what notification given on updating if station connected to another station connected to manager
+                StationControl another;
+                if (stationLine.firstControl == this)
+                    another = stationLine.secondControl as StationControl;
+                else another = stationLine.firstControl as StationControl;
+                if (another.IsConnectedToManager())
+                {
+                    LoadingWindow wnd;
+                    foreach (string message in UpdateAnotherStationMessages)
+                    {
+                        wnd = new LoadingWindow(string.Format(message, another.stationName.Text), 1);
+                        wnd.ShowDialog();
+                    }
+                    parameterItem.IsEnabled = true;
+                    parameterItem.Icon = new Image { Source = new BitmapImage(enableParameters) };
+                }
             }
             else
             {
