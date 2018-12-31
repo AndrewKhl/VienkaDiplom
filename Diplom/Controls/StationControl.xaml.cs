@@ -109,6 +109,10 @@ namespace Diplom.Models
         {
             if (IsConnectedToManager())
             {
+                LoadingWindow wnd = new LoadingWindow($"Идет опрос версии ПО БУКС станции {stationName.Text}", 3);
+                wnd.ShowDialog();
+                wnd = new LoadingWindow($"Идет опрос версии ПО ИБЭП станции {stationName.Text}", 3);
+                wnd.ShowDialog();
                 parameterItem.IsEnabled = true;
                 parameterItem.Icon = new Image { Source = new BitmapImage(enableParameters) };
             }

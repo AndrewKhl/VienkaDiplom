@@ -90,6 +90,9 @@
     <Compile Include="Controls\StationControl.xaml.cs">
       <DependentUpon>StationControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LoadingWindow.xaml.cs">
+      <DependentUpon>LoadingWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Models\DataManagers.cs" />
     <Compile Include="Models\DataNetwork.cs" />
     <Compile Include="Models\DataStation.cs" />
@@ -118,6 +121,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="ConfigurationStation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LoadingWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
