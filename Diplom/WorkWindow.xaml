@@ -357,7 +357,7 @@
                         <MenuItem Visibility="Collapsed" Header="Сеть" Name="NetworkMenuItem">
                             <MenuItem Header="Выделить" IsEnabled="False" />
                             <MenuItem Header="Свойства" Click="EditNetwork_Click" />
-                            <MenuItem Header="Удалить">
+                            <MenuItem Header="Удалить" Click="RemoveNetwork_Click">
                                 <MenuItem.Icon>
                                     <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
                                 </MenuItem.Icon>

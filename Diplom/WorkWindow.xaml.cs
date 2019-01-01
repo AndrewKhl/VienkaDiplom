@@ -272,7 +272,7 @@ namespace Diplom
 
         private void CreateNetwork()
         {
-			if (DataNetwork.IsCreate)
+			if (DataNetwork.IsCreated)
 			{
 				ShowErrorCreateNetwork();
 				return;
@@ -470,6 +470,23 @@ namespace Diplom
                 else if (child is ManagerControl)
                     (child as ManagerControl).SetColor(currentColor);
             }
+        }
+
+        private void RemoveNetwork_Click(object sender, RoutedEventArgs e)
+        {
+            canvas.Children.Clear();
+            DataNetwork.Managers.Clear();
+            DataNetwork.Stations.Clear();
+            DataNetwork.IsCreated = false;
+            numbersManagers.Clear();
+            numbersStations.Clear();
+            maxStationNumber = 1;
+            maxManagerNumber = 1;
+            connector = null;
+            IsRadioConnection = null;
+            FocusedControl = null;
+            NetworkMenuItem.Visibility = Visibility.Collapsed;
+            StationControl.IsConnecting = false;
         }
     }
 }

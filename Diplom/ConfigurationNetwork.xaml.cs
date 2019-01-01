@@ -42,7 +42,7 @@ namespace Diplom
 			DataNetwork.Name = nameNewNetwork.Text.Trim();
 			DataNetwork.Type = typeNetwork.SelectedItem.ToString();
             DataNetwork.Address = number;
-			DataNetwork.IsCreate = true;
+			DataNetwork.IsCreated = true;
 			Stock.workWindow.EnabledButton(true);
 			Close();
             if (!IsEditing)
