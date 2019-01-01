@@ -83,5 +83,16 @@ namespace Diplom.Models
         {
             window.ConnectControls(this);
         }
+
+        private void Focus_Click(object sender, RoutedEventArgs e)
+        {
+            window.SetFocus(this);
+        }
+
+        private void Remove_Click(object sender, RoutedEventArgs e)
+        {
+            window.SetFocus(this);
+            window.RemoveElement();
+        }
     }
 }

@@ -153,8 +153,12 @@ namespace Diplom.Models
                 LoadingWindow wnd;
                 foreach (string message in UpdateMainStationMessages)
                 {
-                    wnd = new LoadingWindow(string.Format(message, stationName.Text), 1);
-                    wnd.ShowDialog();
+                    try
+                    {
+                        wnd = new LoadingWindow(string.Format(message, stationName.Text), 1);
+                        wnd.ShowDialog();
+                    }
+                    catch (Exception) { return; }
                 }
                 if (item != null)
                 {
@@ -174,8 +178,12 @@ namespace Diplom.Models
                     LoadingWindow wnd;
                     foreach (string message in UpdateAnotherStationMessages)
                     {
-                        wnd = new LoadingWindow(string.Format(message, another.stationName.Text), 1);
-                        wnd.ShowDialog();
+                        try
+                        {
+                            wnd = new LoadingWindow(string.Format(message, another.stationName.Text), 1);
+                            wnd.ShowDialog();
+                        }
+                        catch (Exception) { return; }
                     }
                     if (item != null)
                     {

@@ -59,5 +59,11 @@ namespace Diplom
             if (loadingBar.Value >= 100)
                 Close();
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+            throw new Exception();
+        }
     }
 }

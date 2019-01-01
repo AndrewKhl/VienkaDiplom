@@ -40,9 +40,9 @@
                     </MenuItem>
                 </MenuItem>
                 <MenuItem Header="Сеть (PDH)">
-                    <MenuItem Header="Выделить"></MenuItem>
-                    <MenuItem Header="Свойства"></MenuItem>
-                    <MenuItem Header="Удалить">
+                    <MenuItem Header="Выделить" Click="Focus_Click" />
+                    <MenuItem Header="Свойства" />
+                    <MenuItem Header="Удалить" Click="Remove_Click">
                         <MenuItem.Icon>
                             <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
                         </MenuItem.Icon>
