@@ -341,7 +341,7 @@
                 </Canvas.Background>
 
                 <Canvas.ContextMenu>
-                    <ContextMenu>
+                    <ContextMenu Opened="ContextMenu_Opened">
                         <MenuItem Header="Выделить всё"/>
                         <MenuItem Header="Создать сеть" Click="CreateNetwork_Click">
                             <MenuItem.Icon>
@@ -352,6 +352,26 @@
                             <MenuItem.Icon>
                                 <Image Source="pack://application:,,,/Resources/Icons/ConnectToRemoteNetwork.png"/>
                             </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Visibility="Collapsed" Header="Сеть" Name="NetworkMenuItem">
+                            <MenuItem Header="Выделить" IsEnabled="False" />
+                            <MenuItem Header="Свойства" Click="EditNetwork_Click" />
+                            <MenuItem Header="Удалить">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Создать менеджера" Click="CreateManager_Click">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/Resources/Icons/NewManager.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="Создать станцию" Click="CreateStation_Click">
+                                <MenuItem.Icon>
+                                    <Image Source="pack://application:,,,/Resources/Icons/NewStation.png"/>
+                                </MenuItem.Icon>
+                            </MenuItem>
                         </MenuItem>
                     </ContextMenu>
                 </Canvas.ContextMenu>

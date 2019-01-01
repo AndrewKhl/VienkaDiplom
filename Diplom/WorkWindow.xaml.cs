@@ -292,6 +292,8 @@ namespace Diplom
 			{
                 ConfigurationStation wnd = new ConfigurationStation { Owner = this };
                 wnd.ShowDialog();
+                if (DataNetwork.Managers.Count > 0)
+                    NetworkMenuItem.Visibility = Visibility.Visible;
 			}
 			else
 				ShowErrorCountStations();
@@ -344,7 +346,11 @@ namespace Diplom
                 {
                     IsRadioConnection = isRadio;
                     connector = station;
-                    if (isRadio) station.IsChecked = false;
+                    if (isRadio)
+                    {
+                        station.IsChecked = false;
+                        StationControl.IsConnecting = true;
+                    }
                 }
             }
             else
@@ -364,6 +370,7 @@ namespace Diplom
                         }
                         savedStation.IsChecked = true;
                         station.IsChecked = true;
+                        StationControl.IsConnecting = false;
                     }
                     else if (IsRadioConnection == false && connector is ManagerControl)
                     {
@@ -421,6 +428,47 @@ namespace Diplom
                     (station.stationLine.firstControl as StationControl).stationGauge.Visibility = Visibility.Visible;
                     (station.stationLine.secondControl as StationControl).stationGauge.Visibility = Visibility.Visible;
                 }
+            }
+        }
+
+        private void EditNetwork_Click(object sender, RoutedEventArgs e)
+        {
+            ConfigurationNetwork wnd = new ConfigurationNetwork { Owner = this, IsEditing = true };
+            wnd.nameNewNetwork.Text = DataNetwork.Name;
+            wnd.colorCanvas.SelectedColor = currentColor;
+            foreach (string item in wnd.listOfAdress.Items)
+            {
+                if (item == DataNetwork.Address.ToString())
+                {
+                    wnd.listOfAdress.SelectedItem = item;
+                    break;
+                }
+            }
+            foreach (ComboBoxItem item in wnd.typeNetwork.Items)
+            {
+                if ((string)item.Content == DataNetwork.Type)
+                {
+                    wnd.typeNetwork.SelectedItem = item;
+                    break;
+                }
+            }
+            wnd.typeNetwork.IsEnabled = false;
+            wnd.ShowDialog();
+        }
+
+        private void ContextMenu_Opened(object sender, RoutedEventArgs e)
+        {
+            NetworkMenuItem.Header = $"Сеть {DataNetwork.Name}";
+        }
+
+        public void UpdateColors()
+        {
+            foreach (var child in canvas.Children)
+            {
+                if (child is StationControl)
+                    (child as StationControl).SetColor(currentColor);
+                else if (child is ManagerControl)
+                    (child as ManagerControl).SetColor(currentColor);
             }
         }
     }

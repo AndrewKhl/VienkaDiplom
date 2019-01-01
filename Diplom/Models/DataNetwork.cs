@@ -12,6 +12,7 @@ namespace Diplom.Models
 		public static string Name { get; set; }
 		public static bool IsCreate { get; set; } = false;
 		public static string Type { get; set; }
+        public static int Address { get; set; }
 		public static ObservableCollection<ManagerControl> Managers { get; set; }
 		public static ObservableCollection<StationControl> Stations { get; set; }
 

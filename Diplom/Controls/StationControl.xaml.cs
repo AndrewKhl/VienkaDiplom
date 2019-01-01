@@ -19,6 +19,7 @@ namespace Diplom.Models
         public ConnectionLine stationLine;
         public ConnectionLine managerLine;
         public bool IsRightRotation = true;
+        public static bool IsConnecting = false;
 
         private bool isChecked = false;
         public bool IsChecked
@@ -26,7 +27,10 @@ namespace Diplom.Models
             get => isChecked;
             set
             {
-                RadioItem.IsChecked = value;
+                var item = GetRadioItem();
+                if (item != null)
+                    item.IsChecked = value;
+
                 isChecked = value;
             }
         }
@@ -49,7 +53,7 @@ namespace Diplom.Models
 		public StationControl(WorkWindow window, string name, int number, Color color)
         {
             InitializeComponent();
-            (Resources["fontColor"] as SolidColorBrush).Color = color;
+            SetColor(color);
             image.Source = new BitmapImage(ImageUri);
             BorderThickness = new Thickness(2);
 			Data = new DataStation();
@@ -68,13 +72,16 @@ namespace Diplom.Models
 			gauge.EndInit();
 			stationGauge.Source = gauge;
 			stationGauge.Visibility = Visibility.Hidden;
-
-            parameterItem.Icon = new Image { Source = new BitmapImage(disableParameters) };
 		}
 
         public WorkWindow window { get; }
 
 		public event Action FocusedElement;
+
+        public void SetColor(Color color)
+        {
+            (Resources["fontColor"] as SolidColorBrush).Color = color;
+        }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
@@ -123,7 +130,10 @@ namespace Diplom.Models
 
         private void RadioConnect_Click(object sender, RoutedEventArgs e)
         {
-            RadioItem.IsChecked = false;
+            var item = GetRadioItem();
+            if (item != null)
+                item.IsChecked = false;
+
             if (!IsChecked)
                 window.ConnectControls(this);
             else
@@ -137,6 +147,7 @@ namespace Diplom.Models
 
         private void Update_Click(object sender, RoutedEventArgs e)
         {
+            var item = GetParameterItem();
             if (IsConnectedToManager())
             {
                 LoadingWindow wnd;
@@ -145,8 +156,11 @@ namespace Diplom.Models
                     wnd = new LoadingWindow(string.Format(message, stationName.Text), 1);
                     wnd.ShowDialog();
                 }
-                parameterItem.IsEnabled = true;
-                parameterItem.Icon = new Image { Source = new BitmapImage(enableParameters) };
+                if (item != null)
+                {
+                    item.IsEnabled = true;
+                    item.Icon = new Image { Source = new BitmapImage(enableParameters) };
+                }
             }
             else if (IsConnectedToStation())
             {
@@ -163,8 +177,11 @@ namespace Diplom.Models
                         wnd = new LoadingWindow(string.Format(message, another.stationName.Text), 1);
                         wnd.ShowDialog();
                     }
-                    parameterItem.IsEnabled = true;
-                    parameterItem.Icon = new Image { Source = new BitmapImage(enableParameters) };
+                    if (item != null)
+                    {
+                        item.IsEnabled = true;
+                        item.Icon = new Image { Source = new BitmapImage(enableParameters) };
+                    }
                 }
             }
             else
@@ -195,7 +212,39 @@ namespace Diplom.Models
 
         private void ContextMenu_Opened(object sender, RoutedEventArgs e)
         {
-            RadioItem.IsChecked = IsChecked;
+            var item = GetRadioItem();
+            if (item != null)
+                item.IsChecked = IsChecked;
+        }
+
+        private MenuItem GetRadioItem() => GetMenuItem("RadioItem");
+        private MenuItem GetParameterItem() => GetMenuItem("parameterItem");
+        private MenuItem GetMenuItem(string name)
+        {
+            var mainMenu = Resources["MainMenu"] as ContextMenu;
+            foreach (var item in mainMenu.Items)
+                if (item is MenuItem && (item as MenuItem).Name == name)
+                    return item as MenuItem;
+            return null;
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            IsConnecting = false;
+            window.ConnectControls(this, true);
+        }
+
+        private void Context_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (!IsConnecting)
+                stackPanel.ContextMenu = Resources["MainMenu"] as ContextMenu;
+            else
+            {
+                if (window.connector == this)
+                    stackPanel.ContextMenu = Resources["CancelMenu"] as ContextMenu;
+                else
+                    stackPanel.ContextMenu = Resources["SecondMenu"] as ContextMenu;
+            }
         }
     }
 }

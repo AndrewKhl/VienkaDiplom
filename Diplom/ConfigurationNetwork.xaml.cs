@@ -10,6 +10,7 @@ namespace Diplom
     /// </summary>
     public partial class ConfigurationNetwork : Window
     {
+        public bool IsEditing { get; set; } = false;
         public ConfigurationNetwork()
         {
             InitializeComponent();
@@ -17,8 +18,8 @@ namespace Diplom
 			List<string> list = new List<string>();
 			for (int i = 1; i <= Stock.numberLimit; ++i)
 			{
-				if (!Stock.workWindow.numbersManagers.Contains(i))
-					list.Add(i.ToString());
+				//if (!Stock.workWindow.numbersManagers.Contains(i))
+                list.Add(i.ToString());
 			}
 				
 			listOfAdress.ItemsSource = list;
@@ -36,13 +37,18 @@ namespace Diplom
 		{
 			int number = int.Parse(listOfAdress.SelectedItem.ToString());
             Stock.workWindow.currentColor = colorCanvas.SelectedColor ?? Colors.Green;
-			Stock.workWindow.CreateManager(nameNewNetwork.Text.Trim(), number);
+            if (!IsEditing)
+                Stock.workWindow.CreateManager(nameNewNetwork.Text.Trim(), number);
 			DataNetwork.Name = nameNewNetwork.Text.Trim();
 			DataNetwork.Type = typeNetwork.SelectedItem.ToString();
+            DataNetwork.Address = number;
 			DataNetwork.IsCreate = true;
 			Stock.workWindow.EnabledButton(true);
 			Close();
-			Stock.workWindow.CreateStation_Click(sender, e);
+            if (!IsEditing)
+                Stock.workWindow.CreateStation_Click(sender, e);
+            if (IsEditing)
+                Stock.workWindow.UpdateColors();
 		}
 	}
 }

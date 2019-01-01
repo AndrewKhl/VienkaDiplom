@@ -7,8 +7,89 @@
              mc:Ignorable="d">
     <UserControl.Resources>
         <SolidColorBrush x:Key="fontColor" Color="Green" Opacity="0.5" />
+
+        <ContextMenu x:Key="CancelMenu">
+            <MenuItem Header="Отмена" Click="Cancel_Click" />
+        </ContextMenu>
+        
+        <ContextMenu x:Key="MainMenu" Opened="ContextMenu_Opened">
+            <MenuItem Header="Станция">
+                <MenuItem Header="Свойства">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/CustomFile.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Удалить">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Сеть (PDH)">
+                <MenuItem Header="Выделить"></MenuItem>
+                <MenuItem Header="Свойства"></MenuItem>
+                <MenuItem Header="Удалить">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="Связать по локальному порту" Click="LocalConnect_Click"></MenuItem>
+            <MenuItem Header="Связать по порту А"></MenuItem>
+            <MenuItem Header="Связать по порту Б"></MenuItem>
+            <MenuItem Header="Связать по радиоканалу" Name="RadioItem" IsCheckable="True" Click="RadioConnect_Click"></MenuItem>
+            <Separator />
+            <MenuItem Header="Обновить конфигурацию" Click="Update_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Протокол станции">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/ShowEvents.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Параметры" Click="ShowParametrWindow" Name="parameterItem" IsEnabled="False">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/DisabledShow.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="Выполнить макрос" IsEnabled="False">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/disablePlay.png" />
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+
+        <ContextMenu x:Key="SecondMenu">
+            <MenuItem Header="Связать по радиоканалу" Click="RadioConnect_Click" />
+            <Separator />
+            <MenuItem Header="Обновить конфигурацию" Click="Update_Click">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Протокол станции">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/ShowEvents.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Параметры" Click="ShowParametrWindow" IsEnabled="False">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/DisabledShow.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="Выполнить макрос" IsEnabled="False">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/disablePlay.png" />
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
     </UserControl.Resources>
-    <StackPanel Orientation="Vertical">
+    <StackPanel ContextMenu="{StaticResource MainMenu}" Orientation="Vertical" Name="stackPanel" MouseRightButtonDown="Context_Click">
         <Border Background="{StaticResource fontColor}" Name="stationNameBorder" BorderThickness="1" Padding="3 1">
             <TextBlock Name="stationName" HorizontalAlignment="Center" FontWeight="SemiBold" Foreground="White"/>
         </Border>
@@ -25,48 +106,5 @@
             </Border>
             <Image Name="stationGauge" Grid.Column="2"/>
         </Grid>
-
-        <StackPanel.ContextMenu>
-            <ContextMenu Opened="ContextMenu_Opened">
-                <MenuItem Header="Станция">
-                    <MenuItem Header="Свойства">
-                        <MenuItem.Icon>
-                            <Image Source="pack://application:,,,/Resources/Icons/CustomFile.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="Удалить">
-                        <MenuItem.Icon>
-                            <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </MenuItem>
-                <MenuItem Header="Сеть (PDH)">
-                    <MenuItem Header="Выделить"></MenuItem>
-                    <MenuItem Header="Свойства"></MenuItem>
-                    <MenuItem Header="Удалить">
-                        <MenuItem.Icon>
-                            <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </MenuItem>
-                <Separator></Separator>
-                <MenuItem Header="Связаться по локальному порту" Click="LocalConnect_Click"></MenuItem>
-                <MenuItem Header="Связаться по порту А"></MenuItem>
-                <MenuItem Header="Связаться по порту Б"></MenuItem>
-                <MenuItem Header="Связаться по радиоканалу" Name="RadioItem" IsCheckable="True" Click="RadioConnect_Click"></MenuItem>
-                <Separator></Separator>
-                <MenuItem Header="Обновить конфигурацию" Click="Update_Click">
-                    <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Протокол станции">
-                    <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/ShowEvents.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Параметры" Click="ShowParametrWindow" Name="parameterItem" IsEnabled="False"/>
-            </ContextMenu>
-        </StackPanel.ContextMenu>
     </StackPanel>
 </UserControl>

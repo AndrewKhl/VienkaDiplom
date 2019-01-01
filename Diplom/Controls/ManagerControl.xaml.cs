@@ -19,7 +19,7 @@ namespace Diplom.Models
         public ManagerControl(WorkWindow window, string name, int number, Color color)
         {
             InitializeComponent();
-            (Resources["fontColor"] as SolidColorBrush).Color = color;
+            SetColor(color);
             image.Source = new BitmapImage(ImageUri);
             BorderThickness = new Thickness(2);
 			Data = new DataManagers();
@@ -35,6 +35,11 @@ namespace Diplom.Models
 
         public WorkWindow window { get; }
         public event Action FocusedElement;
+
+        public void SetColor(Color color)
+        {
+            (Resources["fontColor"] as SolidColorBrush).Color = color;
+        }
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
