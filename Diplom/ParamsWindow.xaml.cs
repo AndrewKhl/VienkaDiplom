@@ -30,8 +30,27 @@ namespace Diplom
 			DataContext = _currentStation.Data;
         }
 
+		private void VisualTree(object sender)
+		{
+			FrameworkElement obj = sender as FrameworkElement;
+			
+			if (sender as TextBlock != null)
+				obj.Visibility = Visibility.Visible;
+
+			int count = VisualTreeHelper.GetChildrenCount(obj);
+
+			for (int i = 0; i < count; ++i)
+			{
+				var item = VisualTreeHelper.GetChild(sender as DependencyObject, i);
+				VisualTree(item);
+			}
+		}
+
 		private void RefreshParams(object sender, RoutedEventArgs e)
 		{
+			FrameworkElement obj = sender as FrameworkElement;
+			ContextMenu menu = obj.Parent as ContextMenu;
+			VisualTree(menu.PlacementTarget);
 			MessageBox.Show("Параметры успешно обновлены", "Уведомление",
 			MessageBoxButton.OK, MessageBoxImage.Information);
 		}

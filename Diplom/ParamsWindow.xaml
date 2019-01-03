@@ -13,17 +13,19 @@
             <Setter Property="TextBlock.HorizontalAlignment" Value="Right" />
             <Setter Property="TextBlock.Margin" Value="5 0" />
             <Setter Property="Grid.Column" Value="1"/>
+            <Setter Property="TextBlock.Visibility" Value="Hidden"/>
         </Style>
 
         <Style x:Key="TextViewStyle2Column">
             <Setter Property="TextBlock.HorizontalAlignment" Value="Right" />
             <Setter Property="TextBlock.Margin" Value="5 0" />
             <Setter Property="Grid.Column" Value="2"/>
+            <Setter Property="TextBlock.Visibility" Value="Hidden"/>
         </Style>
     </Window.Resources>
     <Grid>
         <TreeView >
-            <TreeViewItem Header="МД-1Р">
+            <TreeViewItem Header="МД-1Р" Name="MD_1R">
                 <TreeViewItem.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Обновить" Click="RefreshParams">
@@ -33,11 +35,11 @@
                         </MenuItem>
                     </ContextMenu>
                 </TreeViewItem.ContextMenu>
-                <TreeViewItem Header="Паспорт">
-                    <TreeViewItem Header="Режим работы"></TreeViewItem>
-                    <TreeViewItem Header="Слот 1"></TreeViewItem>
-                    <TreeViewItem Header="Версия фрэймера"></TreeViewItem>
-                    <TreeViewItem Header="Версии ПО" HorizontalContentAlignment="Stretch">
+                <TreeViewItem Header="Паспорт" Name="Pasport">
+                    <TreeViewItem Header="Режим работы" Name="WorkMode"></TreeViewItem>
+                    <TreeViewItem Header="Слот 1" Name="Slot1"></TreeViewItem>
+                    <TreeViewItem Header="Версия фрэймера" Name="FrameVersion"></TreeViewItem>
+                    <TreeViewItem Header="Версии ПО" Name="POVersion" HorizontalContentAlignment="Stretch" Background="AliceBlue">
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="150"/>
@@ -45,15 +47,39 @@
                                 <ColumnDefinition Width="150"/>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
+                                <RowDefinition Name="Protocol">
+                                    <RowDefinition.ContextMenu>
+                                        <ContextMenu>
+                                            
+                                        </ContextMenu>
+                                    </RowDefinition.ContextMenu>
+                                </RowDefinition>
+                                <RowDefinition Name="LoaderB">
+                                    <RowDefinition.ContextMenu>
+                                        <ContextMenu>
+
+                                        </ContextMenu>
+                                    </RowDefinition.ContextMenu>
+                                </RowDefinition>
+                                <RowDefinition Name="CPU_BMU">
+                                    <RowDefinition.ContextMenu>
+                                        <ContextMenu>
+
+                                        </ContextMenu>
+                                    </RowDefinition.ContextMenu>
+                                </RowDefinition>
+                                <RowDefinition Name="PLIS_BMU">
+                                    <RowDefinition.ContextMenu>
+                                        <ContextMenu>
+
+                                        </ContextMenu>
+                                    </RowDefinition.ContextMenu>
+                                </RowDefinition>
                             </Grid.RowDefinitions>
                             <TextBlock Grid.Row="0" Text="Протокол"/>
-                            <TextBlock Grid.Row="1" Text="Загрузчик Б..."/>
+                            <TextBlock Grid.Row="1" Text="Загрузчик Б..." />
                             <TextBlock Grid.Row="2" Text="CPU БМУ"/>
-                            <TextBlock Grid.Row="3" Text="ПЛИС БМУ"/>
+                            <TextBlock Grid.Row="3" Text="ПЛИС БМУ" />
 
                             <TextBlock Grid.Row="0" Text="2" Style="{StaticResource TextViewStyle1Column}"/>
                             <TextBlock Grid.Row="1" Text="7" Style="{StaticResource TextViewStyle1Column}"/>
@@ -62,7 +88,7 @@
                         </Grid>
                     </TreeViewItem>
                 </TreeViewItem>
-                <TreeViewItem Header="Телеметрия">
+                <TreeViewItem Header="Телеметрия" Name="Telemetry">
                     <TreeViewItem>
                         <TreeViewItem.Header>
                             <Grid>
@@ -71,9 +97,9 @@
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Флаги ошибок" Grid.Column="0"/>
-                                <TextBlock Text="Ствол 1" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
-                                <TextBlock Text="Ствол 2" Grid.Column="2" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Text="Флаги ошибок" Grid.Column="0" Name="ErrorFlags"/>
+                                <TextBlock Text="Ствол 1" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}" Name="Trunk1"/>
+                                <TextBlock Text="Ствол 2" Grid.Column="2" Style="{StaticResource TextViewStyle1Column}" Name="Trunk2"/>
                             </Grid>
                         </TreeViewItem.Header>
                         <Grid Margin="-20,0,0,0">
@@ -83,9 +109,15 @@
                                 <ColumnDefinition Width="150"></ColumnDefinition>
                             </Grid.ColumnDefinitions>
                             <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
+                                <RowDefinition Name="Prm_Trunk">
+                                    <RowDefinition.ContextMenu>
+                                        <ContextMenu>
+                                            
+                                        </ContextMenu>
+                                    </RowDefinition.ContextMenu>
+                                </RowDefinition>
+                                <RowDefinition Name="Zahvat_SCS"/>
+                                <RowDefinition Name="WorkTrunk"/>
                             </Grid.RowDefinitions>
                             <TextBlock Text="Прм. ствол" Grid.Row="0"/>
                             <TextBlock Text="Захват СЦС" Grid.Row="1" />
