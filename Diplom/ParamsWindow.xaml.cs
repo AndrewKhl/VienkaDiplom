@@ -32,17 +32,18 @@ namespace Diplom
 
 		private void VisualTree(object sender)
 		{
-			FrameworkElement obj = sender as FrameworkElement;
-			
-			if (sender as TextBlock != null)
-				obj.Visibility = Visibility.Visible;
-
-			int count = VisualTreeHelper.GetChildrenCount(obj);
-
-			for (int i = 0; i < count; ++i)
+			if (sender is FrameworkElement obj)
 			{
-				var item = VisualTreeHelper.GetChild(sender as DependencyObject, i);
-				VisualTree(item);
+				if (sender as TextBlock != null)
+					obj.Visibility = Visibility.Visible;
+
+				int count = VisualTreeHelper.GetChildrenCount(obj);
+
+				for (int i = 0; i < count; ++i)
+				{
+					var item = VisualTreeHelper.GetChild(sender as DependencyObject, i);
+					VisualTree(item);
+				}
 			}
 		}
 
