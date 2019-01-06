@@ -24,16 +24,19 @@ namespace Diplom.Models
             SetColor(color);
             image.Source = new BitmapImage(ImageUri);
             BorderThickness = new Thickness(2);
-			Data = new DataManagers();
+            Data = new DataManagers
+            {
+                Name = name,
+                Number = number
+            };
+            SetVisibleName();
 
-            managerName.Text = $"{name} [{number}]";
-            Data.Name = name;
-			Data.Number = number;
-
-			DataNetwork.Managers.Add(this);
+            DataNetwork.Managers.Add(this);
 
             this.window = window;
         }
+
+        public void SetVisibleName() => managerName.Text = $"{Data.Name} [{Data.Number}]";
 
         public WorkWindow window { get; }
         public event Action FocusedElement;
@@ -126,7 +129,8 @@ namespace Diplom.Models
 
         private void ManagerProperties_Click(object sender, RoutedEventArgs e)
         {
-
+            ConfigurationManager wnd = new ConfigurationManager(this) { Owner = window };
+            wnd.ShowDialog();
         }
 
         private void ManagerRemove_Click(object sender, RoutedEventArgs e)

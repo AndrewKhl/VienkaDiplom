@@ -56,11 +56,12 @@ namespace Diplom.Models
             SetColor(color);
             image.Source = new BitmapImage(ImageUri);
             BorderThickness = new Thickness(2);
-			Data = new DataStation();
-
-            stationName.Text = $"{name} [{number}]";
-			Data.Name = name;
-			Data.Number = number;
+            Data = new DataStation
+            {
+                Name = name,
+                Number = number
+            };
+            SetVisibleName();
 
 			DataNetwork.Stations.Add(this);
 
@@ -73,6 +74,8 @@ namespace Diplom.Models
 			stationGauge.Source = gauge;
 			stationGauge.Visibility = Visibility.Hidden;
 		}
+
+        public void SetVisibleName() => stationName.Text = $"{Data.Name} [{Data.Number}]";
 
         public WorkWindow window { get; }
 
@@ -264,7 +267,8 @@ namespace Diplom.Models
 
         private void StationProperties_Click(object sender, RoutedEventArgs e)
         {
-
+            ConfigurationStation wnd = new ConfigurationStation(this) { Owner = window };
+            wnd.ShowDialog();
         }
 
         private void StationRemove_Click(object sender, RoutedEventArgs e)

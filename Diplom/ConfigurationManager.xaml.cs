@@ -1,16 +1,7 @@
-﻿using System;
+﻿using Diplom.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Diplom
 {
@@ -19,7 +10,8 @@ namespace Diplom
     /// </summary>
     public partial class ConfigurationManager : Window
     {
-        public ConfigurationManager()
+        private ManagerControl manager;
+        public ConfigurationManager(ManagerControl editedManager = null)
         {
             InitializeComponent();
 
@@ -30,12 +22,23 @@ namespace Diplom
 					list.Add(i.ToString());
 			}
 				
-			listOfAdress.ItemsSource = list;
-            listOfAdress.SelectedIndex = listOfAdress.Items.Count - 1;
-
-            nameNewManager.Text = $"Безымянный";
+            if (editedManager != null)
+            {
+                manager = editedManager;
+                nameNewManager.Text = manager.Data.Name;
+                string item = manager.Data.Number.ToString();
+                list.Add(item);
+                list.OrderBy(x => int.Parse(x));
+                listOfAdress.ItemsSource = list;
+                listOfAdress.SelectedItem = item;
+            }
+            else
+            {
+                nameNewManager.Text = $"Безымянный";
+                listOfAdress.ItemsSource = list;
+                listOfAdress.SelectedIndex = listOfAdress.Items.Count - 1;
+            }
         }
-
 
         private void CloseWindow(object sender, RoutedEventArgs e)
 		{
@@ -45,8 +48,19 @@ namespace Diplom
 		private void CreateManager(object sender, RoutedEventArgs e)
 		{
 			int number = int.Parse(listOfAdress.SelectedItem.ToString());
-			Stock.workWindow.CreateManager(nameNewManager.Text.Trim(), number);
-			Close();
+            if (manager == null)
+            {
+                Stock.workWindow.CreateManager(nameNewManager.Text.Trim(), number);
+            }
+            else
+            {
+                Stock.workWindow.numbersStations.Remove(manager.Data.Number);
+                Stock.workWindow.numbersStations.Add(number);
+                manager.Data.Number = number;
+                manager.Data.Name = nameNewManager.Text;
+                manager.SetVisibleName();
+            }
+            Close();
 		}
     }
 }
