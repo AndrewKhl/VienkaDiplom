@@ -99,13 +99,13 @@
     <Compile Include="ParamsWindow.xaml.cs">
       <DependentUpon>ParamsWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SetMainStationWindow.xaml.cs">
+    <Compile Include="SetWindows\SetMainStationWindow.xaml.cs">
       <DependentUpon>SetMainStationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SetPeriodWindow.xaml.cs">
+    <Compile Include="SetWindows\SetPeriodWindow.xaml.cs">
       <DependentUpon>SetPeriodWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SetSynhronizationStation.xaml.cs">
+    <Compile Include="SetWindows\SetSynhronizationStation.xaml.cs">
       <DependentUpon>SetSynhronizationStation.xaml</DependentUpon>
     </Compile>
     <Compile Include="Stock.cs" />
@@ -152,15 +152,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SetMainStationWindow.xaml">
+    <Page Include="SetWindows\SetMainStationWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SetPeriodWindow.xaml">
+    <Page Include="SetWindows\SetPeriodWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="SetSynhronizationStation.xaml">
+    <Page Include="SetWindows\SetSynhronizationStation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

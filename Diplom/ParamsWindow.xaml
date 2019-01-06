@@ -10,18 +10,43 @@
 
     <Window.Resources>
         <Style x:Key="TextViewStyle1Column">
-            <Setter Property="TextBlock.HorizontalAlignment" Value="Right" />
-            <Setter Property="TextBlock.Margin" Value="5 0" />
+            <Setter Property="TextBlock.HorizontalAlignment" Value="Right"/>
+            <Setter Property="TextBlock.Margin" Value="5 0"/>
             <Setter Property="Grid.Column" Value="1"/>
             <Setter Property="TextBlock.Visibility" Value="Hidden"/>
+            <Setter Property="TextBlock.Padding" Value="1"/>
         </Style>
 
         <Style x:Key="TextViewStyle2Column">
-            <Setter Property="TextBlock.HorizontalAlignment" Value="Right" />
-            <Setter Property="TextBlock.Margin" Value="5 0" />
+            <Setter Property="TextBlock.HorizontalAlignment" Value="Right"/>
+            <Setter Property="TextBlock.Margin" Value="5 0"/>
             <Setter Property="Grid.Column" Value="2"/>
             <Setter Property="TextBlock.Visibility" Value="Hidden"/>
+            <Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
         </Style>
+
+        <Style TargetType="TreeViewItem">
+            <Setter Property="Margin" Value="0 4"/>
+            <Setter Property="Background" Value="LightGray"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        
+        <Style TargetType="DataGridCell">
+            <Setter Property="BorderBrush" Value="Black"/>
+        </Style>
+
+        <Style TargetType="Grid">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="ShowGridLines" Value="True"/>
+        </Style>
+
+        <Style TargetType="RowDefinition">
+            <Setter Property="Height" Value="22"/>
+        </Style>
+        
     </Window.Resources>
     <Grid>
         <TreeView >
@@ -36,467 +61,541 @@
                     </ContextMenu>
                 </TreeViewItem.ContextMenu>
                 <TreeViewItem Header="Паспорт" Name="Pasport">
-                    <TreeViewItem Header="Режим работы" Name="WorkMode"></TreeViewItem>
-                    <TreeViewItem Header="Слот 1" Name="Slot1"></TreeViewItem>
-                    <TreeViewItem Header="Версия фрэймера" Name="FrameVersion"></TreeViewItem>
-                    <TreeViewItem Header="Версии ПО" Name="POVersion" HorizontalContentAlignment="Stretch" Background="AliceBlue">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="150"/>
-                                <ColumnDefinition Width="150"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Name="Protocol">
-                                    <RowDefinition.ContextMenu>
-                                        <ContextMenu>
-                                            
-                                        </ContextMenu>
-                                    </RowDefinition.ContextMenu>
-                                </RowDefinition>
-                                <RowDefinition Name="LoaderB">
-                                    <RowDefinition.ContextMenu>
-                                        <ContextMenu>
+                    <TreeViewItem Margin="0 4 0 1">
+                        <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid ShowGridLines="True">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Режим работы" Grid.Column="0"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <TreeViewItem Margin="0 1">
+                        <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid ShowGridLines="True">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Слот 1" Grid.Column="0"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <TreeViewItem Margin="0 1">
+                        <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid ShowGridLines="True">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Версия фрэймера" Grid.Column="0"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -4">
+                                <Grid ShowGridLines="True" Background="LightGray">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Версии ПО" Grid.Column="0"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="-19 0 0 0">
+                            <Grid ShowGridLines="True">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Name="Protocol"/>
+                                    <RowDefinition Name="LoaderB"/>
+                                    <RowDefinition Name="CPU_BMU"/>
+                                    <RowDefinition Name="PLIS_BMU"/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Grid.Row="0" Text="Протокол"/>
+                                <TextBlock Grid.Row="1" Text="Загрузчик Б..." />
+                                <TextBlock Grid.Row="2" Text="CPU БМУ"/>
+                                <TextBlock Grid.Row="3" Text="ПЛИС БМУ" />
 
-                                        </ContextMenu>
-                                    </RowDefinition.ContextMenu>
-                                </RowDefinition>
-                                <RowDefinition Name="CPU_BMU">
-                                    <RowDefinition.ContextMenu>
-                                        <ContextMenu>
-
-                                        </ContextMenu>
-                                    </RowDefinition.ContextMenu>
-                                </RowDefinition>
-                                <RowDefinition Name="PLIS_BMU">
-                                    <RowDefinition.ContextMenu>
-                                        <ContextMenu>
-
-                                        </ContextMenu>
-                                    </RowDefinition.ContextMenu>
-                                </RowDefinition>
-                            </Grid.RowDefinitions>
-                            <TextBlock Grid.Row="0" Text="Протокол"/>
-                            <TextBlock Grid.Row="1" Text="Загрузчик Б..." />
-                            <TextBlock Grid.Row="2" Text="CPU БМУ"/>
-                            <TextBlock Grid.Row="3" Text="ПЛИС БМУ" />
-
-                            <TextBlock Grid.Row="0" Text="2" Style="{StaticResource TextViewStyle1Column}"/>
-                            <TextBlock Grid.Row="1" Text="7" Style="{StaticResource TextViewStyle1Column}"/>
-                            <TextBlock Grid.Row="2" Text="5" Style="{StaticResource TextViewStyle1Column}"/>
-                            <TextBlock Grid.Row="3" Text="2" Style="{StaticResource TextViewStyle1Column}"/>
-                        </Grid>
+                                <TextBlock Grid.Row="0" Text="2" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Grid.Row="1" Text="7" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Grid.Row="2" Text="5" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Grid.Row="3" Text="2" Style="{StaticResource TextViewStyle1Column}"/>
+                            </Grid>
+                        </Border>
                     </TreeViewItem>
                 </TreeViewItem>
                 <TreeViewItem Header="Телеметрия" Name="Telemetry">
                     <TreeViewItem>
                         <TreeViewItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Флаги ошибок" Grid.Column="0" Name="ErrorFlags"/>
-                                <TextBlock Text="Ствол 1" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}" Name="Trunk1"/>
-                                <TextBlock Text="Ствол 2" Grid.Column="2" Style="{StaticResource TextViewStyle1Column}" Name="Trunk2"/>
-                            </Grid>
+                            <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
+                                <Grid ShowGridLines="True" Background="LightGray">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Флаги ошибок" Grid.Column="0" Name="ErrorFlags"/>
+                                    <TextBlock Text="Ствол 1" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}" Visibility="Visible"/>
+                                    <TextBlock Text="Ствол 2" Grid.Column="2" Style="{StaticResource TextViewStyle1Column}" Visibility="Visible"/>
+                                </Grid>
+                            </Border>
                         </TreeViewItem.Header>
-                        <Grid Margin="-20,0,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Name="Prm_Trunk">
-                                    <RowDefinition.ContextMenu>
-                                        <ContextMenu>
-                                            
-                                        </ContextMenu>
-                                    </RowDefinition.ContextMenu>
-                                </RowDefinition>
-                                <RowDefinition Name="Zahvat_SCS"/>
-                                <RowDefinition Name="WorkTrunk"/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="Прм. ствол" Grid.Row="0"/>
-                            <TextBlock Text="Захват СЦС" Grid.Row="1" />
-                            <TextBlock Text="Раб. ствол" Grid.Row="2" />
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="-19,0,0,0">
+                            <Grid ShowGridLines="True">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Прм. ствол" Grid.Row="0"/>
+                                <TextBlock Text="Захват СЦС" Grid.Row="1" />
+                                <TextBlock Text="Раб. ствол" Grid.Row="2" />
 
-                            <TextBlock Text="норма" Grid.Row="0" Style="{StaticResource TextViewStyle1Column}"/>
-                            <TextBlock Text="нет" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
-                            <TextBlock Text="норма" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Text="норма" Grid.Row="0" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Text="нет" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Text="норма" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
 
-                            <TextBlock Text="нет" Grid.Row="1" Style="{StaticResource TextViewStyle2Column}"/>
-                        </Grid>
+                                <TextBlock Text="нет" Grid.Row="1" Style="{StaticResource TextViewStyle2Column}"/>
+                            </Grid>
+                        </Border>
                     </TreeViewItem>
                     
                     <TreeViewItem>
                         <TreeViewItem.Header>
-                            <Grid>
+                            <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
+                                <Grid ShowGridLines="True" Background="LightGray">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Состояние E1" Grid.Column="0"/>
+                                    <TextBlock Text="Состояние" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}" Visibility="Visible"/>
+                                    <TextBlock Text="Контроль" Grid.Column="2" Style="{StaticResource TextViewStyle2Column}" Visibility="Visible"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="-19,0,0,0">
+                            <Grid ShowGridLines="True">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Состояние E1" Grid.Column="0"/>
-                                <TextBlock Text="Состояние" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
-                                <TextBlock Text="Контроль" Grid.Column="2" Style="{StaticResource TextViewStyle2Column}"/>
+                                <TextBlock Text="1E1" Grid.Row="0"/>
+                                <TextBlock Text="LOS" Grid.Row="0" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Text="выключен" Grid.Row="0" Style="{StaticResource TextViewStyle2Column}"/>
                             </Grid>
-                        </TreeViewItem.Header>
-
-                        <Grid Margin="-20,0,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="1E1" Grid.Row="0"/>
-                            <TextBlock Text="LOS" Grid.Row="0" Style="{StaticResource TextViewStyle1Column}"/>
-                            <TextBlock Text="выключен" Grid.Row="0" Style="{StaticResource TextViewStyle2Column}"/>
-                        </Grid>
-                    </TreeViewItem>
-                    
-                    
-                    <TreeViewItem>
-                        <TreeViewItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Качество связи" Grid.Column="0"/>
-                                <TextBlock Text="Ствол 1" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
-                                <TextBlock Text="Ствол 2" Grid.Column="2" Style="{StaticResource TextViewStyle2Column}"/>
-                            </Grid>
-                        </TreeViewItem.Header>
-
-                        <Grid Margin="-20,0,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            
-                            <TextBlock Text="BER 1c" Grid.Row="0"/>
-                            <TextBlock Text="5e-4 [1e-6]" Grid.Row="0" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="BER 15мин" Grid.Row="1"/>
-                            <TextBlock Text="1e-4 [6e-9]" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="BER 1c вых" Grid.Row="2"/>
-                            <TextBlock Text="5e-4 [1e-3]" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
-                            
-                            <TextBlock Text="BER 15мин" Grid.Row="3"/>
-                            <TextBlock Text="1e-4 [8e-4]" Grid.Row="3" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="ES вых" Grid.Row="4"/>
-                            <TextBlock Text="0" Grid.Row="4" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="SES вых" Grid.Row="5"/>
-                            <TextBlock Text="0" Grid.Row="5" Style="{StaticResource TextViewStyle1Column}"/>
-                            
-                            <TextBlock Text="UAS вых" Grid.Row="6"/>
-                            <TextBlock Text="216" Grid.Row="6" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="ESR вых" Grid.Row="7"/>
-                            <TextBlock Text="0" Grid.Row="7" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="SESR вых" Grid.Row="8"/>
-                            <TextBlock Text="0" Grid.Row="8" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="Время измерения" Grid.Row="9"/>
-                            <TextBlock Text="216 сек" Grid.Row="9" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="Сброс счётчика" Grid.Row="10"/>
-
-                            <TextBlock Text="Подкл. ТР1" Grid.Row="11"/>
-                            <TextBlock Text="нет" Grid.Row="11" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="Подкл. ТР2" Grid.Row="12"/>
-                            <TextBlock Text="нет" Grid.Row="12" Style="{StaticResource TextViewStyle1Column}"/>
-                            
-                            <TextBlock Text="Связь с устройством" Grid.Row="13"/>
-                            <TextBlock Text="0 %" Grid.Row="13" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="Температура" Grid.Row="14"/>
-                            <TextBlock Text="25 [23/42] C" Grid.Row="14" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="Приёмный ствол" Grid.Row="15"/>
-                            <TextBlock Text="первый" Grid.Row="15" Style="{StaticResource TextViewStyle1Column}"/>
-                        </Grid>
+                        </Border>
                     </TreeViewItem>
                     
                     
                     <TreeViewItem>
                         <TreeViewItem.Header>
-                            <Grid>
+                            <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
+                                <Grid ShowGridLines="True" Background="LightGray">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Качество связи" Grid.Column="0"/>
+                                    <TextBlock Text="Ствол 1" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}" Visibility="Visible"/>
+                                    <TextBlock Text="Ствол 2" Grid.Column="2" Style="{StaticResource TextViewStyle2Column}" Visibility="Visible"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="-19 0 0 0">
+                            <Grid ShowGridLines="True">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="ППУ" Grid.Column="0"/>
-                                <TextBlock Text="Ствол 1" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
-                                <TextBlock Text="Ствол 2" Grid.Column="2" Style="{StaticResource TextViewStyle2Column}"/>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <TextBlock Text="BER 1c" Grid.Row="0"/>
+                                <TextBlock Text="5e-4 [1e-6]" Grid.Row="0" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="BER 15мин" Grid.Row="1"/>
+                                <TextBlock Text="1e-4 [6e-9]" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="BER 1c вых" Grid.Row="2"/>
+                                <TextBlock Text="5e-4 [1e-3]" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="BER 15мин" Grid.Row="3"/>
+                                <TextBlock Text="1e-4 [8e-4]" Grid.Row="3" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="ES вых" Grid.Row="4"/>
+                                <TextBlock Text="0" Grid.Row="4" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="SES вых" Grid.Row="5"/>
+                                <TextBlock Text="0" Grid.Row="5" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="UAS вых" Grid.Row="6"/>
+                                <TextBlock Text="216" Grid.Row="6" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="ESR вых" Grid.Row="7"/>
+                                <TextBlock Text="0" Grid.Row="7" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="SESR вых" Grid.Row="8"/>
+                                <TextBlock Text="0" Grid.Row="8" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Время измерения" Grid.Row="9"/>
+                                <TextBlock Text="216 сек" Grid.Row="9" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Сброс счётчика" Grid.Row="10"/>
+
+                                <TextBlock Text="Подкл. ТР1" Grid.Row="11"/>
+                                <TextBlock Text="нет" Grid.Row="11" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Подкл. ТР2" Grid.Row="12"/>
+                                <TextBlock Text="нет" Grid.Row="12" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Связь с устройством" Grid.Row="13"/>
+                                <TextBlock Text="0 %" Grid.Row="13" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Температура" Grid.Row="14"/>
+                                <TextBlock Text="25 [23/42] C" Grid.Row="14" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Приёмный ствол" Grid.Row="15"/>
+                                <TextBlock Text="первый" Grid.Row="15" Style="{StaticResource TextViewStyle1Column}"/>
                             </Grid>
-                        </TreeViewItem.Header>
-                        <Grid Margin="-20,0,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="Связь с ППУ" Grid.Row="0"/>
-                            <TextBlock Text="100%" Grid.Row="0" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="Уровень сигнала" Grid.Row="1"/>
-                            <TextBlock Text="21%" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="К3 кабель" Grid.Row="2"/>
-                            <TextBlock Text="нет" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
-                            <TextBlock Text="нет" Grid.Row="2" Style="{StaticResource TextViewStyle2Column}"/>
-                        </Grid>
+                        </Border>
                     </TreeViewItem>
                     
                     
                     <TreeViewItem>
                         <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
+                                <Grid ShowGridLines="True" Background="LightGray">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="ППУ" Grid.Column="0"/>
+                                    <TextBlock Text="Ствол 1" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}" Visibility="Visible"/>
+                                    <TextBlock Text="Ствол 2" Grid.Column="2" Style="{StaticResource TextViewStyle2Column}" Visibility="Visible"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="-19,0,0,0">
+                            <Grid ShowGridLines="True">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"></ColumnDefinition>
+                                    <ColumnDefinition Width="150"></ColumnDefinition>
+                                    <ColumnDefinition Width="150"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Связь с ППУ" Grid.Row="0"/>
+                                <TextBlock Text="100%" Grid.Row="0" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Уровень сигнала" Grid.Row="1"/>
+                                <TextBlock Text="21%" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="К3 кабель" Grid.Row="2"/>
+                                <TextBlock Text="нет" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Text="нет" Grid.Row="2" Style="{StaticResource TextViewStyle2Column}"/>
+                            </Grid>
+                        </Border>
+                    </TreeViewItem>
+                    
+                    
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
+                                <Grid Background="LightGray">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Дискретные каналы" Grid.Column="0"/>
+                                    <TextBlock Text="Состояние" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}" Visibility="Visible"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="-19 0 0 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
+                                    <ColumnDefinition Width="150"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Дискретные каналы" Grid.Column="0"/>
-                                <TextBlock Text="Состояние" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Канал 1вх" Grid.Row="0"/>
+                                <TextBlock Text="выкл." Grid.Row="0" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Канал 2вх" Grid.Row="1"/>
+                                <TextBlock Text="выкл." Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Канал 3вх" Grid.Row="2"/>
+                                <TextBlock Text="выкл." Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Канал 4вх" Grid.Row="3"/>
+                                <TextBlock Text="выкл." Grid.Row="3" Style="{StaticResource TextViewStyle1Column}"/>
                             </Grid>
-                        </TreeViewItem.Header>
-
-                        <Grid Margin="-20,0,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="Канал 1вх" Grid.Row="0"/>
-                            <TextBlock Text="выкл." Grid.Row="0" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="Канал 2вх" Grid.Row="1"/>
-                            <TextBlock Text="выкл." Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="Канал 3вх" Grid.Row="2"/>
-                            <TextBlock Text="выкл." Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="Канал 4вх" Grid.Row="3"/>
-                            <TextBlock Text="выкл." Grid.Row="3" Style="{StaticResource TextViewStyle1Column}"/>
-                        </Grid>
+                        </Border>
                     </TreeViewItem>
                     
                     
                 </TreeViewItem>
                 <TreeViewItem Header="Управление">
-                    <TreeViewItem>
+                    <TreeViewItem Margin="0 4 0 1">
                         <TreeViewItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Режим резервирования" Grid.Column="0"/>
-                                <TextBlock Text="1-й ствол" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
-                            </Grid>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
-                    <TreeViewItem>
-                        <TreeViewItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Скорость" Grid.Column="0"/>
-                                <TextBlock Text="2048 Кб/с" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
-                            </Grid>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
-                    <TreeViewItem>
-                        <TreeViewItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Синхронизация" Grid.Column="0"/>
-                                <!--<TextBlock Text="РК" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"-->
-                                <TextBlock Text="{Binding Path=Synhronization, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Style="{StaticResource TextViewStyle1Column}" Name="synhronizationStationTextBlock">
-                                    <TextBlock.ContextMenu>
-                                        <ContextMenu>
-                                            <MenuItem Header="Изменить" Click="SetNewSynhronizationStation"/>
-                                            <MenuItem Header="Обновить" Click="RefreshParams">
-                                                <MenuItem.Icon>
-                                                    <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
-                                                </MenuItem.Icon>
-                                            </MenuItem>
-                                        </ContextMenu>
-                                    </TextBlock.ContextMenu>
-                                </TextBlock>
-                            </Grid>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
-                    <TreeViewItem>
-                        <TreeViewItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Коммутатор Ethernet" Grid.Column="0"/>
-                                <TextBlock Text="не передаётся" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
-                            </Grid>
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid ShowGridLines="True">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Режим резервирования" Grid.Column="0"/>
+                                    <TextBlock Text="1-й ствол" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                </Grid>
+                            </Border>
                         </TreeViewItem.Header>
                     </TreeViewItem>
 
-                    <TreeViewItem>
+                    <TreeViewItem Margin="0 1">
                         <TreeViewItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="ППУ"/>
-                                <TextBlock Text="Ствол 1" Style="{StaticResource TextViewStyle1Column}"/>
-                                <TextBlock Text="Ствол 2" Style="{StaticResource TextViewStyle2Column}"/>
-                            </Grid>
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Скорость" Grid.Column="0"/>
+                                    <TextBlock Text="2048 Кб/с" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                </Grid>
+                            </Border>
                         </TreeViewItem.Header>
-                        <Grid Margin="-20,0,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="Питание ППУ"/>
-                            <TextBlock Text="включено" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="Вых. ток. ЦАП" Grid.Row="1"/>
-                            <TextBlock Text="0.6 max" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
-                        </Grid>
                     </TreeViewItem>
-
-                    <TreeViewItem>
+                    
+                    <TreeViewItem Margin="0 1">
                         <TreeViewItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Коммутатор Ethernet" Grid.Column="0"/>
-                                <TextBlock Text="не передаётся" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
-                            </Grid>
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Синхронизация" Grid.Column="0"/>
+                                    <TextBlock Text="{Binding Path=Synhronization, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="3" Style="{StaticResource TextViewStyle1Column}" Name="synhronizationStationTextBlock">
+                                        <TextBlock.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Изменить" Click="SetNewSynhronizationStation"/>
+                                                <MenuItem Header="Обновить" Click="RefreshParams">
+                                                    <MenuItem.Icon>
+                                                        <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
+                                                    </MenuItem.Icon>
+                                                </MenuItem>
+                                            </ContextMenu>
+                                        </TextBlock.ContextMenu>
+                                    </TextBlock>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    
+                    <TreeViewItem Margin="0 1 0 4">
+                        <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Коммутатор Ethernet" Grid.Column="0"/>
+                                    <TextBlock Text="не передаётся" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                </Grid>
+                            </Border>
                         </TreeViewItem.Header>
                     </TreeViewItem>
 
                     <TreeViewItem>
                         <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
+                                <Grid Background="LightGray">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="ППУ"/>
+                                    <TextBlock Text="Ствол 1" Style="{StaticResource TextViewStyle1Column}" Visibility="Visible"/>
+                                    <TextBlock Text="Ствол 2" Style="{StaticResource TextViewStyle2Column}" Visibility="Visible"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="-19 0 0 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Шлейфование"/>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Питание ППУ"/>
+                                <TextBlock Text="включено" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Вых. ток. ЦАП" Grid.Row="1"/>
+                                <TextBlock Text="0.6 max" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
                             </Grid>
-                        </TreeViewItem.Header>
-                        <Grid Margin="-20,0,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Шлейф Е1"/>
-                            <TextBlock Text="выключен" Style="{StaticResource TextViewStyle1Column}"/>
-                        </Grid>
+                        </Border>
                     </TreeViewItem>
 
                     <TreeViewItem>
                         <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                        <ColumnDefinition Width="150"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Коммутатор Ethernet" Grid.Column="0"/>
+                                    <TextBlock Text="не передаётся" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
+                                <Grid Background="LightGray">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Шлейфование"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="-19 0 0 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Дискретные каналы"/>
-                                <TextBlock Text="Состояние" Style="{StaticResource TextViewStyle1Column}"/>
-                                <TextBlock Text="Управление" Style="{StaticResource TextViewStyle2Column}"/>
+                                <TextBlock Text="Шлейф Е1"/>
+                                <TextBlock Text="выключен" Style="{StaticResource TextViewStyle1Column}"/>
                             </Grid>
+                        </Border>
+                    </TreeViewItem>
+
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
+                                <Grid Background="LightGray">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Дискретные каналы"/>
+                                    <TextBlock Text="Состояние" Style="{StaticResource TextViewStyle1Column}" Visibility="Visible"/>
+                                    <TextBlock Text="Управление" Style="{StaticResource TextViewStyle2Column}" Visibility="Visible"/>
+                                </Grid>
+                            </Border>
                         </TreeViewItem.Header>
-                        <Grid Margin="-20,0,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="Период опроса"/>
-                            <TextBlock Text="1 сек" Style="{StaticResource TextViewStyle1Column}"/>
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="-19 0 0 0">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="150"></ColumnDefinition>
+                                    <ColumnDefinition Width="150"></ColumnDefinition>
+                                    <ColumnDefinition Width="150"></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Период опроса"/>
+                                <TextBlock Text="1 сек" Style="{StaticResource TextViewStyle1Column}"/>
 
-                            <TextBlock Text="Канал 1 вых" Grid.Row="1"/>
-                            <TextBlock Text="выкл" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
-                            <TextBlock Text="мастер" Grid.Row="1" Style="{StaticResource TextViewStyle2Column}"/>
+                                <TextBlock Text="Канал 1 вых" Grid.Row="1"/>
+                                <TextBlock Text="выкл" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Text="мастер" Grid.Row="1" Style="{StaticResource TextViewStyle2Column}"/>
 
-                            <TextBlock Text="Канал 2 вых" Grid.Row="2"/>
-                            <TextBlock Text="выкл" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
-                            <TextBlock Text="мастер" Grid.Row="2" Style="{StaticResource TextViewStyle2Column}"/>
+                                <TextBlock Text="Канал 2 вых" Grid.Row="2"/>
+                                <TextBlock Text="выкл" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Text="мастер" Grid.Row="2" Style="{StaticResource TextViewStyle2Column}"/>
 
-                            <TextBlock Text="Канал 3 вых" Grid.Row="3"/>
-                            <TextBlock Text="выкл" Grid.Row="3" Style="{StaticResource TextViewStyle1Column}"/>
-                            <TextBlock Text="мастер" Grid.Row="3" Style="{StaticResource TextViewStyle2Column}"/>
+                                <TextBlock Text="Канал 3 вых" Grid.Row="3"/>
+                                <TextBlock Text="выкл" Grid.Row="3" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Text="мастер" Grid.Row="3" Style="{StaticResource TextViewStyle2Column}"/>
 
-                            <TextBlock Text="Канал 4 вых" Grid.Row="4"/>
-                            <TextBlock Text="выкл" Grid.Row="4" Style="{StaticResource TextViewStyle1Column}"/>
-                            <TextBlock Text="мастер" Grid.Row="4" Style="{StaticResource TextViewStyle2Column}"/>
-                        </Grid>
+                                <TextBlock Text="Канал 4 вых" Grid.Row="4"/>
+                                <TextBlock Text="выкл" Grid.Row="4" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Text="мастер" Grid.Row="4" Style="{StaticResource TextViewStyle2Column}"/>
+                            </Grid>
+                        </Border>
                     </TreeViewItem>
                 </TreeViewItem>
             </TreeViewItem>
@@ -513,144 +612,284 @@
                     </ContextMenu>
                 </TreeViewItem.ContextMenu>
                 <TreeViewItem Header="Паспорт">
+                    <TreeViewItem Margin="0 4 0 1">
+                        <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Программная версия" Grid.Column="0"/>
+                                    <TextBlock Text="5.00" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    
+                    <TreeViewItem Margin="0 1">
+                        <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Серийный номер" Grid.Column="0"/>
+                                    <TextBlock Text="18110007" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    
+                    <TreeViewItem Margin="0 1">
+                        <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Макс. скорость" Grid.Column="0"/>
+                                    <TextBlock Text="2048 кБит/с" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    
+                    <TreeViewItem Margin="0 1">
+                        <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Мощность" Grid.Column="0"/>
+                                    <TextBlock Text="36 дБм" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+                    
+                    <TreeViewItem Margin="0 1 0 4">
+                        <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Тип кодирования" Grid.Column="0"/>
+                                    <TextBlock Text="2/3" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+                    </TreeViewItem>
+
                     <TreeViewItem>
                         <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
+                                <Grid Background="LightGray">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="ЖНКЮ" Grid.Column="0"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="-19 0 0 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
+                                    <ColumnDefinition Width="150"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Программная версия" Grid.Column="0"/>
-                                <TextBlock Text="5.00" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Плата ВИП"/>
+                                <TextBlock Text="0000000000054" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Плата ВЧ" Grid.Row="1"/>
+                                <TextBlock Text="0000000000055" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Плата модема" Grid.Row="2"/>
+                                <TextBlock Text="0000000000112" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
                             </Grid>
-                        </TreeViewItem.Header>
+                        </Border>
                     </TreeViewItem>
+
                     <TreeViewItem>
                         <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
+                                <Grid Background="LightGray">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Частоты" Grid.Column="0"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="-19 0 0 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Серийный номер" Grid.Column="0"/>
-                                <TextBlock Text="18110007" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
-                            </Grid>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
-                    <TreeViewItem>
-                        <TreeViewItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Макс. скорость" Grid.Column="0"/>
-                                <TextBlock Text="2048 кБит/с" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Нижняя рабочая частота"/>
+                                <TextBlock Text="0238 МГц" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Верхняя рабочая частота" Grid.Row="1"/>
+                                <TextBlock Text="0480 Мгц" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
                             </Grid>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
-                    <TreeViewItem>
-                        <TreeViewItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Мощность" Grid.Column="0"/>
-                                <TextBlock Text="36 дБм" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
-                            </Grid>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
-                    <TreeViewItem>
-                        <TreeViewItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Тип кодирования" Grid.Column="0"/>
-                                <TextBlock Text="2/3" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
-                            </Grid>
-                        </TreeViewItem.Header>
-                    </TreeViewItem>
-
-                    <TreeViewItem Header="ЖНКЮ">
-                        <Grid Margin="-20,0,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="Плата ВИП"/>
-                            <TextBlock Text="0000000000054" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="Плата ВЧ" Grid.Row="1"/>
-                            <TextBlock Text="0000000000055" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
-                            
-                            <TextBlock Text="Плата модема" Grid.Row="2"/>
-                            <TextBlock Text="0000000000112" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
-                        </Grid>
-                    </TreeViewItem>
-
-                    <TreeViewItem Header="Частоты">
-                        <Grid Margin="-20,0,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                                <ColumnDefinition Width="150"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-
-                            </Grid.RowDefinitions>
-                            <TextBlock Text="Нижняя рабочая частота"/>
-                            <TextBlock Text="0238 МГц" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="Верхняя рабочая частота" Grid.Row="1"/>
-                            <TextBlock Text="0480 Мгц" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
-                        </Grid>
+                        </Border>
                     </TreeViewItem>
 
                 </TreeViewItem>
                 
                 <TreeViewItem Header="Телеметрия">
-                    <TreeViewItem Header="Флаги ошибок">
-                        <TreeViewItem>
-                            <TreeViewItem.Header>
-                                <Grid>
+                    <TreeViewItem>
+                        <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid Background="LightGray">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="150"></ColumnDefinition>
                                         <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Перегрузка" Grid.Column="0"/>
-                                    <TextBlock Text="Норма" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                    <TextBlock Text="Флаги ошибок" Grid.Column="0"/>
                                 </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+                        <TreeViewItem Margin="0 1 0 1">
+                            <TreeViewItem.Header>
+                                <Border BorderBrush="Black" BorderThickness="1" Margin="-19 0 0 0">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"></ColumnDefinition>
+                                            <ColumnDefinition Width="150"></ColumnDefinition>
+                                            <ColumnDefinition Width="150"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="Перегрузка" Grid.Column="0"/>
+                                        <TextBlock Text="Норма" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                    </Grid>
+                                </Border>
                             </TreeViewItem.Header>
                         </TreeViewItem>
                     
+                    <TreeViewItem Margin="0 1 0 4">
+                            <TreeViewItem.Header>
+                                <Border BorderBrush="Black" BorderThickness="1" Margin="-19 0 0 0">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150"></ColumnDefinition>
+                                            <ColumnDefinition Width="150"></ColumnDefinition>
+                                            <ColumnDefinition Width="150"></ColumnDefinition>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="КСВ антенны" Grid.Column="0"/>
+                                        <TextBlock Text="Авария" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                    </Grid>
+                                </Border>
+                            </TreeViewItem.Header>
+                        </TreeViewItem>
+                    </TreeViewItem>
                     <TreeViewItem>
                         <TreeViewItem.Header>
+                            <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
+                                <Grid Background="LightGray">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Захваты" Grid.Column="0"/>
+                                </Grid>
+                            </Border>
+                        </TreeViewItem.Header>
+                        <Border BorderBrush="Black" BorderThickness="1" Margin="-19 0 0 0">
                             <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
                                     <ColumnDefinition Width="150"></ColumnDefinition>
+                                    <ColumnDefinition Width="150"></ColumnDefinition>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="КСВ антенны" Grid.Column="0"/>
-                                <TextBlock Text="Авария" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock Text="Синт. гетеродин"/>
+                                <TextBlock Text="Есть" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Синт. ПРМ" Grid.Row="1"/>
+                                <TextBlock Text="Есть" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Синт. ПРД" Grid.Row="2"/>
+                                <TextBlock Text="Есть" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Связь с устройством" Grid.Row="3"/>
+                                <TextBlock Text="0 %" Grid.Row="3" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Уровень ПРМ" Grid.Row="4"/>
+                                <TextBlock Text="-102[-99/0]дБм" Grid.Row="4" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Уровень ПРД" Grid.Row="5"/>
+                                <TextBlock Text="35 [16/40]дБм" Grid.Row="5" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="ВИП 6В" Grid.Row="6"/>
+                                <TextBlock Text="7.5В" Grid.Row="6" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="ВИП 28В" Grid.Row="7"/>
+                                <TextBlock Text="30В" Grid.Row="7" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Температура" Grid.Row="8"/>
+                                <TextBlock Text="22[-55/55]дБм" Grid.Row="8" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Обнаружение н..." Grid.Row="9"/>
+                                <TextBlock Text="0%" Grid.Row="9" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="BER" Grid.Row="10"/>
+                                <TextBlock Text="1e-8[8e-3]" Grid.Row="10" Style="{StaticResource TextViewStyle1Column}"/>
+
+                                <TextBlock Text="Время работы" Grid.Row="11"/>
+                                <TextBlock Text="235c" Grid.Row="11" Style="{StaticResource TextViewStyle1Column}"/>
                             </Grid>
-                        </TreeViewItem.Header>
+                        </Border>
                     </TreeViewItem>
-                    </TreeViewItem>
-                    <TreeViewItem Header="Захваты">
-                        <Grid Margin="-20,0,0,0">
+                </TreeViewItem>
+                
+                
+                <TreeViewItem Header="Управление">
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="150"></ColumnDefinition>
                                 <ColumnDefinition Width="150"></ColumnDefinition>
@@ -663,107 +902,47 @@
                                 <RowDefinition/>
                                 <RowDefinition/>
                                 <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
                             </Grid.RowDefinitions>
-                            <TextBlock Text="Синт. гетеродин"/>
-                            <TextBlock Text="Есть" Style="{StaticResource TextViewStyle1Column}"/>
+                            <TextBlock Text="Треб. уровень П..."/>
+                            <TextBlock Text="35 Дбм" Style="{StaticResource TextViewStyle1Column}"/>
 
-                            <TextBlock Text="Синт. ПРМ" Grid.Row="1"/>
-                            <TextBlock Text="Есть" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
-                            
-                            <TextBlock Text="Синт. ПРД" Grid.Row="2"/>
-                            <TextBlock Text="Есть" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
-                            
-                            <TextBlock Text="Связь с устройством" Grid.Row="3"/>
-                            <TextBlock Text="0 %" Grid.Row="3" Style="{StaticResource TextViewStyle1Column}"/>
-                            
-                            <TextBlock Text="Уровень ПРМ" Grid.Row="4"/>
-                            <TextBlock Text="-102[-99/0]дБм" Grid.Row="4" Style="{StaticResource TextViewStyle1Column}"/>
+                            <TextBlock Text="Режим ППУ" Grid.Row="1"/>
+                            <TextBlock Text="{Binding Path=Main, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}">
+                                <TextBlock.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Изменить" Click="SetNewMainStatusStation"/>
+                                        <MenuItem Header="Обновить" Click="RefreshParams">
+                                            <MenuItem.Icon>
+                                                <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </TextBlock.ContextMenu>
+                            </TextBlock>
 
-                            <TextBlock Text="Уровень ПРД" Grid.Row="5"/>
-                            <TextBlock Text="35 [16/40]дБм" Grid.Row="5" Style="{StaticResource TextViewStyle1Column}"/>
+                            <TextBlock Text="Шлейф ЦС ВАСК" Grid.Row="2"/>
+                            <TextBlock Text="Выключен" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
 
-                            <TextBlock Text="ВИП 6В" Grid.Row="6"/>
-                            <TextBlock Text="7.5В" Grid.Row="6" Style="{StaticResource TextViewStyle1Column}"/>
+                            <TextBlock Text="Номер частоты" Grid.Row="3"/>
+                            <TextBlock Text="{Binding Path=Period, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0} МГц}" Grid.Row="3" Style="{StaticResource TextViewStyle1Column}" Name="periodStationTextBlock">
+                                <TextBlock.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Изменить" Click="SetNewPeriodStation"/>
+                                        <MenuItem Header="Обновить" Click="RefreshParams">
+                                            <MenuItem.Icon>
+                                                <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
+                                            </MenuItem.Icon>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </TextBlock.ContextMenu>
+                            </TextBlock>
 
-                            <TextBlock Text="ВИП 28В" Grid.Row="7"/>
-                            <TextBlock Text="30В" Grid.Row="7" Style="{StaticResource TextViewStyle1Column}"/>
+                            <TextBlock Text="Скорость ЦП" Grid.Row="4"/>
+                            <TextBlock Text="2048 кбис/с" Grid.Row="4" Style="{StaticResource TextViewStyle1Column}"/>
 
-                            <TextBlock Text="Температура" Grid.Row="8"/>
-                            <TextBlock Text="22[-55/55]дБм" Grid.Row="8" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="Обнаружение н..." Grid.Row="9"/>
-                            <TextBlock Text="0%" Grid.Row="9" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="BER" Grid.Row="10"/>
-                            <TextBlock Text="1e-8[8e-3]" Grid.Row="10" Style="{StaticResource TextViewStyle1Column}"/>
-
-                            <TextBlock Text="Время работы" Grid.Row="11"/>
-                            <TextBlock Text="235c" Grid.Row="11" Style="{StaticResource TextViewStyle1Column}"/>
+                            <TextBlock Text="Сохранить настройки" Grid.Row="5"/>
                         </Grid>
-                    </TreeViewItem>
-                </TreeViewItem>
-                
-                
-                <TreeViewItem Header="Управление">
-                    <Grid Margin="-20,0,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150"></ColumnDefinition>
-                            <ColumnDefinition Width="150"></ColumnDefinition>
-                            <ColumnDefinition Width="150"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Треб. уровень П..."/>
-                        <TextBlock Text="35 Дбм" Style="{StaticResource TextViewStyle1Column}"/>
-
-                        <TextBlock Text="Режим ППУ" Grid.Row="1"/>
-                        <TextBlock Text="{Binding Path=Main, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}">
-                            <TextBlock.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="Изменить" Click="SetNewMainStatusStation"/>
-                                    <MenuItem Header="Обновить" Click="RefreshParams">
-                                        <MenuItem.Icon>
-                                            <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
-                                        </MenuItem.Icon>
-                                    </MenuItem>
-                                </ContextMenu>
-                            </TextBlock.ContextMenu>
-                        </TextBlock>
-
-                        <TextBlock Text="Шлейф ЦС ВАСК" Grid.Row="2"/>
-                        <TextBlock Text="Выключен" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
-
-                        <TextBlock Text="Номер частоты" Grid.Row="3"/>
-                        <TextBlock Text="{Binding Path=Period, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, StringFormat={}{0} МГц}" Grid.Row="3" Style="{StaticResource TextViewStyle1Column}" Name="periodStationTextBlock">
-                            <TextBlock.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="Изменить" Click="SetNewPeriodStation"/>
-                                    <MenuItem Header="Обновить" Click="RefreshParams">
-                                        <MenuItem.Icon>
-                                            <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
-                                        </MenuItem.Icon>
-                                    </MenuItem>
-                                </ContextMenu>
-                            </TextBlock.ContextMenu>
-                        </TextBlock>
-
-                        <TextBlock Text="Скорость ЦП" Grid.Row="4"/>
-                        <TextBlock Text="2048 кбис/с" Grid.Row="4" Style="{StaticResource TextViewStyle1Column}"/>
-
-                        <TextBlock Text="Сохранить настройки" Grid.Row="5"/>
-                    </Grid>
+                    </Border>
                 </TreeViewItem>
             </TreeViewItem>
             
@@ -781,57 +960,62 @@
                 <TreeViewItem Header="Паспорт">
                     <TreeViewItem>
                         <TreeViewItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Программная версия" Grid.Column="0"/>
-                                <TextBlock Text="3.1" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
-                            </Grid>
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Программная версия" Grid.Column="0"/>
+                                    <TextBlock Text="3.1" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                </Grid>
+                            </Border>
                         </TreeViewItem.Header>
                     </TreeViewItem>
                 </TreeViewItem>
                 
                 <TreeViewItem Header="Управление">
-                    <Grid Margin="-20,0,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150"></ColumnDefinition>
-                            <ColumnDefinition Width="150"></ColumnDefinition>
-                            <ColumnDefinition Width="150"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Шлейф"/>
-                        <TextBlock Text="Нет" Style="{StaticResource TextViewStyle1Column}"/>
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"></ColumnDefinition>
+                                <ColumnDefinition Width="150"></ColumnDefinition>
+                                <ColumnDefinition Width="150"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Шлейф"/>
+                            <TextBlock Text="Нет" Style="{StaticResource TextViewStyle1Column}"/>
 
-                        <TextBlock Text="Интерфейс" Grid.Row="1"/>
-                        <TextBlock Text="RS-232 (V.24/V.28)" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
+                            <TextBlock Text="Интерфейс" Grid.Row="1"/>
+                            <TextBlock Text="RS-232 (V.24/V.28)" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
 
-                        <TextBlock Text="Скорость" Grid.Row="2"/>
-                        <TextBlock Text="9600 бит/с" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
+                            <TextBlock Text="Скорость" Grid.Row="2"/>
+                            <TextBlock Text="9600 бит/с" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
 
-                        <TextBlock Text="Длина символа" Grid.Row="3"/>
-                        <TextBlock Text="8 бит" Grid.Row="3" Style="{StaticResource TextViewStyle1Column}"/>
+                            <TextBlock Text="Длина символа" Grid.Row="3"/>
+                            <TextBlock Text="8 бит" Grid.Row="3" Style="{StaticResource TextViewStyle1Column}"/>
 
-                        <TextBlock Text="Бит чётности" Grid.Row="4"/>
-                        <TextBlock Text="Не использовать" Grid.Row="4" Style="{StaticResource TextViewStyle1Column}"/>
+                            <TextBlock Text="Бит чётности" Grid.Row="4"/>
+                            <TextBlock Text="Не использовать" Grid.Row="4" Style="{StaticResource TextViewStyle1Column}"/>
 
-                        <TextBlock Text="Стоп биты" Grid.Row="5"/>
-                        <TextBlock Text="1 бит" Grid.Row="5" Style="{StaticResource TextViewStyle1Column}"/>
+                            <TextBlock Text="Стоп биты" Grid.Row="5"/>
+                            <TextBlock Text="1 бит" Grid.Row="5" Style="{StaticResource TextViewStyle1Column}"/>
 
-                        <TextBlock Text="Удалённый сброс" Grid.Row="6"/>
+                            <TextBlock Text="Удалённый сброс" Grid.Row="6"/>
 
-                        <TextBlock Text="Заводские настройки" Grid.Row="7"/>
-                    </Grid>
+                            <TextBlock Text="Заводские настройки" Grid.Row="7"/>
+                        </Grid>
+                    </Border>
                 </TreeViewItem>
             </TreeViewItem>
             
@@ -849,70 +1033,77 @@
                 <TreeViewItem Header="Паспорт">
                     <TreeViewItem>
                         <TreeViewItem.Header>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                    <ColumnDefinition Width="150"></ColumnDefinition>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Text="Программная версия" Grid.Column="0"/>
-                                <TextBlock Text="9" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
-                            </Grid>
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                        <ColumnDefinition Width="150"></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="Программная версия" Grid.Column="0"/>
+                                    <TextBlock Text="9" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                </Grid>
+                            </Border>
                         </TreeViewItem.Header>
                     </TreeViewItem>
                 </TreeViewItem>
-                
+
                 <TreeViewItem Header="Телеметрия">
-                    <Grid Margin="-20,0,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150"></ColumnDefinition>
-                            <ColumnDefinition Width="150"></ColumnDefinition>
-                            <ColumnDefinition Width="150"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Установить скорость"/>
-                        <TextBlock Text="Нет подключения" Style="{StaticResource TextViewStyle1Column}"/>
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"></ColumnDefinition>
+                                <ColumnDefinition Width="150"></ColumnDefinition>
+                                <ColumnDefinition Width="150"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Установить скорость"/>
+                            <TextBlock Text="Нет подключения" Style="{StaticResource TextViewStyle1Column}"/>
 
-                        <TextBlock Text="Ошибки РК" Grid.Row="1"/>
-                        <TextBlock Text="0" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
+                            <TextBlock Text="Ошибки РК" Grid.Row="1"/>
+                            <TextBlock Text="0" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
 
-                        <TextBlock Text="Пакеты РК" Grid.Row="2"/>
-                        <TextBlock Text="0" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
+                            <TextBlock Text="Пакеты РК" Grid.Row="2"/>
+                            <TextBlock Text="0" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
 
-                        <TextBlock Text="Ошибки LAN" Grid.Row="3"/>
-                        <TextBlock Text="0" Grid.Row="3" Style="{StaticResource TextViewStyle1Column}"/>
+                            <TextBlock Text="Ошибки LAN" Grid.Row="3"/>
+                            <TextBlock Text="0" Grid.Row="3" Style="{StaticResource TextViewStyle1Column}"/>
 
-                        <TextBlock Text="Пакеты LAN" Grid.Row="4"/>
-                        <TextBlock Text="0" Grid.Row="4" Style="{StaticResource TextViewStyle1Column}"/>
-                    </Grid>
+                            <TextBlock Text="Пакеты LAN" Grid.Row="4"/>
+                            <TextBlock Text="0" Grid.Row="4" Style="{StaticResource TextViewStyle1Column}"/>
+                        </Grid>
+                    </Border>
                 </TreeViewItem>
                 
                 
                 <TreeViewItem Header="Управление">
-                    <Grid Margin="-20,0,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="150"></ColumnDefinition>
-                            <ColumnDefinition Width="150"></ColumnDefinition>
-                            <ColumnDefinition Width="150"></ColumnDefinition>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <TextBlock Text="Скорость подключения"/>
-                        <TextBlock Text="авто" Style="{StaticResource TextViewStyle1Column}"/>
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="150"></ColumnDefinition>
+                                <ColumnDefinition Width="150"></ColumnDefinition>
+                                <ColumnDefinition Width="150"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="Скорость подключения"/>
+                            <TextBlock Text="авто" Style="{StaticResource TextViewStyle1Column}"/>
 
-                        <TextBlock Text="Flow Control" Grid.Row="1"/>
-                        <TextBlock Text="выкл" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
+                            <TextBlock Text="Flow Control" Grid.Row="1"/>
+                            <TextBlock Text="выкл" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
 
-                        <TextBlock Text="Сброс блока" Grid.Row="2"/>
-                    </Grid>
+                            <TextBlock Text="Сброс блока" Grid.Row="2"/>
+                        </Grid>
+                    </Border>
                 </TreeViewItem>
             </TreeViewItem>
         </TreeView>
