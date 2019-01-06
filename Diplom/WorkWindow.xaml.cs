@@ -194,6 +194,8 @@ namespace Diplom
             ClearLineControls(station.stationLine);
         }
 
+        public void RemoveLocalConnection(StationControl station) { }
+
         public void RemoveElement()
         {
             if (FocusedControl is StationControl)
@@ -234,6 +236,10 @@ namespace Diplom
                     (control as IFocusable).FocusedElement -= FocusedControl.UnsetFocusBorder;
             }
             FocusedControl = null;
+            IsRadioConnection = null;
+            connector = null;
+            StationControl.IsConnecting = false;
+            ManagerControl.IsConnecting = false;
         }
 
         private void canvas_Drop(object sender, DragEventArgs e)
@@ -378,6 +384,7 @@ namespace Diplom
                         var line = new ConnectionLine(manager, station, canvas, true);
                         manager.line = line;
                         station.managerLine = line;
+                        ManagerControl.IsConnecting = false;
                     }
                 }
                 connector = null;
