@@ -1,6 +1,7 @@
 ﻿using Diplom.Models;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace Diplom
@@ -40,7 +41,7 @@ namespace Diplom
             if (!IsEditing)
                 Stock.workWindow.CreateManager(nameNewNetwork.Text.Trim(), number);
 			DataNetwork.Name = nameNewNetwork.Text.Trim();
-			DataNetwork.Type = typeNetwork.SelectedItem.ToString();
+			DataNetwork.Type = (typeNetwork.SelectedItem as ComboBoxItem).Content.ToString();
             DataNetwork.Address = number;
 			DataNetwork.IsCreated = true;
 			Stock.workWindow.EnabledButton(true);

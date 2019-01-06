@@ -393,6 +393,7 @@ namespace Diplom
                 {
                     connector = manager;
                     IsRadioConnection = false;
+                    ManagerControl.IsConnecting = true;
                 }
             }
             else
@@ -403,6 +404,7 @@ namespace Diplom
                     var line = new ConnectionLine(station, manager, canvas, true);
                     manager.line = line;
                     station.managerLine = line;
+                    ManagerControl.IsConnecting = false;
                 }
                 connector = null;
                 IsRadioConnection = null;
@@ -431,7 +433,7 @@ namespace Diplom
             }
         }
 
-        private void EditNetwork_Click(object sender, RoutedEventArgs e)
+        public void EditNetwork_Click(object sender, RoutedEventArgs e)
         {
             ConfigurationNetwork wnd = new ConfigurationNetwork { Owner = this, IsEditing = true };
             wnd.nameNewNetwork.Text = DataNetwork.Name;
@@ -458,7 +460,7 @@ namespace Diplom
 
         private void ContextMenu_Opened(object sender, RoutedEventArgs e)
         {
-            NetworkMenuItem.Header = $"Сеть {DataNetwork.Name}";
+            NetworkMenuItem.Header = $"Сеть \"{DataNetwork.Name} ({DataNetwork.Type})\"";
         }
 
         public void UpdateColors()
@@ -472,7 +474,7 @@ namespace Diplom
             }
         }
 
-        private void RemoveNetwork_Click(object sender, RoutedEventArgs e)
+        public void RemoveNetwork_Click(object sender, RoutedEventArgs e)
         {
             canvas.Children.Clear();
             DataNetwork.Managers.Clear();

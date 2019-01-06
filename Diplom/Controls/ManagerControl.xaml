@@ -6,8 +6,59 @@
              mc:Ignorable="d">
     <UserControl.Resources>
         <SolidColorBrush x:Key="fontColor" Color="Green" Opacity="0.5" />
+
+        <ContextMenu x:Key="CancelMenu">
+            <MenuItem Header="Отмена" Click="Cancel_Click" />
+        </ContextMenu>
+
+        <ContextMenu x:Key="SecondMenu">
+            <MenuItem Header="Настройки" IsEnabled="False" />
+            <MenuItem Header="Контроль сети" IsEnabled="False" />
+            <Separator></Separator>
+            <MenuItem Header="Связать по COM1" />
+            <MenuItem Header="Связать по COM3" Click="Connect_Click" />
+            <MenuItem Header="Связать по COM4" />
+            <MenuItem Header="Связаться по удалённом COM-порту" />
+        </ContextMenu>
+
+        <ContextMenu x:Key="ThirdMenu">
+            <MenuItem Header="Настройки" IsEnabled="False" />
+            <MenuItem Header="Контроль сети" IsEnabled="False" />
+        </ContextMenu>
+        
+        <ContextMenu x:Key="MainMenu" Opened="ContextMenu_Opened">
+            <MenuItem Header="Менеджер" Name="ManagerMenuItem">
+                <MenuItem Header="Свойства" Click="ManagerProperties_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/CustomFile.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Удалить" Click="ManagerRemove_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Сеть (PDH)" Name="NetworkMenuItem">
+                <MenuItem Header="Выделить" IsEnabled="False" />
+                <MenuItem Header="Свойства" Click="NetworkProperties_Click"/>
+                <MenuItem Header="Удалить" Click="NetworkRemove_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="Настройки" IsEnabled="False" />
+            <MenuItem Header="Контроль сети" IsEnabled="False" />
+            <Separator></Separator>
+            <MenuItem Header="Связать по COM1"></MenuItem>
+            <MenuItem Header="Связать по COM3" Click="Connect_Click"></MenuItem>
+            <MenuItem Header="Связать по COM4"></MenuItem>
+            <MenuItem Header="Связаться по удалённом COM-порту"></MenuItem>
+        </ContextMenu>
     </UserControl.Resources>
-    <StackPanel Orientation="Vertical">
+    <StackPanel ContextMenu="{StaticResource MainMenu}" Name="stackPanel" Orientation="Vertical" MouseRightButtonDown="Context_Click">
         <Border Name="managerNameBorder" Background="{StaticResource fontColor}" BorderThickness="1" Padding="3 1">
             <TextBlock Name="managerName" HorizontalAlignment="Center" FontWeight="SemiBold" Foreground="White"/>
         </Border>
@@ -24,39 +75,5 @@
             </Border>
             <Label Grid.Column="2"/>
         </Grid>
-
-        <StackPanel.ContextMenu>
-            <ContextMenu>
-                <MenuItem Header="Менеджер">
-                    <MenuItem Header="Свойсва">
-                        <MenuItem.Icon>
-                            <Image Source="pack://application:,,,/Resources/Icons/CustomFile.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="Удалить">
-                        <MenuItem.Icon>
-                            <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </MenuItem>
-                <MenuItem Header="Сеть (PDH)">
-                    <MenuItem Header="Выделить" Click="Focus_Click" />
-                    <MenuItem Header="Свойства" />
-                    <MenuItem Header="Удалить" Click="Remove_Click">
-                        <MenuItem.Icon>
-                            <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                </MenuItem>
-                <Separator></Separator>
-                <MenuItem Header="Настройки"></MenuItem>
-                <MenuItem Header="Контроль сети"></MenuItem>
-                <Separator></Separator>
-                <MenuItem Header="Связать по COM1"></MenuItem>
-                <MenuItem Header="Связать по COM3" Click="Connect_Click"></MenuItem>
-                <MenuItem Header="Связать по COM4"></MenuItem>
-                <MenuItem Header="Связаться по удалённом COM-порту"></MenuItem>
-            </ContextMenu>
-        </StackPanel.ContextMenu>
     </StackPanel>
 </UserControl>
