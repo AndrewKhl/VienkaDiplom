@@ -13,6 +13,7 @@ namespace Diplom.Models
 		private int _period = 0;
 		private string _main = "Ведомая";
 		private string _synchronization = "Внутренняя";
+		public DateTime firstRefreshStation = DateTime.MinValue;
 
 
 		public string Name { get; set; }

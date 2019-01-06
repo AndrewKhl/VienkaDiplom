@@ -30,10 +30,16 @@
             <Setter Property="Background" Value="LightGray"/>
         </Style>
 
+        <Style x:Key="focusText">
+            <Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+            <Setter Property="TextBlock.Foreground" Value="Blue"/>
+        </Style>
+
         <Style TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FocusVisualStyle" Value="{StaticResource focusText}"/>
         </Style>
-        
+   
         <Style TargetType="DataGridCell">
             <Setter Property="BorderBrush" Value="Black"/>
         </Style>
@@ -275,7 +281,7 @@
                                 <TextBlock Text="0" Grid.Row="5" Style="{StaticResource TextViewStyle1Column}"/>
 
                                 <TextBlock Text="UAS вых" Grid.Row="6"/>
-                                <TextBlock Text="216" Grid.Row="6" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Text="216" Grid.Row="6" Style="{StaticResource TextViewStyle1Column}" Name="UASexit"/>
 
                                 <TextBlock Text="ESR вых" Grid.Row="7"/>
                                 <TextBlock Text="0" Grid.Row="7" Style="{StaticResource TextViewStyle1Column}"/>
@@ -284,7 +290,7 @@
                                 <TextBlock Text="0" Grid.Row="8" Style="{StaticResource TextViewStyle1Column}"/>
 
                                 <TextBlock Text="Время измерения" Grid.Row="9"/>
-                                <TextBlock Text="216 сек" Grid.Row="9" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Text="216 сек" Grid.Row="9" Style="{StaticResource TextViewStyle1Column}" Name="timeCalculated"/>
 
                                 <TextBlock Text="Сброс счётчика" Grid.Row="10"/>
 

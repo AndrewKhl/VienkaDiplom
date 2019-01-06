@@ -51,7 +51,22 @@ namespace Diplom
 		{
 			FrameworkElement obj = sender as FrameworkElement;
 			ContextMenu menu = obj.Parent as ContextMenu;
-			VisualTree(menu.PlacementTarget);
+			VisualTree(menu.PlacementTarget);		
+
+			if (_currentStation.Data.firstRefreshStation == DateTime.MinValue)
+			{
+				UASexit.Text = "0";
+				timeCalculated.Text = "0";
+				_currentStation.Data.firstRefreshStation = DateTime.Now;
+			}
+			else
+			{
+				TimeSpan period = DateTime.Now - _currentStation.Data.firstRefreshStation;
+
+				UASexit.Text = (period.Hours * 3600 + period.Minutes * 60 + period.Seconds).ToString();
+				timeCalculated.Text = (period.Hours * 3600 + period.Minutes * 60 + period.Seconds).ToString();
+			}
+
 			MessageBox.Show("Параметры успешно обновлены", "Уведомление",
 			MessageBoxButton.OK, MessageBoxImage.Information);
 		}
