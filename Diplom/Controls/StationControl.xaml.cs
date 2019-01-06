@@ -56,11 +56,12 @@ namespace Diplom.Models
             SetColor(color);
             image.Source = new BitmapImage(ImageUri);
             BorderThickness = new Thickness(2);
-			Data = new DataStation();
-
-            stationName.Text = $"{name} [{number}]";
-			Data.Name = name;
-			Data.Number = number;
+            Data = new DataStation
+            {
+                Name = name,
+                Number = number
+            };
+            SetVisibleName();
 
 			DataNetwork.Stations.Add(this);
 
@@ -73,6 +74,8 @@ namespace Diplom.Models
 			stationGauge.Source = gauge;
 			stationGauge.Visibility = Visibility.Hidden;
 		}
+
+        public void SetVisibleName() => stationName.Text = $"{Data.Name} [{Data.Number}]";
 
         public WorkWindow window { get; }
 
@@ -223,6 +226,9 @@ namespace Diplom.Models
             var item = GetRadioItem();
             if (item != null)
                 item.IsChecked = IsChecked;
+
+            (GetMenuItem("NetworkMenuItem") as MenuItem).Header = $"Сеть \"{DataNetwork.Name} ({DataNetwork.Type})\"";
+            (GetMenuItem("StationMenuItem") as MenuItem).Header = $"Станция \"{Data.Name} ({Data.Number})\"";
         }
 
         private MenuItem GetRadioItem() => GetMenuItem("RadioItem");
@@ -244,15 +250,41 @@ namespace Diplom.Models
 
         private void Context_Click(object sender, MouseButtonEventArgs e)
         {
-            if (!IsConnecting)
-                stackPanel.ContextMenu = Resources["MainMenu"] as ContextMenu;
+            string menu_type;
+            if (ManagerControl.IsConnecting)
+                menu_type = "ThirdMenu";
+            else if (!IsConnecting)
+                menu_type = "MainMenu";
             else
             {
                 if (window.connector == this)
-                    stackPanel.ContextMenu = Resources["CancelMenu"] as ContextMenu;
+                    menu_type = "CancelMenu";
                 else
-                    stackPanel.ContextMenu = Resources["SecondMenu"] as ContextMenu;
+                    menu_type = "SecondMenu";
             }
+            stackPanel.ContextMenu = Resources[menu_type] as ContextMenu;
+        }
+
+        private void StationProperties_Click(object sender, RoutedEventArgs e)
+        {
+            ConfigurationStation wnd = new ConfigurationStation(this) { Owner = window };
+            wnd.ShowDialog();
+        }
+
+        private void StationRemove_Click(object sender, RoutedEventArgs e)
+        {
+            window.SetFocus(this);
+            window.RemoveElement();
+        }
+
+        private void NetworkProperties_Click(object sender, RoutedEventArgs e)
+        {
+            window.EditNetwork_Click(sender, e);
+        }
+
+        private void NetworkRemove_Click(object sender, RoutedEventArgs e)
+        {
+            window.RemoveNetwork_Click(sender, e);
         }
     }
 }

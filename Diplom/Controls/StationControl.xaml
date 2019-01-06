@@ -13,22 +13,22 @@
         </ContextMenu>
         
         <ContextMenu x:Key="MainMenu" Opened="ContextMenu_Opened">
-            <MenuItem Header="Станция">
-                <MenuItem Header="Свойства">
+            <MenuItem Header="Станция" Name="StationMenuItem">
+                <MenuItem Header="Свойства" Click="StationProperties_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/CustomFile.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Удалить">
+                <MenuItem Header="Удалить" Click="StationRemove_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
-            <MenuItem Header="Сеть (PDH)">
-                <MenuItem Header="Выделить"></MenuItem>
-                <MenuItem Header="Свойства"></MenuItem>
-                <MenuItem Header="Удалить">
+            <MenuItem Header="Сеть (PDH)" Name="NetworkMenuItem">
+                <MenuItem Header="Выделить" IsEnabled="False" />
+                <MenuItem Header="Свойства" Click="NetworkProperties_Click" />
+                <MenuItem Header="Удалить" Click="NetworkRemove_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
                     </MenuItem.Icon>
@@ -36,8 +36,8 @@
             </MenuItem>
             <Separator />
             <MenuItem Header="Связать по локальному порту" Click="LocalConnect_Click"></MenuItem>
-            <MenuItem Header="Связать по порту А"></MenuItem>
-            <MenuItem Header="Связать по порту Б"></MenuItem>
+            <MenuItem Header="Связать по порту А" />
+            <MenuItem Header="Связать по порту Б" />
             <MenuItem Header="Связать по радиоканалу" Name="RadioItem" IsCheckable="True" Click="RadioConnect_Click"></MenuItem>
             <Separator />
             <MenuItem Header="Обновить конфигурацию" Click="Update_Click">
@@ -77,6 +77,34 @@
                 </MenuItem.Icon>
             </MenuItem>
             <MenuItem Header="Параметры" Click="ShowParametrWindow" IsEnabled="False">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/DisabledShow.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="Выполнить макрос" IsEnabled="False">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/disablePlay.png" />
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+
+        <ContextMenu x:Key="ThirdMenu">
+            <MenuItem Header="Связать по локальному порту" Click="LocalConnect_Click" />
+            <MenuItem Header="Связать по порту А" />
+            <MenuItem Header="Связать по порту Б" />
+            <Separator />
+            <MenuItem Header="Обновить конфигурацию" IsEnabled="False" >
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Протокол станции">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/ShowEvents.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Параметры" IsEnabled="False">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/Icons/DisabledShow.png"/>
                 </MenuItem.Icon>

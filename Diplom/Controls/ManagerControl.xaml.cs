@@ -16,22 +16,27 @@ namespace Diplom.Models
 		public DataManagers Data;
         public ConnectionLine line;
 
+        public static bool IsConnecting = false;
+
         public ManagerControl(WorkWindow window, string name, int number, Color color)
         {
             InitializeComponent();
             SetColor(color);
             image.Source = new BitmapImage(ImageUri);
             BorderThickness = new Thickness(2);
-			Data = new DataManagers();
+            Data = new DataManagers
+            {
+                Name = name,
+                Number = number
+            };
+            SetVisibleName();
 
-            managerName.Text = $"{name} [{number}]";
-            Data.Name = name;
-			Data.Number = number;
-
-			DataNetwork.Managers.Add(this);
+            DataNetwork.Managers.Add(this);
 
             this.window = window;
         }
+
+        public void SetVisibleName() => managerName.Text = $"{Data.Name} [{Data.Number}]";
 
         public WorkWindow window { get; }
         public event Action FocusedElement;
@@ -84,15 +89,64 @@ namespace Diplom.Models
             window.ConnectControls(this);
         }
 
-        private void Focus_Click(object sender, RoutedEventArgs e)
+        private void Cancel_Click(object sender, RoutedEventArgs e)
         {
-            window.SetFocus(this);
+            IsConnecting = false;
+            window.ConnectControls(this);
         }
 
-        private void Remove_Click(object sender, RoutedEventArgs e)
+        private void Context_Click(object sender, MouseButtonEventArgs e)
+        {
+            string menu_type;
+            if (StationControl.IsConnecting)
+                menu_type = "ThirdMenu";
+            else if (!IsConnecting)
+                menu_type = "MainMenu";
+            else
+            {
+                if (window.connector == this)
+                    menu_type = "CancelMenu";
+                else
+                    menu_type = "SecondMenu";
+            }
+            stackPanel.ContextMenu = Resources[menu_type] as ContextMenu;
+        }
+
+        private MenuItem GetMenuItem(string name)
+        {
+            var mainMenu = Resources["MainMenu"] as ContextMenu;
+            foreach (var item in mainMenu.Items)
+                if (item is MenuItem && (item as MenuItem).Name == name)
+                    return item as MenuItem;
+            return null;
+        }
+
+        private void ContextMenu_Opened(object sender, RoutedEventArgs e)
+        {
+            (GetMenuItem("NetworkMenuItem") as MenuItem).Header = $"Сеть \"{DataNetwork.Name} ({DataNetwork.Type})\"";
+            (GetMenuItem("ManagerMenuItem") as MenuItem).Header = $"Менеджер \"{Data.Name} ({Data.Number})\"";
+        }
+
+        private void ManagerProperties_Click(object sender, RoutedEventArgs e)
+        {
+            ConfigurationManager wnd = new ConfigurationManager(this) { Owner = window };
+            wnd.ShowDialog();
+        }
+
+        private void ManagerRemove_Click(object sender, RoutedEventArgs e)
         {
             window.SetFocus(this);
             window.RemoveElement();
+        }
+
+        private void NetworkProperties_Click(object sender, RoutedEventArgs e)
+        {
+            window.EditNetwork_Click(sender, e);
+        }
+
+        private void NetworkRemove_Click(object sender, RoutedEventArgs e)
+        {
+            window.RemoveNetwork_Click(sender, e);
         }
     }
 }
