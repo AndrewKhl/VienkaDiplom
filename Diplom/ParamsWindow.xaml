@@ -24,6 +24,11 @@
                 <Trigger Property="TextBlock.IsHitTestVisible" Value="True">
                     <Setter Property="TextBlock.Foreground" Value="Black"/>
                 </Trigger>
+
+                <Trigger Property="TextBlock.IsMouseOver" Value="true">
+                    <Setter Property="TextBlock.Foreground" Value="White"/>
+                    <Setter Property="TextBlock.Background" Value="Gray"/>
+                </Trigger>
             </Style.Triggers>
         </Style>
 
@@ -39,6 +44,11 @@
             <Style.Triggers>
                 <Trigger Property="TextBlock.IsHitTestVisible" Value="True">
                     <Setter Property="TextBlock.Foreground" Value="Black"/>
+                </Trigger>
+
+                <Trigger Property="TextBlock.IsMouseOver" Value="true">
+                    <Setter Property="TextBlock.Foreground" Value="White"/>
+                    <Setter Property="TextBlock.Background" Value="Gray"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -61,6 +71,11 @@
             <Style.Triggers>
                 <Trigger Property="IsHitTestVisible" Value="True">
                     <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+
+                <Trigger Property="IsMouseOver" Value="true">
+                    <Setter Property="Foreground" Value="White"/>
+                    <Setter Property="Background" Value="Gray"/>
                 </Trigger>
             </Style.Triggers>
             
