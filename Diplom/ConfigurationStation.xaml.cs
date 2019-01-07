@@ -5,9 +5,6 @@ using System.Windows;
 
 namespace Diplom
 {
-    /// <summary>
-    /// Логика взаимодействия для ConfigurationStation.xaml
-    /// </summary>
     public partial class ConfigurationStation : Window
     {
         private StationControl station;
@@ -41,10 +38,7 @@ namespace Diplom
             }
         }
 
-        private void CloseWindow(object sender, RoutedEventArgs e)
-		{
-			Close();
-		}
+        private void CloseWindow(object sender, RoutedEventArgs e) => Close();
 
 		private void CreateNetwork(object sender, RoutedEventArgs e)
 		{

@@ -5,9 +5,6 @@ using System.Windows;
 
 namespace Diplom
 {
-    /// <summary>
-    /// Interaction logic for ConfigurationManager.xaml
-    /// </summary>
     public partial class ConfigurationManager : Window
     {
         private ManagerControl manager;
@@ -40,10 +37,7 @@ namespace Diplom
             }
         }
 
-        private void CloseWindow(object sender, RoutedEventArgs e)
-		{
-			Close();
-		}
+        private void CloseWindow(object sender, RoutedEventArgs e) => Close();
 
 		private void CreateManager(object sender, RoutedEventArgs e)
 		{

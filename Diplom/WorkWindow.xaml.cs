@@ -16,7 +16,7 @@ namespace Diplom
 		public List<int> numbersManagers = new List<int>();
         public int maxStationNumber = 1;
         public int maxManagerNumber = 1;
-        public Color currentColor;
+        //public Color currentColor;
 
         public ConnectingType connecting = ConnectingType.None;
         public UserControl connector;
@@ -103,7 +103,7 @@ namespace Diplom
         {
 			numbersStations.Add(number);
             numbersStations.Sort();
-            var station = new StationControl(this, name, number, currentColor);
+            var station = new StationControl(this, name, number, DataNetwork.CurrentColor);
             Canvas.SetLeft(station, 0);
             Canvas.SetTop(station, 0);
             foreach (var control in canvas.Children)
@@ -122,7 +122,7 @@ namespace Diplom
         public void CreateManager(string name, int number = 0)
         {
             numbersManagers.Add(number);
-            var manager = new ManagerControl(this, name, number, currentColor);
+            var manager = new ManagerControl(this, name, number, DataNetwork.CurrentColor);
             Canvas.SetLeft(manager, 0);
             Canvas.SetTop(manager, 0);
             foreach (var control in canvas.Children)
@@ -203,12 +203,6 @@ namespace Diplom
 				ShowErrorCountStations();
 		}
 
-		private void ShowErrorCountStations() =>
-			MessageBox.Show("Максимальное кол-во станций", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-
-		private void ShowErrorCreateNetwork() =>
-			MessageBox.Show("Максимальное кол-во сетей", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-
         private void CreateManager_Click(object sender, RoutedEventArgs e)
         {
             if (numbersManagers.Count < 1)
@@ -224,6 +218,12 @@ namespace Diplom
                     MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+		private void ShowErrorCountStations() =>
+			MessageBox.Show("Максимальное кол-во станций", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+
+		private void ShowErrorCreateNetwork() =>
+			MessageBox.Show("Максимальное кол-во сетей", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
 
         private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -258,7 +258,7 @@ namespace Diplom
         {
             ConfigurationNetwork wnd = new ConfigurationNetwork { Owner = this, IsEditing = true };
             wnd.nameNewNetwork.Text = DataNetwork.Name;
-            wnd.colorCanvas.SelectedColor = currentColor;
+            wnd.colorCanvas.SelectedColor = DataNetwork.CurrentColor;
             foreach (string item in wnd.listOfAdress.Items)
             {
                 if (item == DataNetwork.Address.ToString())
@@ -287,9 +287,9 @@ namespace Diplom
             foreach (var child in canvas.Children)
             {
                 if (child is StationControl)
-                    (child as StationControl).SetColor(currentColor);
+                    (child as StationControl).SetColor(DataNetwork.CurrentColor);
                 else if (child is ManagerControl)
-                    (child as ManagerControl).SetColor(currentColor);
+                    (child as ManagerControl).SetColor(DataNetwork.CurrentColor);
             }
         }
 

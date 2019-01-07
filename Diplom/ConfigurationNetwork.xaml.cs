@@ -6,9 +6,6 @@ using System.Windows.Media;
 
 namespace Diplom
 {
-    /// <summary>
-    /// Логика взаимодействия для ConfigurationNetwork.xaml
-    /// </summary>
     public partial class ConfigurationNetwork : Window
     {
         public bool IsEditing { get; set; } = false;
@@ -26,16 +23,12 @@ namespace Diplom
             nameNewNetwork.Text = $"Безымянный";
         }
 
-        private void CloseWindow(object sender, RoutedEventArgs e)
-		{
-			Close();
-		}
+        private void CloseWindow(object sender, RoutedEventArgs e) => Close();
 
 		private void CreateNetwork(object sender, RoutedEventArgs e)
 		{
 			int number = int.Parse(listOfAdress.SelectedItem.ToString());
             DataNetwork.CurrentColor = colorCanvas.SelectedColor ?? Colors.Green;
-            Stock.workWindow.currentColor = DataNetwork.CurrentColor;
             if (!IsEditing)
                 Stock.workWindow.CreateManager(nameNewNetwork.Text.Trim(), number);
 			DataNetwork.Name = nameNewNetwork.Text.Trim();
