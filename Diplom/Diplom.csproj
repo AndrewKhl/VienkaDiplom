@@ -96,8 +96,14 @@
     <Compile Include="Models\DataManagers.cs" />
     <Compile Include="Models\DataNetwork.cs" />
     <Compile Include="Models\DataStation.cs" />
+    <Compile Include="SetWindows\OnOffStation.xaml.cs">
+      <DependentUpon>OnOffStation.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ParamsWindow.xaml.cs">
       <DependentUpon>ParamsWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SetWindows\SetRangeStation.xaml.cs">
+      <DependentUpon>SetRangeStation.xaml</DependentUpon>
     </Compile>
     <Compile Include="SetWindows\SetMainStationWindow.xaml.cs">
       <DependentUpon>SetMainStationWindow.xaml</DependentUpon>
@@ -148,7 +154,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SetWindows\OnOffStation.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="ParamsWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SetWindows\SetRangeStation.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

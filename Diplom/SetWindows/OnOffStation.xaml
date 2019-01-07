@@ -1,4 +1,4 @@
-﻿<Window x:Class="Diplom.SetPeriodWindow"
+﻿<Window x:Class="Diplom.OnOffStation"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -7,18 +7,20 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Icon="pack://application:,,,/Resources/icon.png"
-        Title="ППУ1::Номер рабочей частоты ППУ" Height="160" Width="320">
+        Title="МД1-Р1::Питание ППУ1" Height="160" Width="320">
 
     <StackPanel>
-        <TextBlock Text="Номера рабочей частоты ППУ:" HorizontalAlignment="Left" Margin="20 5 0 5"/>
-        <TextBox Name="selectPeriod" FontSize="12" Width="270" Height="20"/>
+        <TextBlock Text="Питание ППУ1:" HorizontalAlignment="Left" Margin="20 5 0 5"/>
+        <ComboBox Name="selectType" FontSize="12" Width="270" Height="20">
+            <ComboBoxItem>включено</ComboBoxItem>
+            <ComboBoxItem>выключено</ComboBoxItem>
+        </ComboBox>
         <StackPanel Orientation="Horizontal" Margin="15 10">
-            <CheckBox Name="setChanged" Click="SetChanged_Click"/>
+            <CheckBox Name="setChanged"/>
             <TextBlock Text="Временное изменение (мир):" Margin="10 0"/>
             <TextBox Height="20" Width="60" Margin="15 0 0 0" FontSize="12" Name="temporaryChange" IsEnabled="False"/>
         </StackPanel>
 
-        <Button Click="SetNewPeriod" Height="20" Width="80" HorizontalAlignment="Right" Margin="20 10">Применить</Button>
+        <Button Click="SetNewState" Height="20" Width="80" HorizontalAlignment="Right" Margin="20 10">Применить</Button>
     </StackPanel>
 </Window>
-

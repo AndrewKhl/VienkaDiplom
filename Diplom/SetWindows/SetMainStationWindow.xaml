@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
+        Icon="pack://application:,,,/Resources/icon.png"
         Title="ППУ1::Тип станции" Height="120" Width="320">
 
     <StackPanel>

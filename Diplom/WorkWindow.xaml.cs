@@ -497,5 +497,5 @@ namespace Diplom
             NetworkMenuItem.Visibility = Visibility.Collapsed;
             StationControl.IsConnecting = false;
         }
-    }
+	}
 }

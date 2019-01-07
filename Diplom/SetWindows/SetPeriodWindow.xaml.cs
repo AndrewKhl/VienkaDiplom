@@ -23,16 +23,19 @@ namespace Diplom
 		private StationControl _currentStation;
 		public SetPeriodWindow(StationControl station)
 		{
+			InitializeComponent();
 			_currentStation = station;
 			selectPeriod.Text = station.Data.Period.ToString();
-			InitializeComponent();
 		}
 
 		private void SetNewPeriod(object sender, RoutedEventArgs e)
 		{
+			int minPeriod = 238;
+			int maxPeriod = 480;
+
 			if (int.TryParse(selectPeriod.Text, out int newPeriod))
 			{
-				if (newPeriod >= 100 && newPeriod <= 1000)
+				if (newPeriod >= minPeriod && newPeriod <= maxPeriod)
 				{
 					if (temporaryChange.IsEnabled == true)
 					{
@@ -47,7 +50,7 @@ namespace Diplom
 					Close();
 				}
 				else
-					MessageBox.Show("Период должен быть в диапазоне от 100 до 1000", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+					MessageBox.Show($"Период должен быть в диапазоне от {minPeriod} до {maxPeriod}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
 			}
 			else
 				MessageBox.Show("Период должен быть числом", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
