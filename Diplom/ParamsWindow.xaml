@@ -39,8 +39,16 @@
         </Style>
 
         <Style TargetType="TextBlock">
-            <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="FocusVisualStyle" Value="{StaticResource focusText}"/>
+            <Style.Setters>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style.Setters>
+
+            <Style.Triggers>
+                <Trigger Property="IsHitTestVisible" Value="True">
+                    <Setter Property="Foreground" Value="Black"/>
+                </Trigger>
+            </Style.Triggers>
+            
         </Style>
    
         <Style TargetType="DataGridCell">
@@ -115,13 +123,13 @@
                     <TreeViewItem>
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -4">
-                                <Grid ShowGridLines="True" Background="LightGray" IsEnabled="False">
+                                <Grid ShowGridLines="True" Background="LightGray">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="150"/>
                                         <ColumnDefinition Width="150"/>
                                         <ColumnDefinition Width="150"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Версии ПО" Grid.Column="0"/>
+                                    <TextBlock Text="Версии ПО" Grid.Column="0" IsEnabled="False"/>
                                 </Grid>
                             </Border>
                         </TreeViewItem.Header>
