@@ -25,15 +25,18 @@ namespace Diplom
 			ParamsWindow pWnd = Owner as ParamsWindow;
 
 			if (newState == "включено")
+			{
 				pWnd.VisualTree(pWnd.MainTree, Visibility.Visible);
+				Close();
+			}
 			else
+			{
 				pWnd.VisualTree(pWnd.MainTree, Visibility.Hidden);
-
-			pWnd.StateStation.Visibility = Visibility.Visible;
-
-			_currentStation.Data.firstRefreshStation = DateTime.MinValue;
-			Stock.workWindow.RemoveLocalConnection(_currentStation);
-			Close();
+				pWnd.StateStation.Visibility = Visibility.Visible;
+				_currentStation.Data.firstRefreshStation = DateTime.MinValue;
+				Stock.workWindow.RemoveLocalConnection(_currentStation);
+				pWnd.Close();
+			}
 		}
 	}
 }

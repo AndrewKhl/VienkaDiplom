@@ -31,7 +31,7 @@ namespace Diplom.Models
 				_onStation = value == "Включено" ? true : false;
 				OnPropertyChanged("State");
 			}
-		}
+		} 
 
 		public int Period
 		{

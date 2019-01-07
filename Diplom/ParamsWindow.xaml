@@ -115,7 +115,7 @@
                     <TreeViewItem>
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -4">
-                                <Grid ShowGridLines="True" Background="LightGray">
+                                <Grid ShowGridLines="True" Background="LightGray" IsEnabled="False">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="150"/>
                                         <ColumnDefinition Width="150"/>

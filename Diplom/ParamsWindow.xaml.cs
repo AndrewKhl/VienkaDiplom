@@ -28,6 +28,7 @@ namespace Diplom
             InitializeComponent();
 			periodStationTextBlock.Text = _currentStation.Data.Period.ToString() + " МГц";
 			DataContext = _currentStation.Data;
+			StateStation.Visibility = Visibility.Visible;
         }
 
 		public void VisualTree(object sender, Visibility visible)
@@ -52,7 +53,15 @@ namespace Diplom
 		{
 			FrameworkElement obj = sender as FrameworkElement;
 			ContextMenu menu = obj.Parent as ContextMenu;
-			VisualTree(menu.PlacementTarget, Visibility.Visible);		
+
+			if (_currentStation.Data.State == "включено")
+				VisualTree(menu.PlacementTarget, Visibility.Visible);
+			else
+			{
+				MessageBox.Show("Включите станцию", "Ошибка",
+				MessageBoxButton.OK, MessageBoxImage.Information);
+				return;
+			}
 
 			if (_currentStation.Data.firstRefreshStation == DateTime.MinValue)
 			{
