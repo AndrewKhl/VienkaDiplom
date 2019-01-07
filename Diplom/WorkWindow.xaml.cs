@@ -399,6 +399,8 @@ namespace Diplom
         public void RemoveLocalConnection(StationControl station)
         {
             //FUCK
+            canvas.Children.Remove(station.managerLine.line);
+            ClearLineControls(station.managerLine);
         }
 
         public void RemoveElement()
