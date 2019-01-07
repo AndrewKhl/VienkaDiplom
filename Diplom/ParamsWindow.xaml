@@ -8,7 +8,7 @@
         Icon="pack://application:,,,/Resources/icon.png"
         WindowStartupLocation="CenterScreen"
         ResizeMode="NoResize"
-        Title="Параметры" Height="800" Width="534" >
+        Title="Параметры" Height="800" Width="547" >
 
     <Window.Resources>
         <Style x:Key="TextViewStyle1Column">
@@ -99,7 +99,19 @@
     </Window.Resources>
     <Grid>
         <TreeView Name="MainTree">
-            <TreeViewItem Header="МД-1Р" Name="MD_1R">
+            <TreeViewItem>
+                <TreeViewItem.Header>
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <Grid ShowGridLines="True" Background="LightGray">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="188"/>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="150"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="МДР-1" Grid.Column="0"/>
+                        </Grid>
+                    </Border>
+                </TreeViewItem.Header>
                 <TreeViewItem.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Обновить" Click="RefreshParams">
@@ -697,7 +709,19 @@
             </TreeViewItem>
             
             
-            <TreeViewItem Header="ППУ">
+            <TreeViewItem>
+                <TreeViewItem.Header>
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <Grid ShowGridLines="True" Background="LightGray">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="188"/>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="150"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="ППУ" Grid.Column="0"/>
+                        </Grid>
+                    </Border>
+                </TreeViewItem.Header>
                 <TreeViewItem.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Обновить" Click="RefreshParams">
@@ -1079,7 +1103,19 @@
             </TreeViewItem>
             
             
-            <TreeViewItem Header="БИ-RS">
+            <TreeViewItem>
+                <TreeViewItem.Header>
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <Grid ShowGridLines="True" Background="LightGray">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="188"/>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="150"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="БИ-RS" Grid.Column="0"/>
+                        </Grid>
+                    </Border>
+                </TreeViewItem.Header>
                 <TreeViewItem.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Обновить" Click="RefreshParams">
@@ -1176,7 +1212,19 @@
             </TreeViewItem>
             
             
-            <TreeViewItem Header="БИ-ETH">
+            <TreeViewItem>
+                <TreeViewItem.Header>
+                    <Border BorderBrush="Black" BorderThickness="1">
+                        <Grid ShowGridLines="True" Background="LightGray">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="188"/>
+                                <ColumnDefinition Width="150"/>
+                                <ColumnDefinition Width="150"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="БИ-ETH" Grid.Column="0"/>
+                        </Grid>
+                    </Border>
+                </TreeViewItem.Header>
                 <TreeViewItem.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Обновить" Click="RefreshParams">
