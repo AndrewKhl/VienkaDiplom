@@ -293,78 +293,60 @@ namespace Diplom
         public void ConnectControls(StationControl station, bool isRadio = true)
         {
             //FUCK
-            if (connector == null)
-            {
-                if ((isRadio && station.stationLine == null) || (!isRadio && station.managerLine == null))
-                {
-                    IsRadioConnection = isRadio;
+            ConnectionLine line;
+            switch (connecting) {
+                case ConnectingType.None:
                     connector = station;
-                    if (isRadio)
+                    connecting = (isRadio ? ConnectingType.StationRadio : ConnectingType.StationLocal);
+                    break;
+                case ConnectingType.StationRadio:
+                    var firstStation = connector as StationControl;
+                    line = new ConnectionLine(firstStation, station, canvas);
+                    firstStation.stationLine = line;
+                    station.stationLine = line;
+                    if (firstStation.IsConnectedToManager() || station.IsConnectedToManager())
                     {
-                        station.IsChecked = false;
-                        StationControl.IsConnecting = true;
+                        firstStation.stationGauge.Visibility = Visibility.Visible;
+                        station.stationGauge.Visibility = Visibility.Visible;
                     }
-                    else ManagerControl.IsConnecting = true;
-                }
-            }
-            else
-            {
-                if (connector != station)
-                {
-                    if (IsRadioConnection == true)
-                    {
-                        var savedStation = connector as StationControl;
-                        var line = new ConnectionLine(savedStation, station, canvas);
-                        savedStation.stationLine = line;
-                        station.stationLine = line;
-                        if (savedStation.IsConnectedToManager() || station.IsConnectedToManager())
-                        {
-                            savedStation.stationGauge.Visibility = Visibility.Visible;
-                            station.stationGauge.Visibility = Visibility.Visible;
-                        }
-                        savedStation.IsChecked = true;
-                        station.IsChecked = true;
-                        StationControl.IsConnecting = false;
-                    }
-                    else if (IsRadioConnection == false && connector is ManagerControl)
-                    {
-                        var manager = connector as ManagerControl;
-                        var line = new ConnectionLine(manager, station, canvas, true);
-                        manager.line = line;
-                        station.managerLine = line;
-                        ManagerControl.IsConnecting = false;
-                    }
-                }
-                connector = null;
-                IsRadioConnection = null;
+
+                    CancelConnection();
+                    break;
+                case ConnectingType.Manager:
+                    var manager = connector as ManagerControl;
+                    line = new ConnectionLine(manager, station, canvas, true);
+                    manager.line = line;
+                    station.managerLine = line;
+
+                    CancelConnection();
+                    break;
             }
         }
 
         public void ConnectControls(ManagerControl manager)
         {
             //FUCK
-            if (connector == null)
+            switch (connecting)
             {
-                if (manager.line == null)
-                {
+                case ConnectingType.None:
                     connector = manager;
-                    IsRadioConnection = false;
-                    ManagerControl.IsConnecting = true;
-                }
-            }
-            else
-            {
-                if (IsRadioConnection == false && connector is StationControl && manager.line == null)
-                {
+                    connecting = ConnectingType.Manager;
+                    break;
+                case ConnectingType.StationLocal:
                     var station = connector as StationControl;
                     var line = new ConnectionLine(station, manager, canvas, true);
                     manager.line = line;
                     station.managerLine = line;
-                    ManagerControl.IsConnecting = false;
-                }
-                connector = null;
-                IsRadioConnection = null;
+
+                    CancelConnection();
+                    break;
             }
+        }
+         
+        public void CancelConnection()
+        {
+            connector = null;
+            connecting = ConnectingType.None;
         }
 
         private void ClearLineControls(ConnectionLine line)
@@ -411,8 +393,6 @@ namespace Diplom
         {
             //FUCK
             canvas.Children.Remove(station.stationLine.line);
-            (station.stationLine.firstControl as StationControl).IsChecked = false;
-            (station.stationLine.secondControl as StationControl).IsChecked = false;
             ClearLineControls(station.stationLine);
         }
 
@@ -462,10 +442,7 @@ namespace Diplom
                     (control as IFocusable).FocusedElement -= FocusedControl.UnsetFocusBorder;
             }
             FocusedControl = null;
-            IsRadioConnection = null;
-            connector = null;
-            StationControl.IsConnecting = false;
-            ManagerControl.IsConnecting = false;
+            CancelConnection();
         }
 
         public void RemoveNetwork_Click(object sender, RoutedEventArgs e)
@@ -479,11 +456,9 @@ namespace Diplom
             numbersStations.Clear();
             maxStationNumber = 1;
             maxManagerNumber = 1;
-            connector = null;
-            IsRadioConnection = null;
             FocusedControl = null;
+            CancelConnection();
             NetworkMenuItem.Visibility = Visibility.Collapsed;
-            StationControl.IsConnecting = false;
         }
     }
 }

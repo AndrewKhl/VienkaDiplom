@@ -12,29 +12,34 @@ namespace Diplom.Models
         private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_relay.png");
         private static Uri enableParameters = new Uri(@"pack://application:,,,/Resources/Icons/Params.png");
         private static Uri disableParameters = new Uri(@"pack://application:,,,/Resources/Icons/DisabledShow.png");
+        private static Uri gaugeUri = new Uri("pack://application:,,,/Resources/gauge_1_30.png");
+
+        public WorkWindow workWindow { get; }
+		public event Action FocusedElement;
+
 		public DataStation Data;
         public ConnectionLine stationLine;
         public ConnectionLine managerLine;
         public bool IsRightRotation = true;
-        public static bool IsConnecting = false;
 
-        private bool isChecked = false;
-        public bool IsChecked
-        {
-            get => isChecked;
-            set
-            {
-                var item = GetRadioItem();
-                if (item != null) item.IsChecked = value;
-                isChecked = value;
-            }
-        }
+        //private bool isChecked = false;
+        //public bool IsChecked
+        //{
+        //    get => isChecked;
+        //    set
+        //    {
+        //        var item = GetRadioItem();
+        //        if (item != null) item.IsChecked = value;
+        //        isChecked = value;
+        //    }
+        //}
 
         private static string[] UpdateMainStationMessages =
         {
             "Идет опрос версии ПО БУКС станции {0}",
             "Идет опрос версии ПО ИБЭП станции {0}"
         };
+
         private static string[] UpdateAnotherStationMessages =
         {
             "Идет опрос версии ПО БУКС станции {0}",
@@ -60,11 +65,11 @@ namespace Diplom.Models
 
 			DataNetwork.Stations.Add(this);
 
-            this.window = window;
+            workWindow = window;
 
 			BitmapImage gauge = new BitmapImage();
 			gauge.BeginInit();
-			gauge.UriSource = new Uri("pack://application:,,,/Resources/gauge_1_30.png");
+            gauge.UriSource = gaugeUri;
 			gauge.EndInit();
 			stationGauge.Source = gauge;
 			stationGauge.Visibility = Visibility.Hidden;
@@ -72,20 +77,13 @@ namespace Diplom.Models
 
         public void SetVisibleName() => stationName.Text = $"{Data.Name} [{Data.Number}]";
 
-        public WorkWindow window { get; }
-
-		public event Action FocusedElement;
-
-        public void SetColor(Color color)
-        {
-            (Resources["fontColor"] as SolidColorBrush).Color = color;
-        }
+        public void SetColor(Color color) => (Resources["fontColor"] as SolidColorBrush).Color = color;
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             base.OnMouseDown(e);
             SetFocusBorder();
-            window.SetFocus(this);
+            workWindow.SetFocus(this);
             e.Handled = true;
         }
 
@@ -132,20 +130,21 @@ namespace Diplom.Models
             if (item != null)
                 item.IsChecked = false;
 
-            if (!IsChecked)
-                window.ConnectControls(this);
+            if (stationLine == null)
+                workWindow.ConnectControls(this);
             else
-                window.RemoveRadioConnection(this);
+                workWindow.RemoveRadioConnection(this);
         }
 
         private void LocalConnect_Click(object sender, RoutedEventArgs e)
         {
-			window.ConnectControls(this, false);
+            if (managerLine == null)
+                workWindow.ConnectControls(this, false);
         }
 
         private void Update_Click(object sender, RoutedEventArgs e)
         {
-            var item = GetParameterItem();
+            var item = GetMenuItem("parameterItem");
             if (IsConnectedToManager())
             {
                 LoadingWindow wnd;
@@ -220,14 +219,13 @@ namespace Diplom.Models
         {
             var item = GetRadioItem();
             if (item != null)
-                item.IsChecked = IsChecked;
+                item.IsChecked = (stationLine != null);
+                //item.IsChecked = IsChecked;
 
             (GetMenuItem("NetworkMenuItem") as MenuItem).Header = $"Сеть \"{DataNetwork.Name} ({DataNetwork.Type})\"";
             (GetMenuItem("StationMenuItem") as MenuItem).Header = $"Станция \"{Data.Name} ({Data.Number})\"";
         }
 
-        private MenuItem GetRadioItem() => GetMenuItem("RadioItem");
-        private MenuItem GetParameterItem() => GetMenuItem("parameterItem");
         private MenuItem GetMenuItem(string name)
         {
             var mainMenu = Resources["MainMenu"] as ContextMenu;
@@ -237,56 +235,39 @@ namespace Diplom.Models
             return null;
         }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e)
-        {
-            IsConnecting = false;
-            window.ConnectControls(this, true);
-        }
+        private MenuItem GetRadioItem() => GetMenuItem("RadioItem");
+
+        private void Cancel_Click(object sender, RoutedEventArgs e) => workWindow.CancelConnection();
 
         private void Context_Click(object sender, MouseButtonEventArgs e)
         {
             string menu_type;
-            if (ManagerControl.IsConnecting)
+            switch (workWindow.connecting)
             {
-                if (window.connector == this)
-                    menu_type = "CancelMenu";
-                if (window.connector is StationControl)
-                    menu_type = "LocalStationMenu";
-                else
-                    menu_type = "LocalManagerMenu";
+                case ConnectingType.Manager: menu_type = "ManagerMenu"; break;
+                case ConnectingType.StationLocal: menu_type = (workWindow.connector != this ? "LocalMenu" : "CancelMenu"); break;
+                case ConnectingType.StationRadio: menu_type = (workWindow.connector != this ? "RadioMenu" : "CancelMenu"); break;
+                default: menu_type = "MainMenu"; break;
             }
-            else if (window.IsRadioConnection != null)
-            {
-                if (window.connector == this)
-                    menu_type = "CancelMenu";
-                else
-                    menu_type = "RadioMenu";
-            }
-            else
-                menu_type = "MainMenu";
             stackPanel.ContextMenu = Resources[menu_type] as ContextMenu;
         }
 
         private void StationProperties_Click(object sender, RoutedEventArgs e)
         {
-            ConfigurationStation wnd = new ConfigurationStation(this) { Owner = window };
+            ConfigurationStation wnd = new ConfigurationStation(this) { Owner = workWindow };
             wnd.ShowDialog();
         }
 
         private void StationRemove_Click(object sender, RoutedEventArgs e)
         {
-            window.SetFocus(this);
-            window.RemoveElement();
+            workWindow.SetFocus(this);
+            workWindow.RemoveElement();
         }
 
-        private void NetworkProperties_Click(object sender, RoutedEventArgs e)
-        {
-            window.EditNetwork_Click(sender, e);
-        }
+        private void NetworkProperties_Click(object sender, RoutedEventArgs e) =>
+            workWindow.EditNetwork_Click(sender, e);
 
-        private void NetworkRemove_Click(object sender, RoutedEventArgs e)
-        {
-            window.RemoveNetwork_Click(sender, e);
-        }
+        private void NetworkRemove_Click(object sender, RoutedEventArgs e) =>
+            workWindow.RemoveNetwork_Click(sender, e);
     }
 }

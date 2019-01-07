@@ -13,7 +13,8 @@ namespace Diplom.Models
 		public DataManagers Data;
         public ConnectionLine line;
 
-        public static bool IsConnecting = false;
+        public WorkWindow workWindow { get; }
+        public event Action FocusedElement;
 
         public ManagerControl(WorkWindow window, string name, int number, Color color)
         {
@@ -30,24 +31,18 @@ namespace Diplom.Models
 
             DataNetwork.Managers.Add(this);
 
-            this.window = window;
+            workWindow = window;
         }
 
         public void SetVisibleName() => managerName.Text = $"{Data.Name} [{Data.Number}]";
 
-        public WorkWindow window { get; }
-        public event Action FocusedElement;
-
-        public void SetColor(Color color)
-        {
-            (Resources["fontColor"] as SolidColorBrush).Color = color;
-        }
+        public void SetColor(Color color) => (Resources["fontColor"] as SolidColorBrush).Color = color;
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             base.OnMouseDown(e);
             SetFocusBorder();
-            window.SetFocus(this);
+            workWindow.SetFocus(this);
             e.Handled = true;
         }
 
@@ -83,28 +78,21 @@ namespace Diplom.Models
 
         private void Connect_Click(object sender, RoutedEventArgs e)
         {
-            window.ConnectControls(this);
+            if (line == null)
+                workWindow.ConnectControls(this);
         }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e)
-        {
-            IsConnecting = false;
-            window.ConnectControls(this);
-        }
+        private void Cancel_Click(object sender, RoutedEventArgs e) => workWindow.CancelConnection();
 
         private void Context_Click(object sender, MouseButtonEventArgs e)
         {
             string menu_type;
-            if (StationControl.IsConnecting)
-                menu_type = "ThirdMenu";
-            else if (!IsConnecting)
-                menu_type = "MainMenu";
-            else
+            switch (workWindow.connecting)
             {
-                if (window.connector == this)
-                    menu_type = "CancelMenu";
-                else
-                    menu_type = "SecondMenu";
+                case ConnectingType.Manager: menu_type = "CancelMenu"; break;
+                case ConnectingType.StationLocal: menu_type = "LocalMenu"; break;
+                case ConnectingType.StationRadio: menu_type = "RadioMenu"; break;
+                default: menu_type = "MainMenu"; break;
             }
             stackPanel.ContextMenu = Resources[menu_type] as ContextMenu;
         }
@@ -126,24 +114,18 @@ namespace Diplom.Models
 
         private void ManagerProperties_Click(object sender, RoutedEventArgs e)
         {
-            ConfigurationManager wnd = new ConfigurationManager(this) { Owner = window };
+            ConfigurationManager wnd = new ConfigurationManager(this) { Owner = workWindow };
             wnd.ShowDialog();
         }
 
         private void ManagerRemove_Click(object sender, RoutedEventArgs e)
         {
-            window.SetFocus(this);
-            window.RemoveElement();
+            workWindow.SetFocus(this);
+            workWindow.RemoveElement();
         }
 
-        private void NetworkProperties_Click(object sender, RoutedEventArgs e)
-        {
-            window.EditNetwork_Click(sender, e);
-        }
+        private void NetworkProperties_Click(object sender, RoutedEventArgs e) => workWindow.EditNetwork_Click(sender, e);
 
-        private void NetworkRemove_Click(object sender, RoutedEventArgs e)
-        {
-            window.RemoveNetwork_Click(sender, e);
-        }
+        private void NetworkRemove_Click(object sender, RoutedEventArgs e) => workWindow.RemoveNetwork_Click(sender, e);
     }
 }

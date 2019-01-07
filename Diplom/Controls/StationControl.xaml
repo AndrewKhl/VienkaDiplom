@@ -89,7 +89,7 @@
             </MenuItem>
         </ContextMenu>
 
-        <ContextMenu x:Key="LocalManagerMenu">
+        <ContextMenu x:Key="ManagerMenu">
             <MenuItem Header="Связать по локальному порту" Click="LocalConnect_Click" />
             <MenuItem Header="Связать по порту А" />
             <MenuItem Header="Связать по порту Б" />
@@ -117,7 +117,7 @@
             </MenuItem>
         </ContextMenu>
 
-        <ContextMenu x:Key="LocalStationMenu">
+        <ContextMenu x:Key="LocalMenu">
             <MenuItem Header="Обновить конфигурацию" IsEnabled="False" >
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>

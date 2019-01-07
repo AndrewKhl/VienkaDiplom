@@ -11,7 +11,7 @@
             <MenuItem Header="Отмена" Click="Cancel_Click" />
         </ContextMenu>
 
-        <ContextMenu x:Key="SecondMenu">
+        <ContextMenu x:Key="LocalMenu">
             <MenuItem Header="Настройки" IsEnabled="False" />
             <MenuItem Header="Контроль сети" IsEnabled="False" />
             <Separator></Separator>
@@ -21,7 +21,7 @@
             <MenuItem Header="Связаться по удалённом COM-порту" />
         </ContextMenu>
 
-        <ContextMenu x:Key="ThirdMenu">
+        <ContextMenu x:Key="RadioMenu">
             <MenuItem Header="Настройки" IsEnabled="False" />
             <MenuItem Header="Контроль сети" IsEnabled="False" />
         </ContextMenu>
