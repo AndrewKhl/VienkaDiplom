@@ -7,7 +7,8 @@
         mc:Ignorable="d"
         Icon="pack://application:,,,/Resources/icon.png"
         WindowStartupLocation="CenterScreen"
-        Title="Параметры" Height="800" Width="600" >
+        ResizeMode="NoResize"
+        Title="Параметры" Height="800" Width="534" >
 
     <Window.Resources>
         <Style x:Key="TextViewStyle1Column">
@@ -83,6 +84,7 @@
    
         <Style TargetType="DataGridCell">
             <Setter Property="BorderBrush" Value="Black"/>
+            <Setter Property="BorderThickness" Value="1"/>
         </Style>
 
         <Style TargetType="Grid">
@@ -107,7 +109,19 @@
                         </MenuItem>
                     </ContextMenu>
                 </TreeViewItem.ContextMenu>
-                <TreeViewItem Header="Паспорт" Name="Pasport">
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Grid Background="LightGray">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="169"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Паспорт" Grid.Column="0"/>
+                            </Grid>
+                        </Border>
+                    </TreeViewItem.Header>
                     <TreeViewItem Margin="0 4 0 1">
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1">
@@ -189,7 +203,19 @@
                         </Border>
                     </TreeViewItem>
                 </TreeViewItem>
-                <TreeViewItem Header="Телеметрия" Name="Telemetry">
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Grid Background="LightGray">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="169"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Телеметрия" Grid.Column="0"/>
+                            </Grid>
+                        </Border>
+                    </TreeViewItem.Header>
                     <TreeViewItem>
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
@@ -441,7 +467,19 @@
                     
                     
                 </TreeViewItem>
-                <TreeViewItem Header="Управление">
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Grid Background="LightGray">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="169"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Управление" Grid.Column="0"/>
+                            </Grid>
+                        </Border>
+                    </TreeViewItem.Header>
                     <TreeViewItem Margin="0 4 0 1">
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1">
@@ -669,7 +707,19 @@
                         </MenuItem>
                     </ContextMenu>
                 </TreeViewItem.ContextMenu>
-                <TreeViewItem Header="Паспорт">
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Grid Background="LightGray">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="169"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Паспорт" Grid.Column="0"/>
+                            </Grid>
+                        </Border>
+                    </TreeViewItem.Header>
                     <TreeViewItem Margin="0 4 0 1">
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1">
@@ -823,8 +873,20 @@
                     </TreeViewItem>
 
                 </TreeViewItem>
-                
-                <TreeViewItem Header="Телеметрия">
+
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Grid Background="LightGray">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="169"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Телеметрия" Grid.Column="0"/>
+                            </Grid>
+                        </Border>
+                    </TreeViewItem.Header>
                     <TreeViewItem>
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1">
@@ -945,7 +1007,19 @@
                 </TreeViewItem>
                 
                 
-                <TreeViewItem Header="Управление">
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Grid Background="LightGray">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="169"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Управление" Grid.Column="0"/>
+                            </Grid>
+                        </Border>
+                    </TreeViewItem.Header>
                     <Border BorderBrush="Black" BorderThickness="1">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -1015,7 +1089,19 @@
                         </MenuItem>
                     </ContextMenu>
                 </TreeViewItem.ContextMenu>
-                <TreeViewItem Header="Паспорт">
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Grid Background="LightGray">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="169"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Паспорт" Grid.Column="0"/>
+                            </Grid>
+                        </Border>
+                    </TreeViewItem.Header>
                     <TreeViewItem>
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1">
@@ -1033,7 +1119,19 @@
                     </TreeViewItem>
                 </TreeViewItem>
                 
-                <TreeViewItem Header="Управление">
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Grid Background="LightGray">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="169"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Управление" Grid.Column="0"/>
+                            </Grid>
+                        </Border>
+                    </TreeViewItem.Header>
                     <Border BorderBrush="Black" BorderThickness="1">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -1088,7 +1186,19 @@
                         </MenuItem>
                     </ContextMenu>
                 </TreeViewItem.ContextMenu>
-                <TreeViewItem Header="Паспорт">
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Grid Background="LightGray">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="169"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Паспорт" Grid.Column="0"/>
+                            </Grid>
+                        </Border>
+                    </TreeViewItem.Header>
                     <TreeViewItem>
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1">
@@ -1106,7 +1216,19 @@
                     </TreeViewItem>
                 </TreeViewItem>
 
-                <TreeViewItem Header="Телеметрия">
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Grid Background="LightGray">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="169"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Телеметрия" Grid.Column="0"/>
+                            </Grid>
+                        </Border>
+                    </TreeViewItem.Header>
                     <Border BorderBrush="Black" BorderThickness="1">
                         <Grid>
                             <Grid.ColumnDefinitions>
@@ -1140,7 +1262,19 @@
                 </TreeViewItem>
                 
                 
-                <TreeViewItem Header="Управление">
+                <TreeViewItem>
+                    <TreeViewItem.Header>
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <Grid Background="LightGray">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="169"/>
+                                    <ColumnDefinition Width="150"/>
+                                    <ColumnDefinition Width="150"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Управлние" Grid.Column="0"/>
+                            </Grid>
+                        </Border>
+                    </TreeViewItem.Header>
                     <Border BorderBrush="Black" BorderThickness="1">
                         <Grid>
                             <Grid.ColumnDefinitions>
