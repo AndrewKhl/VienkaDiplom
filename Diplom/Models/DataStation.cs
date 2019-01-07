@@ -13,10 +13,26 @@ namespace Diplom.Models
 		private int _period = 0;
 		private string _main = "Ведомая";
 		private string _synchronization = "Внутренняя";
+		public bool _onStation = true;
 
-
+		public DateTime firstRefreshStation = DateTime.MinValue;
 		public string Name { get; set; }
 		public int Number { get; set; }
+
+		public string State
+		{
+			get
+			{
+				return _onStation == true ? "включено" : "выключено";
+			}
+
+			set
+			{
+				_onStation = value == "Включено" ? true : false;
+				OnPropertyChanged("State");
+			}
+		}
+
 		public int Period
 		{
 			get { return _period; }

@@ -460,5 +460,5 @@ namespace Diplom
             CancelConnection();
             NetworkMenuItem.Visibility = Visibility.Collapsed;
         }
-    }
+	}
 }

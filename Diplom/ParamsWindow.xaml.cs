@@ -30,19 +30,20 @@ namespace Diplom
 			DataContext = _currentStation.Data;
         }
 
-		private void VisualTree(object sender)
+		public void VisualTree(object sender, Visibility visible)
 		{
 			if (sender is FrameworkElement obj)
 			{
-				if (sender as TextBlock != null)
-					obj.Visibility = Visibility.Visible;
 
 				int count = VisualTreeHelper.GetChildrenCount(obj);
+
+				if (sender as TextBlock != null && (sender as TextBlock).Tag?.ToString() == "changedElement")
+					obj.Visibility = visible;
 
 				for (int i = 0; i < count; ++i)
 				{
 					var item = VisualTreeHelper.GetChild(sender as DependencyObject, i);
-					VisualTree(item);
+					VisualTree(item, visible);
 				}
 			}
 		}
@@ -51,7 +52,22 @@ namespace Diplom
 		{
 			FrameworkElement obj = sender as FrameworkElement;
 			ContextMenu menu = obj.Parent as ContextMenu;
-			VisualTree(menu.PlacementTarget);
+			VisualTree(menu.PlacementTarget, Visibility.Visible);		
+
+			if (_currentStation.Data.firstRefreshStation == DateTime.MinValue)
+			{
+				UASexit.Text = "0";
+				timeCalculated.Text = "0";
+				_currentStation.Data.firstRefreshStation = DateTime.Now;
+			}
+			else
+			{
+				TimeSpan period = DateTime.Now - _currentStation.Data.firstRefreshStation;
+
+				UASexit.Text = (period.Hours * 3600 + period.Minutes * 60 + period.Seconds).ToString();
+				timeCalculated.Text = (period.Hours * 3600 + period.Minutes * 60 + period.Seconds).ToString();
+			}
+
 			MessageBox.Show("Параметры успешно обновлены", "Уведомление",
 			MessageBoxButton.OK, MessageBoxImage.Information);
 		}
@@ -76,5 +92,12 @@ namespace Diplom
 			wnd.Owner = this;
 			wnd.Show();
 		}
+
+		private void SetNewStateStation(object sender, RoutedEventArgs e)
+		{
+			OnOffStation wnd = new OnOffStation(_currentStation);
+			wnd.Owner = this;
+			wnd.Show();
+		}	
 	}
 }

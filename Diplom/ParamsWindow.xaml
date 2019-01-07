@@ -15,6 +15,7 @@
             <Setter Property="Grid.Column" Value="1"/>
             <Setter Property="TextBlock.Visibility" Value="Hidden"/>
             <Setter Property="TextBlock.Padding" Value="1"/>
+            <Setter Property="TextBlock.Tag" Value="changedElement"/>
         </Style>
 
         <Style x:Key="TextViewStyle2Column">
@@ -23,6 +24,7 @@
             <Setter Property="Grid.Column" Value="2"/>
             <Setter Property="TextBlock.Visibility" Value="Hidden"/>
             <Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+            <Setter Property="TextBlock.Tag" Value="changedElement"/>
         </Style>
 
         <Style TargetType="TreeViewItem">
@@ -30,10 +32,16 @@
             <Setter Property="Background" Value="LightGray"/>
         </Style>
 
+        <Style x:Key="focusText">
+            <Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
+            <Setter Property="TextBlock.Foreground" Value="Blue"/>
+        </Style>
+
         <Style TargetType="TextBlock">
             <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FocusVisualStyle" Value="{StaticResource focusText}"/>
         </Style>
-        
+   
         <Style TargetType="DataGridCell">
             <Setter Property="BorderBrush" Value="Black"/>
         </Style>
@@ -49,7 +57,7 @@
         
     </Window.Resources>
     <Grid>
-        <TreeView >
+        <TreeView Name="MainTree">
             <TreeViewItem Header="МД-1Р" Name="MD_1R">
                 <TreeViewItem.ContextMenu>
                     <ContextMenu>
@@ -275,7 +283,7 @@
                                 <TextBlock Text="0" Grid.Row="5" Style="{StaticResource TextViewStyle1Column}"/>
 
                                 <TextBlock Text="UAS вых" Grid.Row="6"/>
-                                <TextBlock Text="216" Grid.Row="6" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Text="216" Grid.Row="6" Style="{StaticResource TextViewStyle1Column}" Name="UASexit"/>
 
                                 <TextBlock Text="ESR вых" Grid.Row="7"/>
                                 <TextBlock Text="0" Grid.Row="7" Style="{StaticResource TextViewStyle1Column}"/>
@@ -284,7 +292,7 @@
                                 <TextBlock Text="0" Grid.Row="8" Style="{StaticResource TextViewStyle1Column}"/>
 
                                 <TextBlock Text="Время измерения" Grid.Row="9"/>
-                                <TextBlock Text="216 сек" Grid.Row="9" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Text="216 сек" Grid.Row="9" Style="{StaticResource TextViewStyle1Column}" Name="timeCalculated"/>
 
                                 <TextBlock Text="Сброс счётчика" Grid.Row="10"/>
 
@@ -497,7 +505,18 @@
                                     <RowDefinition/>
                                 </Grid.RowDefinitions>
                                 <TextBlock Text="Питание ППУ"/>
-                                <TextBlock Text="включено" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Name="StateStation" Text="{Binding Path=State, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource TextViewStyle1Column}">
+                                        <TextBlock.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Изменить" Click="SetNewStateStation"/>
+                                                <MenuItem Header="Обновить" Click="RefreshParams">
+                                                    <MenuItem.Icon>
+                                                        <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
+                                                    </MenuItem.Icon>
+                                                </MenuItem>
+                                            </ContextMenu>
+                                        </TextBlock.ContextMenu>
+                                </TextBlock>
 
                                 <TextBlock Text="Вых. ток. ЦАП" Grid.Row="1"/>
                                 <TextBlock Text="0.6 max" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
