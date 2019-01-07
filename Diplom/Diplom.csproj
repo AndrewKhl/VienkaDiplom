@@ -266,5 +266,8 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\disablePlay.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\disableProtocol.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

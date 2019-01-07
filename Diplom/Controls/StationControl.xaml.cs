@@ -7,9 +7,6 @@ using System.Windows.Media.Imaging;
 
 namespace Diplom.Models
 {
-    /// <summary>
-    /// Interaction logic for StationControl.xaml
-    /// </summary>
     public partial class StationControl : UserControl, IFocusable
     {
         private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_relay.png");
@@ -28,9 +25,7 @@ namespace Diplom.Models
             set
             {
                 var item = GetRadioItem();
-                if (item != null)
-                    item.IsChecked = value;
-
+                if (item != null) item.IsChecked = value;
                 isChecked = value;
             }
         }
@@ -252,16 +247,23 @@ namespace Diplom.Models
         {
             string menu_type;
             if (ManagerControl.IsConnecting)
-                menu_type = "ThirdMenu";
-            else if (!IsConnecting)
-                menu_type = "MainMenu";
-            else
+            {
+                if (window.connector == this)
+                    menu_type = "CancelMenu";
+                if (window.connector is StationControl)
+                    menu_type = "LocalStationMenu";
+                else
+                    menu_type = "LocalManagerMenu";
+            }
+            else if (window.IsRadioConnection != null)
             {
                 if (window.connector == this)
                     menu_type = "CancelMenu";
                 else
-                    menu_type = "SecondMenu";
+                    menu_type = "RadioMenu";
             }
+            else
+                menu_type = "MainMenu";
             stackPanel.ContextMenu = Resources[menu_type] as ContextMenu;
         }
 

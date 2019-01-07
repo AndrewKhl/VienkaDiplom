@@ -45,9 +45,9 @@
                     <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Протокол станции">
+            <MenuItem Header="Протокол станции" IsEnabled="False">
                 <MenuItem.Icon>
-                    <Image Source="pack://application:,,,/Resources/Icons/ShowEvents.png"/>
+                    <Image Source="pack://application:,,,/Resources/Icons/disableProtocol.png"/>
                 </MenuItem.Icon>
             </MenuItem>
             <MenuItem Header="Параметры" Click="ShowParametrWindow" Name="parameterItem" IsEnabled="False">
@@ -63,7 +63,7 @@
             </MenuItem>
         </ContextMenu>
 
-        <ContextMenu x:Key="SecondMenu">
+        <ContextMenu x:Key="RadioMenu">
             <MenuItem Header="Связать по радиоканалу" Click="RadioConnect_Click" />
             <Separator />
             <MenuItem Header="Обновить конфигурацию" Click="Update_Click">
@@ -71,9 +71,9 @@
                     <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Протокол станции">
+            <MenuItem Header="Протокол станции" IsEnabled="False">
                 <MenuItem.Icon>
-                    <Image Source="pack://application:,,,/Resources/Icons/ShowEvents.png"/>
+                    <Image Source="pack://application:,,,/Resources/Icons/disableProtocol.png"/>
                 </MenuItem.Icon>
             </MenuItem>
             <MenuItem Header="Параметры" Click="ShowParametrWindow" IsEnabled="False">
@@ -89,7 +89,7 @@
             </MenuItem>
         </ContextMenu>
 
-        <ContextMenu x:Key="ThirdMenu">
+        <ContextMenu x:Key="LocalManagerMenu">
             <MenuItem Header="Связать по локальному порту" Click="LocalConnect_Click" />
             <MenuItem Header="Связать по порту А" />
             <MenuItem Header="Связать по порту Б" />
@@ -99,9 +99,33 @@
                     <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <MenuItem Header="Протокол станции">
+            <MenuItem Header="Протокол станции" IsEnabled="False">
                 <MenuItem.Icon>
-                    <Image Source="pack://application:,,,/Resources/Icons/ShowEvents.png"/>
+                    <Image Source="pack://application:,,,/Resources/Icons/disableProtocol.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Параметры" IsEnabled="False">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/DisabledShow.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="Выполнить макрос" IsEnabled="False">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/disablePlay.png" />
+                </MenuItem.Icon>
+            </MenuItem>
+        </ContextMenu>
+
+        <ContextMenu x:Key="LocalStationMenu">
+            <MenuItem Header="Обновить конфигурацию" IsEnabled="False" >
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Протокол станции" IsEnabled="False">
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/disableProtocol.png"/>
                 </MenuItem.Icon>
             </MenuItem>
             <MenuItem Header="Параметры" IsEnabled="False">

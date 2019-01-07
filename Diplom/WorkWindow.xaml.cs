@@ -9,18 +9,16 @@ using System.Windows.Media.Imaging;
 
 namespace Diplom
 {
-    /// <summary>
-    /// Логика взаимодействия для WorkWindow.xaml
-    /// </summary>
     public partial class WorkWindow : Window
     {
 		public List<int> numbersStations = new List<int>();
 		public List<int> numbersManagers = new List<int>();
         public int maxStationNumber = 1;
         public int maxManagerNumber = 1;
-        public UserControl connector = null;
         public Color currentColor;
-        private bool? IsRadioConnection = null;
+
+        public ConnectingType connecting = ConnectingType.None;
+        public UserControl connector;
 
         private static Uri enableRemove = new Uri(@"pack://application:,,,/Resources/Icons/Removed.png");
         private static Uri disableRemove = new Uri(@"pack://application:,,,/Resources/Icons/DisableRemoved.png");
@@ -136,10 +134,7 @@ namespace Diplom
             manager.SetFocusBorder();
         }
 
-        public void SetFocus(IFocusable control)
-        {
-            FocusedControl = control;
-        }
+        public void SetFocus(IFocusable control) => FocusedControl = control;
 
         public void DropFocus()
         {
@@ -147,8 +142,234 @@ namespace Diplom
             FocusedControl = null;
         }
 
+        private void canvas_Drop(object sender, DragEventArgs e)
+        {
+			UserControl control;
+			if (e.Data.GetDataPresent("Station"))
+				control = (StationControl)e.Data.GetData("Station");
+			else if (e.Data.GetDataPresent("Manager"))
+				control = (ManagerControl)e.Data.GetData("Manager");
+			else return;
+
+			double shiftX = (double)e.Data.GetData("shiftX");
+			double shiftY = (double)e.Data.GetData("shiftY");
+			Canvas.SetLeft(control, e.GetPosition(canvas).X - shiftX);
+			Canvas.SetTop(control, e.GetPosition(canvas).Y - shiftY);
+            if (control is ManagerControl && (control as ManagerControl).line != null)
+                (control as ManagerControl).line.UpdatePosition();
+            else if (control is StationControl)
+            {
+                var station = control as StationControl;
+                if (station.managerLine != null)
+                    station.managerLine.UpdatePosition();
+                if (station.stationLine != null)
+                    station.stationLine.UpdatePosition();
+            }
+			e.Handled = true;
+        }
+
+        private void CreateNetwork_Click(object sender, RoutedEventArgs e) => CreateNetwork();
+
+        private void CreateNetwork()
+        {
+			if (DataNetwork.IsCreated)
+			{
+				ShowErrorCreateNetwork();
+				return;
+			}
+			if (numbersStations.Count < Stock.numberLimit)
+			{
+                ConfigurationNetwork wnd = new ConfigurationNetwork { Owner = this };
+                wnd.ShowDialog();
+			}
+			else
+				ShowErrorCountStations();
+        }
+
+        public void CreateStation_Click(object sender, RoutedEventArgs e)
+        {
+			if (numbersStations.Count < Stock.numberLimit)
+			{
+                ConfigurationStation wnd = new ConfigurationStation { Owner = this };
+                wnd.ShowDialog();
+                if (DataNetwork.Managers.Count > 0)
+                    NetworkMenuItem.Visibility = Visibility.Visible;
+			}
+			else
+				ShowErrorCountStations();
+		}
+
+		private void ShowErrorCountStations() =>
+			MessageBox.Show("Максимальное кол-во станций", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+
+		private void ShowErrorCreateNetwork() =>
+			MessageBox.Show("Максимальное кол-во сетей", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+
+        private void CreateManager_Click(object sender, RoutedEventArgs e)
+        {
+            if (numbersManagers.Count < 1)
+            {
+                ConfigurationManager wnd = new ConfigurationManager { Owner = this };
+                wnd.ShowDialog();
+            }
+            else
+            {
+                MessageBox.Show("В данной версии существует ограничение на количество " +
+                    "одновременно существующих менеджеров сети: не более одного", 
+                    "Ограничения версии", 
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            DropFocus();
+            e.Handled = true;
+        }
+
+        private void RemoveElement_Click(object sender, RoutedEventArgs e) => RemoveElement();
+
+
+        private void btnParameters_Click(object sender, RoutedEventArgs e) =>
+            (FocusedControl as StationControl).ShowParametrWindow(sender, e);
+
+        private void canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+                CreateNetwork();
+        }
+
+        private void Routing_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (StationControl station in DataNetwork.Stations)
+            {
+                if (station.IsConnectedToStation() && station.IsConnectedToManager())
+                {
+                    (station.stationLine.firstControl as StationControl).stationGauge.Visibility = Visibility.Visible;
+                    (station.stationLine.secondControl as StationControl).stationGauge.Visibility = Visibility.Visible;
+                }
+            }
+        }
+
+        public void EditNetwork_Click(object sender, RoutedEventArgs e)
+        {
+            ConfigurationNetwork wnd = new ConfigurationNetwork { Owner = this, IsEditing = true };
+            wnd.nameNewNetwork.Text = DataNetwork.Name;
+            wnd.colorCanvas.SelectedColor = currentColor;
+            foreach (string item in wnd.listOfAdress.Items)
+            {
+                if (item == DataNetwork.Address.ToString())
+                {
+                    wnd.listOfAdress.SelectedItem = item;
+                    break;
+                }
+            }
+            foreach (ComboBoxItem item in wnd.typeNetwork.Items)
+            {
+                if ((string)item.Content == DataNetwork.Type)
+                {
+                    wnd.typeNetwork.SelectedItem = item;
+                    break;
+                }
+            }
+            wnd.typeNetwork.IsEnabled = false;
+            wnd.ShowDialog();
+        }
+
+        private void ContextMenu_Opened(object sender, RoutedEventArgs e) =>
+            NetworkMenuItem.Header = $"Сеть \"{DataNetwork.Name} ({DataNetwork.Type})\"";
+
+        public void UpdateColors()
+        {
+            foreach (var child in canvas.Children)
+            {
+                if (child is StationControl)
+                    (child as StationControl).SetColor(currentColor);
+                else if (child is ManagerControl)
+                    (child as ManagerControl).SetColor(currentColor);
+            }
+        }
+
+        public void ConnectControls(StationControl station, bool isRadio = true)
+        {
+            //FUCK
+            if (connector == null)
+            {
+                if ((isRadio && station.stationLine == null) || (!isRadio && station.managerLine == null))
+                {
+                    IsRadioConnection = isRadio;
+                    connector = station;
+                    if (isRadio)
+                    {
+                        station.IsChecked = false;
+                        StationControl.IsConnecting = true;
+                    }
+                    else ManagerControl.IsConnecting = true;
+                }
+            }
+            else
+            {
+                if (connector != station)
+                {
+                    if (IsRadioConnection == true)
+                    {
+                        var savedStation = connector as StationControl;
+                        var line = new ConnectionLine(savedStation, station, canvas);
+                        savedStation.stationLine = line;
+                        station.stationLine = line;
+                        if (savedStation.IsConnectedToManager() || station.IsConnectedToManager())
+                        {
+                            savedStation.stationGauge.Visibility = Visibility.Visible;
+                            station.stationGauge.Visibility = Visibility.Visible;
+                        }
+                        savedStation.IsChecked = true;
+                        station.IsChecked = true;
+                        StationControl.IsConnecting = false;
+                    }
+                    else if (IsRadioConnection == false && connector is ManagerControl)
+                    {
+                        var manager = connector as ManagerControl;
+                        var line = new ConnectionLine(manager, station, canvas, true);
+                        manager.line = line;
+                        station.managerLine = line;
+                        ManagerControl.IsConnecting = false;
+                    }
+                }
+                connector = null;
+                IsRadioConnection = null;
+            }
+        }
+
+        public void ConnectControls(ManagerControl manager)
+        {
+            //FUCK
+            if (connector == null)
+            {
+                if (manager.line == null)
+                {
+                    connector = manager;
+                    IsRadioConnection = false;
+                    ManagerControl.IsConnecting = true;
+                }
+            }
+            else
+            {
+                if (IsRadioConnection == false && connector is StationControl && manager.line == null)
+                {
+                    var station = connector as StationControl;
+                    var line = new ConnectionLine(station, manager, canvas, true);
+                    manager.line = line;
+                    station.managerLine = line;
+                    ManagerControl.IsConnecting = false;
+                }
+                connector = null;
+                IsRadioConnection = null;
+            }
+        }
+
         private void ClearLineControls(ConnectionLine line)
         {
+            //FUCK
             if (line.firstControl is StationControl && line.secondControl is StationControl)
             {
                 var first = line.firstControl as StationControl;
@@ -188,16 +409,21 @@ namespace Diplom
 
         public void RemoveRadioConnection(StationControl station)
         {
+            //FUCK
             canvas.Children.Remove(station.stationLine.line);
             (station.stationLine.firstControl as StationControl).IsChecked = false;
             (station.stationLine.secondControl as StationControl).IsChecked = false;
             ClearLineControls(station.stationLine);
         }
 
-        public void RemoveLocalConnection(StationControl station) { }
+        public void RemoveLocalConnection(StationControl station)
+        {
+            //FUCK
+        }
 
         public void RemoveElement()
         {
+            //FUCK
             if (FocusedControl is StationControl)
             {
                 var station = FocusedControl as StationControl;
@@ -242,247 +468,9 @@ namespace Diplom
             ManagerControl.IsConnecting = false;
         }
 
-        private void canvas_Drop(object sender, DragEventArgs e)
-        {
-			UserControl control;
-			if (e.Data.GetDataPresent("Station"))
-			{
-				control = (StationControl)e.Data.GetData("Station");
-			}
-			else if (e.Data.GetDataPresent("Manager"))
-			{
-				control = (ManagerControl)e.Data.GetData("Manager");
-			}
-			else return;
-			double shiftX = (double)e.Data.GetData("shiftX");
-			double shiftY = (double)e.Data.GetData("shiftY");
-			Canvas.SetLeft(control, e.GetPosition(canvas).X - shiftX);
-			Canvas.SetTop(control, e.GetPosition(canvas).Y - shiftY);
-            if (control is ManagerControl && (control as ManagerControl).line != null)
-                (control as ManagerControl).line.UpdatePosition();
-            else if (control is StationControl)
-            {
-                var station = control as StationControl;
-                if (station.managerLine != null)
-                    station.managerLine.UpdatePosition();
-                if (station.stationLine != null)
-                    station.stationLine.UpdatePosition();
-            }
-			e.Handled = true;
-        }
-
-        private void CreateNetwork_Click(object sender, RoutedEventArgs e)
-        {
-            CreateNetwork();
-        }
-
-        private void CreateNetwork()
-        {
-			if (DataNetwork.IsCreated)
-			{
-				ShowErrorCreateNetwork();
-				return;
-			}
-			if (numbersStations.Count < Stock.numberLimit)
-			{
-                ConfigurationNetwork wnd = new ConfigurationNetwork { Owner = this };
-                wnd.ShowDialog();
-			}
-			else
-				ShowErrorCountStations();
-        }
-
-        public void CreateStation_Click(object sender, RoutedEventArgs e)
-        {
-			if (numbersStations.Count < Stock.numberLimit)
-			{
-                ConfigurationStation wnd = new ConfigurationStation { Owner = this };
-                wnd.ShowDialog();
-                if (DataNetwork.Managers.Count > 0)
-                    NetworkMenuItem.Visibility = Visibility.Visible;
-			}
-			else
-				ShowErrorCountStations();
-		}
-
-		private void ShowErrorCountStations()
-		{
-			MessageBox.Show("Максимальное кол-во станций", "Ошибка",
-                MessageBoxButton.OK, MessageBoxImage.Error);
-		}
-
-		private void ShowErrorCreateNetwork()
-		{
-			MessageBox.Show("Максимальное кол-во сетей", "Ошибка",
-			MessageBoxButton.OK, MessageBoxImage.Error);
-		}
-
-        private void CreateManager_Click(object sender, RoutedEventArgs e)
-        {
-            if (numbersManagers.Count < 1)
-            {
-                ConfigurationManager wnd = new ConfigurationManager { Owner = this };
-                wnd.ShowDialog();
-            }
-            else
-            {
-                MessageBox.Show("В данной версии существует ограничение на количество " +
-                    "одновременно существующих менеджеров сети: не более одного", 
-                    "Ограничения версии", 
-                    MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
-
-        private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            DropFocus();
-            e.Handled = true;
-        }
-
-        private void RemoveElement_Click(object sender, RoutedEventArgs e)
-        {
-            RemoveElement();
-        }
-
-        public void ConnectControls(StationControl station, bool isRadio = true)
-        {
-            if (connector == null)
-            {
-                if ((isRadio && station.stationLine == null) || (!isRadio && station.managerLine == null))
-                {
-                    IsRadioConnection = isRadio;
-                    connector = station;
-                    if (isRadio)
-                    {
-                        station.IsChecked = false;
-                        StationControl.IsConnecting = true;
-                    }
-                }
-            }
-            else
-            {
-                if (connector != station)
-                {
-                    if (IsRadioConnection == true)
-                    {
-                        var savedStation = connector as StationControl;
-                        var line = new ConnectionLine(savedStation, station, canvas);
-                        savedStation.stationLine = line;
-                        station.stationLine = line;
-                        if (savedStation.IsConnectedToManager() || station.IsConnectedToManager())
-                        {
-                            savedStation.stationGauge.Visibility = Visibility.Visible;
-                            station.stationGauge.Visibility = Visibility.Visible;
-                        }
-                        savedStation.IsChecked = true;
-                        station.IsChecked = true;
-                        StationControl.IsConnecting = false;
-                    }
-                    else if (IsRadioConnection == false && connector is ManagerControl)
-                    {
-                        var manager = connector as ManagerControl;
-                        var line = new ConnectionLine(manager, station, canvas, true);
-                        manager.line = line;
-                        station.managerLine = line;
-                        ManagerControl.IsConnecting = false;
-                    }
-                }
-                connector = null;
-                IsRadioConnection = null;
-            }
-        }
-
-        public void ConnectControls(ManagerControl manager)
-        {
-            if (connector == null)
-            {
-                if (manager.line == null)
-                {
-                    connector = manager;
-                    IsRadioConnection = false;
-                    ManagerControl.IsConnecting = true;
-                }
-            }
-            else
-            {
-                if (IsRadioConnection == false && connector is StationControl && manager.line == null)
-                {
-                    var station = connector as StationControl;
-                    var line = new ConnectionLine(station, manager, canvas, true);
-                    manager.line = line;
-                    station.managerLine = line;
-                    ManagerControl.IsConnecting = false;
-                }
-                connector = null;
-                IsRadioConnection = null;
-            }
-        }
-
-        private void btnParameters_Click(object sender, RoutedEventArgs e)
-        {
-            (FocusedControl as StationControl).ShowParametrWindow(sender, e);
-        }
-
-        private void canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 2) CreateNetwork();
-        }
-
-        private void Routing_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (StationControl station in DataNetwork.Stations)
-            {
-                if (station.IsConnectedToStation() && station.IsConnectedToManager())
-                {
-                    (station.stationLine.firstControl as StationControl).stationGauge.Visibility = Visibility.Visible;
-                    (station.stationLine.secondControl as StationControl).stationGauge.Visibility = Visibility.Visible;
-                }
-            }
-        }
-
-        public void EditNetwork_Click(object sender, RoutedEventArgs e)
-        {
-            ConfigurationNetwork wnd = new ConfigurationNetwork { Owner = this, IsEditing = true };
-            wnd.nameNewNetwork.Text = DataNetwork.Name;
-            wnd.colorCanvas.SelectedColor = currentColor;
-            foreach (string item in wnd.listOfAdress.Items)
-            {
-                if (item == DataNetwork.Address.ToString())
-                {
-                    wnd.listOfAdress.SelectedItem = item;
-                    break;
-                }
-            }
-            foreach (ComboBoxItem item in wnd.typeNetwork.Items)
-            {
-                if ((string)item.Content == DataNetwork.Type)
-                {
-                    wnd.typeNetwork.SelectedItem = item;
-                    break;
-                }
-            }
-            wnd.typeNetwork.IsEnabled = false;
-            wnd.ShowDialog();
-        }
-
-        private void ContextMenu_Opened(object sender, RoutedEventArgs e)
-        {
-            NetworkMenuItem.Header = $"Сеть \"{DataNetwork.Name} ({DataNetwork.Type})\"";
-        }
-
-        public void UpdateColors()
-        {
-            foreach (var child in canvas.Children)
-            {
-                if (child is StationControl)
-                    (child as StationControl).SetColor(currentColor);
-                else if (child is ManagerControl)
-                    (child as ManagerControl).SetColor(currentColor);
-            }
-        }
-
         public void RemoveNetwork_Click(object sender, RoutedEventArgs e)
         {
+            //FUCK
             canvas.Children.Clear();
             DataNetwork.Managers.Clear();
             DataNetwork.Stations.Clear();

@@ -7,9 +7,6 @@ using System.Windows.Media.Imaging;
 
 namespace Diplom.Models
 {
-    /// <summary>
-    /// Interaction logic for ManagerControl.xaml
-    /// </summary>
     public partial class ManagerControl : UserControl, IFocusable
     {
         private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_manager.png");
