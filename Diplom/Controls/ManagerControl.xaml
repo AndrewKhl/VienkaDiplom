@@ -11,12 +11,12 @@
             <MenuItem Header="Отмена" Click="Cancel_Click" />
         </ContextMenu>
 
-        <ContextMenu x:Key="LocalMenu">
+        <ContextMenu x:Key="LocalMenu" Opened="ContextMenu_Opened_1">
             <MenuItem Header="Настройки" IsEnabled="False" />
             <MenuItem Header="Контроль сети" IsEnabled="False" />
             <Separator></Separator>
             <MenuItem Header="Связать по COM1" />
-            <MenuItem Header="Связать по COM3" Click="Connect_Click" />
+            <MenuItem Header="Связать по COM3" Name="LocalCom3MenuItem" Click="Connect_Click" />
             <MenuItem Header="Связать по COM4" />
             <MenuItem Header="Связаться по удалённом COM-порту" />
         </ContextMenu>
@@ -52,10 +52,10 @@
             <MenuItem Header="Настройки" IsEnabled="False" />
             <MenuItem Header="Контроль сети" IsEnabled="False" />
             <Separator></Separator>
-            <MenuItem Header="Связать по COM1"></MenuItem>
-            <MenuItem Header="Связать по COM3" Click="Connect_Click"></MenuItem>
-            <MenuItem Header="Связать по COM4"></MenuItem>
-            <MenuItem Header="Связаться по удалённом COM-порту"></MenuItem>
+            <MenuItem Header="Связать по COM1" />
+            <MenuItem Header="Связать по COM3" Click="Connect_Click" Name="Com3MenuItem" IsCheckable="True" IsChecked="False" />
+            <MenuItem Header="Связать по COM4" />
+            <MenuItem Header="Связаться по удалённом COM-порту" />
         </ContextMenu>
     </UserControl.Resources>
     <StackPanel ContextMenu="{StaticResource MainMenu}" Name="stackPanel" Orientation="Vertical" MouseRightButtonDown="Context_Click">

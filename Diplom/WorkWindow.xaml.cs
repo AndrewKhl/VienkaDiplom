@@ -290,9 +290,9 @@ namespace Diplom
             }
         }
 
+        //FUCK
         public void ConnectControls(StationControl station, bool isRadio = true)
         {
-            //FUCK
             ConnectionLine line;
             switch (connecting) {
                 case ConnectingType.None:
@@ -325,7 +325,6 @@ namespace Diplom
 
         public void ConnectControls(ManagerControl manager)
         {
-            //FUCK
             switch (connecting)
             {
                 case ConnectingType.None:
@@ -351,7 +350,6 @@ namespace Diplom
 
         private void ClearLineControls(ConnectionLine line)
         {
-            //FUCK
             if (line.firstControl is StationControl && line.secondControl is StationControl)
             {
                 var first = line.firstControl as StationControl;
@@ -391,21 +389,24 @@ namespace Diplom
 
         public void RemoveRadioConnection(StationControl station)
         {
-            //FUCK
             canvas.Children.Remove(station.stationLine.line);
             ClearLineControls(station.stationLine);
         }
 
         public void RemoveLocalConnection(StationControl station)
         {
-            //FUCK
             canvas.Children.Remove(station.managerLine.line);
             ClearLineControls(station.managerLine);
         }
 
+        public void RemoveLocalConnection(ManagerControl manager)
+        {
+            canvas.Children.Remove(manager.line.line);
+            ClearLineControls(manager.line);
+        }
+
         public void RemoveElement()
         {
-            //FUCK
             if (FocusedControl is StationControl)
             {
                 var station = FocusedControl as StationControl;
@@ -449,7 +450,6 @@ namespace Diplom
 
         public void RemoveNetwork_Click(object sender, RoutedEventArgs e)
         {
-            //FUCK
             canvas.Children.Clear();
             DataNetwork.Managers.Clear();
             DataNetwork.Stations.Clear();

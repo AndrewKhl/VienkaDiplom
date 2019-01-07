@@ -80,6 +80,8 @@ namespace Diplom.Models
         {
             if (line == null)
                 workWindow.ConnectControls(this);
+            else
+                workWindow.RemoveLocalConnection(this);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e) => workWindow.CancelConnection();
@@ -97,9 +99,9 @@ namespace Diplom.Models
             stackPanel.ContextMenu = Resources[menu_type] as ContextMenu;
         }
 
-        private MenuItem GetMenuItem(string name)
+        private MenuItem GetMenuItem(string name, string menu = "MainMenu")
         {
-            var mainMenu = Resources["MainMenu"] as ContextMenu;
+            var mainMenu = Resources[menu] as ContextMenu;
             foreach (var item in mainMenu.Items)
                 if (item is MenuItem && (item as MenuItem).Name == name)
                     return item as MenuItem;
@@ -108,8 +110,9 @@ namespace Diplom.Models
 
         private void ContextMenu_Opened(object sender, RoutedEventArgs e)
         {
-            (GetMenuItem("NetworkMenuItem") as MenuItem).Header = $"Сеть \"{DataNetwork.Name} ({DataNetwork.Type})\"";
-            (GetMenuItem("ManagerMenuItem") as MenuItem).Header = $"Менеджер \"{Data.Name} ({Data.Number})\"";
+            GetMenuItem("Com3MenuItem").IsChecked = (line != null);
+            GetMenuItem("NetworkMenuItem").Header = $"Сеть \"{DataNetwork.Name} ({DataNetwork.Type})\"";
+            GetMenuItem("ManagerMenuItem").Header = $"Менеджер \"{Data.Name} ({Data.Number})\"";
         }
 
         private void ManagerProperties_Click(object sender, RoutedEventArgs e)
@@ -127,5 +130,10 @@ namespace Diplom.Models
         private void NetworkProperties_Click(object sender, RoutedEventArgs e) => workWindow.EditNetwork_Click(sender, e);
 
         private void NetworkRemove_Click(object sender, RoutedEventArgs e) => workWindow.RemoveNetwork_Click(sender, e);
+
+        private void ContextMenu_Opened_1(object sender, RoutedEventArgs e)
+        {
+            GetMenuItem("LocalCom3MenuItem", "LocalMenu").IsEnabled = (line == null);
+        }
     }
 }

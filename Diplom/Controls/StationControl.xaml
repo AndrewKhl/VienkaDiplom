@@ -35,10 +35,12 @@
                 </MenuItem>
             </MenuItem>
             <Separator />
-            <MenuItem Header="Связать по локальному порту" Click="LocalConnect_Click"></MenuItem>
+            <MenuItem Header="Связать по локальному порту" Click="LocalConnect_Click" Name="LocalMenuItem" 
+                      IsCheckable="True" IsChecked="False" />
             <MenuItem Header="Связать по порту А" />
             <MenuItem Header="Связать по порту Б" />
-            <MenuItem Header="Связать по радиоканалу" Name="RadioItem" IsCheckable="True" Click="RadioConnect_Click"></MenuItem>
+            <MenuItem Header="Связать по радиоканалу" Name="RadioItem" Click="RadioConnect_Click" 
+                      IsCheckable="True" IsChecked="False" />
             <Separator />
             <MenuItem Header="Обновить конфигурацию" Click="Update_Click">
                 <MenuItem.Icon>

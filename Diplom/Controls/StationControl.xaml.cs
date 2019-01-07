@@ -22,18 +22,6 @@ namespace Diplom.Models
         public ConnectionLine managerLine;
         public bool IsRightRotation = true;
 
-        //private bool isChecked = false;
-        //public bool IsChecked
-        //{
-        //    get => isChecked;
-        //    set
-        //    {
-        //        var item = GetRadioItem();
-        //        if (item != null) item.IsChecked = value;
-        //        isChecked = value;
-        //    }
-        //}
-
         private static string[] UpdateMainStationMessages =
         {
             "Идет опрос версии ПО БУКС станции {0}",
@@ -217,13 +205,10 @@ namespace Diplom.Models
 
         private void ContextMenu_Opened(object sender, RoutedEventArgs e)
         {
-            var item = GetRadioItem();
-            if (item != null)
-                item.IsChecked = (stationLine != null);
-                //item.IsChecked = IsChecked;
-
-            (GetMenuItem("NetworkMenuItem") as MenuItem).Header = $"Сеть \"{DataNetwork.Name} ({DataNetwork.Type})\"";
-            (GetMenuItem("StationMenuItem") as MenuItem).Header = $"Станция \"{Data.Name} ({Data.Number})\"";
+            GetRadioItem().IsChecked = (stationLine != null);
+            GetMenuItem("LocalMenuItem").IsChecked = (managerLine != null);
+            GetMenuItem("NetworkMenuItem").Header = $"Сеть \"{DataNetwork.Name} ({DataNetwork.Type})\"";
+            GetMenuItem("StationMenuItem").Header = $"Станция \"{Data.Name} ({Data.Number})\"";
         }
 
         private MenuItem GetMenuItem(string name)
