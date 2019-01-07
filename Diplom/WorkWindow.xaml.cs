@@ -1,4 +1,5 @@
 ﻿using Diplom.Models;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Windows;
@@ -32,6 +33,8 @@ namespace Diplom
         private static Uri disableParameters = new Uri(@"pack://application:,,,/Resources/Icons/DisabledShow.png");
         private static Uri enableDB = new Uri(@"pack://application:,,,/Resources/Icons/DBevent.png");
         private static Uri disableDB = new Uri(@"pack://application:,,,/Resources/Icons/DisableDB.png");
+
+        private static string DefaultTitle = "Мастер Link 3";
 
         private IFocusable _focusedControl;
         public IFocusable FocusedControl
@@ -71,6 +74,7 @@ namespace Diplom
         public WorkWindow()
         {
             InitializeComponent();
+            Title = DefaultTitle;
 			Stock.workWindow = this;
 			EnabledButton(false);
 		}
@@ -229,7 +233,6 @@ namespace Diplom
 
         private void RemoveElement_Click(object sender, RoutedEventArgs e) => RemoveElement();
 
-
         private void btnParameters_Click(object sender, RoutedEventArgs e) =>
             (FocusedControl as StationControl).ShowParametrWindow(sender, e);
 
@@ -290,7 +293,6 @@ namespace Diplom
             }
         }
 
-        //FUCK
         public void ConnectControls(StationControl station, bool isRadio = true)
         {
             ConnectionLine line;
@@ -448,7 +450,9 @@ namespace Diplom
             CancelConnection();
         }
 
-        public void RemoveNetwork_Click(object sender, RoutedEventArgs e)
+        public void RemoveNetwork_Click(object sender, RoutedEventArgs e) => RemoveNetwork();
+
+        private void RemoveNetwork()
         {
             canvas.Children.Clear();
             DataNetwork.Managers.Clear();
@@ -462,5 +466,81 @@ namespace Diplom
             CancelConnection();
             NetworkMenuItem.Visibility = Visibility.Collapsed;
         }
-	}
+
+        private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(MapXmlHandler.LastPath))
+                SaveAsCommand();
+            else
+            {
+                try
+                {
+                    MapXmlHandler.WriteMap(MapXmlHandler.LastPath);
+                    Title = $"{DefaultTitle} - {MapXmlHandler.LastPath}";
+                }
+                catch (Exception ex)
+                {
+                    ShowMapError(ex.Message);
+                }
+            }
+        }
+
+        private void SaveAs_Executed(object sender, ExecutedRoutedEventArgs e) => SaveAsCommand();
+
+        private void SaveAsCommand()
+        {
+            try
+            {
+                var dialog = new SaveFileDialog();
+                if (dialog.ShowDialog() == true)
+                {
+                    MapXmlHandler.LastPath = dialog.FileName;
+                    MapXmlHandler.WriteMap(dialog.FileName);
+                    Title = $"{DefaultTitle} - {MapXmlHandler.LastPath}";
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMapError(ex.Message);
+            }
+        }
+
+        private void New_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            RemoveNetwork();
+            Title = DefaultTitle;
+        }
+        
+        private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var dialog = new OpenFileDialog();
+            if (dialog.ShowDialog() == true)
+            {
+                try
+                {
+                    MapXmlHandler.ReadMap(dialog.FileName);
+                    MapXmlHandler.LastPath = dialog.FileName;
+                    Title = $"{DefaultTitle} - {dialog.FileName}";
+                }
+                catch (Exception ex)
+                {
+                    ShowMapError(ex.Message);
+                }
+            }
+        }
+
+        private void New_CanExecute(object sender, CanExecuteRoutedEventArgs e) => 
+            e.CanExecute = true;
+
+        private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e) => 
+            e.CanExecute = true;
+
+        private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e) => 
+            e.CanExecute = true;
+
+        private void SaveAs_CanExecute(object sender, CanExecuteRoutedEventArgs e) => 
+            e.CanExecute = true;
+
+        private void ShowMapError(string message) => MessageBox.Show(message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+    }
 }

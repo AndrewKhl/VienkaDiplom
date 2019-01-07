@@ -18,10 +18,7 @@ namespace Diplom
 
 			List<string> list = new List<string>();
 			for (int i = 1; i <= Stock.numberLimit; ++i)
-			{
-				//if (!Stock.workWindow.numbersManagers.Contains(i))
                 list.Add(i.ToString());
-			}
 				
 			listOfAdress.ItemsSource = list;
 			listOfAdress.SelectedIndex = 0;
@@ -37,7 +34,8 @@ namespace Diplom
 		private void CreateNetwork(object sender, RoutedEventArgs e)
 		{
 			int number = int.Parse(listOfAdress.SelectedItem.ToString());
-            Stock.workWindow.currentColor = colorCanvas.SelectedColor ?? Colors.Green;
+            DataNetwork.CurrentColor = colorCanvas.SelectedColor ?? Colors.Green;
+            Stock.workWindow.currentColor = DataNetwork.CurrentColor;
             if (!IsEditing)
                 Stock.workWindow.CreateManager(nameNewNetwork.Text.Trim(), number);
 			DataNetwork.Name = nameNewNetwork.Text.Trim();

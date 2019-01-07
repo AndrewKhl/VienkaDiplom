@@ -1319,7 +1319,7 @@
                                     <ColumnDefinition Width="150"/>
                                     <ColumnDefinition Width="150"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Управлние" Grid.Column="0"/>
+                                <TextBlock Text="Управление" Grid.Column="0"/>
                             </Grid>
                         </Border>
                     </TreeViewItem.Header>
