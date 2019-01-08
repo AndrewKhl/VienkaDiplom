@@ -130,6 +130,7 @@ namespace Diplom
             }
             canvas.Children.Add(station);
             station.SetFocusBorder();
+            station.UpdateLayout();
 
             MapChanged();
         }
