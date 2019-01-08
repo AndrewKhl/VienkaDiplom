@@ -61,8 +61,8 @@ namespace Diplom
                 {
                     writer.WriteStartElement(ObjectKey);
                     writer.WriteAttributeString(NameAttr, station.Data.Name);
-                    writer.WriteAttributeString(LeftAttr, Canvas.GetLeft(station).ToString());
-                    writer.WriteAttributeString(TopAttr, Canvas.GetTop(station).ToString());
+                    writer.WriteAttributeString(LeftAttr, ((int)Canvas.GetLeft(station)).ToString());
+                    writer.WriteAttributeString(TopAttr, ((int)Canvas.GetTop(station)).ToString());
                     writer.WriteAttributeString(IdAttr, station.Data.Number.ToString());
                     writer.WriteAttributeString(KindAttr, Kind.PDH_Relay.ToString());
                     if (station.stationLine != null)
@@ -83,8 +83,8 @@ namespace Diplom
                 {
                     writer.WriteStartElement(ObjectKey);
                     writer.WriteAttributeString(NameAttr, manager.Data.Name);
-                    writer.WriteAttributeString(LeftAttr, Canvas.GetLeft(manager).ToString());
-                    writer.WriteAttributeString(TopAttr, Canvas.GetTop(manager).ToString());
+                    writer.WriteAttributeString(LeftAttr, ((int)Canvas.GetLeft(manager)).ToString());
+                    writer.WriteAttributeString(TopAttr, ((int)Canvas.GetTop(manager)).ToString());
                     writer.WriteAttributeString(IdAttr, manager.Data.Number.ToString());
                     writer.WriteAttributeString(KindAttr, Kind.PDH_Management.ToString());
 
@@ -132,11 +132,11 @@ namespace Diplom
                     switch (kind)
                     {
                         case Kind.PDH_Relay:
+                            string name = control.Attributes[NameAttr].Value;
                             int controlId = int.Parse(control.Attributes[IdAttr].Value);
-                            Stock.workWindow.CreateStation(
-                                control.Attributes[NameAttr].Value, controlId,
-                                double.Parse(control.Attributes[TopAttr].Value),
-                                double.Parse(control.Attributes[LeftAttr].Value));
+                            int top = int.Parse(control.Attributes[TopAttr].Value);
+                            int left = int.Parse(control.Attributes[LeftAttr].Value);
+                            Stock.workWindow.CreateStation(name, controlId, top, left);
 
                             foreach (XmlNode port in control.ChildNodes)
                             {
@@ -158,8 +158,8 @@ namespace Diplom
                             Stock.workWindow.CreateManager(
                                 control.Attributes[NameAttr].Value,
                                 int.Parse(control.Attributes[IdAttr].Value),
-                                double.Parse(control.Attributes[TopAttr].Value),
-                                double.Parse(control.Attributes[LeftAttr].Value));
+                                int.Parse(control.Attributes[TopAttr].Value),
+                                int.Parse(control.Attributes[LeftAttr].Value));
                             break;
                     }
                 }

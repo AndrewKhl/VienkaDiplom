@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Icon="pack://application:,,,/Resources/icon.png"
         WindowStartupLocation="CenterScreen"
+        KeyDown="Window_KeyDown"
         Height="800" Width="1200">
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.New"
@@ -184,12 +185,12 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Справка">
-                <MenuItem Header="Помощь">
+                <MenuItem Header="Помощь" IsEnabled="False">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Help.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="О программе...">
+                <MenuItem Header="О программе..." IsEnabled="False">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Information.png"/>
                     </MenuItem.Icon>

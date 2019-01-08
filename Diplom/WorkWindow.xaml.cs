@@ -111,7 +111,7 @@ namespace Diplom
 			}
 		}
 
-        public void CreateStation(string name, int number = 0, double top = 0, double left = 0)
+        public void CreateStation(string name, int number = 0, int top = 0, int left = 0)
         {
             numbersControls.Add(number);
             numbersControls.Sort();
@@ -134,7 +134,7 @@ namespace Diplom
             MapChanged();
         }
 
-        public void CreateManager(string name, int number = 0, double top = 0, double left = 0)
+        public void CreateManager(string name, int number = 0, int top = 0, int left = 0)
         {
             numbersControls.Add(number);
             numbersControls.Sort();
@@ -663,5 +663,11 @@ namespace Diplom
             e.CanExecute = true;
 
         private void ShowMapError(string message) => MessageBox.Show(message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete && FocusedControl != null)
+                RemoveElement();
+        }
     }
 }
