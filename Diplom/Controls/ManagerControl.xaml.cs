@@ -133,7 +133,9 @@ namespace Diplom.Models
 
         private void ContextMenu_Opened_1(object sender, RoutedEventArgs e)
         {
-            GetMenuItem("LocalCom3MenuItem", "LocalMenu").IsEnabled = (line == null);
+            var item = GetMenuItem("LocalCom3MenuItem", "LocalMenu");
+            item.IsEnabled = (line == null);
+            item.IsChecked = (line != null);
         }
     }
 }

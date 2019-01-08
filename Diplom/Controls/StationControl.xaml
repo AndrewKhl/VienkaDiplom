@@ -65,8 +65,8 @@
             </MenuItem>
         </ContextMenu>
 
-        <ContextMenu x:Key="RadioMenu">
-            <MenuItem Header="Связать по радиоканалу" Click="RadioConnect_Click" />
+        <ContextMenu x:Key="RadioMenu" Opened="ContextMenu_Opened_1">
+            <MenuItem Header="Связать по радиоканалу" Name="Radio2MenuItem"  Click="RadioConnect_Click" />
             <Separator />
             <MenuItem Header="Обновить конфигурацию" Click="Update_Click">
                 <MenuItem.Icon>

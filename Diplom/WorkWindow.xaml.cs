@@ -13,10 +13,6 @@ namespace Diplom
 {
     public partial class WorkWindow : Window
     {
-		//public List<int> numbersStations = new List<int>();
-		//public List<int> numbersManagers = new List<int>();
-        //public int maxStationNumber = 1;
-        //public int maxManagerNumber = 1;
 		public List<int> numbersControls = new List<int>();
         public int maxNumber = 1;
 
@@ -103,8 +99,6 @@ namespace Diplom
 
         public void CreateStation(string name, int number = 0, double top = 0, double left = 0)
         {
-            //numbersStations.Add(number);
-            //numbersStations.Sort();
             numbersControls.Add(number);
             numbersControls.Sort();
 
@@ -126,7 +120,6 @@ namespace Diplom
 
         public void CreateManager(string name, int number = 0, double top = 0, double left = 0)
         {
-            //numbersManagers.Add(number);
             numbersControls.Add(number);
             numbersControls.Sort();
 
@@ -200,7 +193,6 @@ namespace Diplom
 
         public void CreateStation_Click(object sender, RoutedEventArgs e)
         {
-			//if (numbersStations.Count < Stock.numberLimit)
             if (DataNetwork.Stations.Count < Stock.numberLimit - 1)
 			{
                 ConfigurationStation wnd = new ConfigurationStation { Owner = this };
@@ -214,7 +206,6 @@ namespace Diplom
 
         private void CreateManager_Click(object sender, RoutedEventArgs e)
         {
-            //if (numbersManagers.Count < 1)
             if (DataNetwork.Managers.Count < 1)
             {
                 ConfigurationManager wnd = new ConfigurationManager { Owner = this };
@@ -437,8 +428,6 @@ namespace Diplom
             {
                 var station = FocusedControl as StationControl;
 
-                //numbersStations.Remove(station.Data.Number);
-                //numbersStations.Sort();
                 numbersControls.Remove(station.Data.Number);
                 numbersControls.Sort();
                 
@@ -459,7 +448,6 @@ namespace Diplom
             {
                 var manager = FocusedControl as ManagerControl;
 
-                //numbersManagers.Remove(manager.Data.Number);
                 numbersControls.Remove(manager.Data.Number);
                 numbersControls.Sort();
 
@@ -491,10 +479,6 @@ namespace Diplom
             DataNetwork.Stations.Clear();
             DataNetwork.IsCreated = false;
 
-            //numbersManagers.Clear();
-            //numbersStations.Clear();
-            //maxStationNumber = 1;
-            //maxManagerNumber = 1;
             numbersControls.Clear();
             maxNumber = 1;
 

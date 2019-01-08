@@ -152,7 +152,6 @@ namespace Diplom.Models
             }
             else if (IsConnectedToStation())
             {
-                //TODO check what notification given on updating if station connected to another station connected to manager
                 StationControl another;
                 if (stationLine.firstControl == this)
                     another = stationLine.secondControl as StationControl;
@@ -210,9 +209,9 @@ namespace Diplom.Models
             GetMenuItem("StationMenuItem").Header = $"Станция \"{Data.Name} ({Data.Number})\"";
         }
 
-        private MenuItem GetMenuItem(string name)
+        private MenuItem GetMenuItem(string name, string menu = "MainMenu")
         {
-            var mainMenu = Resources["MainMenu"] as ContextMenu;
+            var mainMenu = Resources[menu] as ContextMenu;
             foreach (var item in mainMenu.Items)
                 if (item is MenuItem && (item as MenuItem).Name == name)
                     return item as MenuItem;
@@ -253,5 +252,12 @@ namespace Diplom.Models
 
         private void NetworkRemove_Click(object sender, RoutedEventArgs e) =>
             workWindow.RemoveNetwork_Click(sender, e);
+
+        private void ContextMenu_Opened_1(object sender, RoutedEventArgs e)
+        {
+            var item = GetMenuItem("Radio2MenuItem", "RadioMenu");
+            item.IsEnabled = (stationLine == null);
+            item.IsChecked = (stationLine != null);
+        }
     }
 }
