@@ -107,9 +107,8 @@ namespace Diplom.Models
 
 		public void ShowParametrWindow(object sender, RoutedEventArgs e)
 		{
-			ParamsWindow wnd = new ParamsWindow(this);
-			wnd.Owner = Stock.workWindow;
-			wnd.Show();
+            ParamsWindow wnd = new ParamsWindow(this) { Owner = Stock.workWindow };
+            wnd.Show();
 		}
 
         private void RadioConnect_Click(object sender, RoutedEventArgs e)

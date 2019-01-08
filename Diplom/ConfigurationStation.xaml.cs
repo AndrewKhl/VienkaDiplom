@@ -15,10 +15,10 @@ namespace Diplom
 			List<string> list = new List<string>();
 			for (int i = 1; i <= Stock.numberLimit; ++i)
 			{
-                if (!Stock.workWindow.numbersStations.Contains(i))
+                //if (!Stock.workWindow.numbersStations.Contains(i))
+                if (!Stock.workWindow.numbersControls.Contains(i))
                     list.Add(i.ToString());
 			}
-
 
             if (editedStation != null)
             {
@@ -49,8 +49,11 @@ namespace Diplom
             }
             else
             {
-                Stock.workWindow.numbersStations.Remove(station.Data.Number);
-                Stock.workWindow.numbersStations.Add(number);
+                //Stock.workWindow.numbersStations.Remove(station.Data.Number);
+                //Stock.workWindow.numbersStations.Add(number);
+                Stock.workWindow.numbersControls.Remove(station.Data.Number);
+                Stock.workWindow.numbersControls.Add(number);
+
                 station.Data.Number = number;
                 station.Data.Name = nameNewStation.Text;
                 station.SetVisibleName();

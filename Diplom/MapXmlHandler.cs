@@ -1,4 +1,6 @@
 ﻿using Diplom.Models;
+using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -12,26 +14,26 @@ namespace Diplom
 
         private enum Kind { PDH_Relay, PDH_Management }
 
-        private static string MapKey = "MAP";
-        private static string NetworkKey = "NETWORK";
-        private static string ObjectKey = "OBJECT";
-        private static string PortKey = "PORT";
-        private static string TimingsKey = "TIMINGS";
+        private static readonly string MapKey = "MAP";
+        private static readonly string NetworkKey = "NETWORK";
+        private static readonly string ObjectKey = "OBJECT";
+        private static readonly string PortKey = "PORT";
+        private static readonly string TimingsKey = "TIMINGS";
 
-        private static string IdAttr = "ID";
-        private static string NameAttr = "NAME";
-        private static string ColorAttr = "COLOR";
-        private static string KindAttr = "KIND";
-        private static string RemoteAttr = "REMOTE";
-        private static string PolledAttr = "POLLED";
-        private static string LeftAttr = "LEFT";
-        private static string TopAttr = "TOP";
-        private static string ObjectIdAttr = "OBJECTID";
+        private static readonly string IdAttr = "ID";
+        private static readonly string NameAttr = "NAME";
+        private static readonly string ColorAttr = "COLOR";
+        private static readonly string KindAttr = "KIND";
+        private static readonly string RemoteAttr = "REMOTE";
+        private static readonly string PolledAttr = "POLLED";
+        private static readonly string LeftAttr = "LEFT";
+        private static readonly string TopAttr = "TOP";
+        private static readonly string ObjectIdAttr = "OBJECTID";
 
-        private static string AskAttr = "ASK";
-        private static string NetUpdateAttr = "NETUPDATE";
-        private static string TimeoutAttr = "TIMEOUT";
-        private static string DelayAttr = "DELAY";
+        private static readonly string AskAttr = "ASK";
+        private static readonly string NetUpdateAttr = "NETUPDATE";
+        private static readonly string TimeoutAttr = "TIMEOUT";
+        private static readonly string DelayAttr = "DELAY";
 
         public static void WriteMap(string path)
         {
@@ -103,10 +105,78 @@ namespace Diplom
 
         public static void ReadMap(string path)
         {
+            XmlDocument document = new XmlDocument();
+            document.Load(path);
+            XmlNode map = document.DocumentElement.SelectSingleNode($"/{MapKey}");
+            XmlNode network = map.SelectSingleNode($"//{NetworkKey}");
+            if (network != null)
+            {
+                var colorValue = network.Attributes[ColorAttr].Value;
+                if (colorValue.Substring(0, 2) == "0x")
+                {
+                    colorValue = colorValue.Remove(0, 2);
+                    colorValue = "#" + colorValue;
+                }
+                var color = (Color)ColorConverter.ConvertFromString(colorValue);
+                LoadNetwork(
+                    network.Attributes[NameAttr].Value,
+                    int.Parse(network.Attributes[IdAttr].Value),
+                    network.Attributes[KindAttr].Value,
+                    color);
 
+                var controls = network.SelectNodes(ObjectKey);
+                Dictionary<int, int> connections = new Dictionary<int, int>();
+                foreach (XmlNode control in controls)
+                {
+                    Kind kind = (Kind)Enum.Parse(typeof(Kind), control.Attributes[KindAttr].Value);
+                    switch (kind)
+                    {
+                        case Kind.PDH_Relay:
+                            int controlId = int.Parse(control.Attributes[IdAttr].Value);
+                            Stock.workWindow.CreateStation(
+                                control.Attributes[NameAttr].Value, controlId,
+                                double.Parse(control.Attributes[TopAttr].Value),
+                                double.Parse(control.Attributes[LeftAttr].Value));
+
+                            foreach (XmlNode port in control.ChildNodes)
+                            {
+                                int connectedWith = int.Parse(port.Attributes[ObjectIdAttr].Value);
+                                int min = Math.Min(controlId, connectedWith);
+                                int max = Math.Max(controlId, connectedWith);
+                                if (connections.ContainsKey(min) && connections[min] == max)
+                                {
+                                    connections.Remove(min);
+                                    Stock.workWindow.LoadStationConnection(min, max);
+                                }
+                                else
+                                {
+                                    connections.Add(min, max);
+                                }
+                            }
+                            break;
+                        case Kind.PDH_Management:
+                            Stock.workWindow.CreateManager(
+                                control.Attributes[NameAttr].Value,
+                                int.Parse(control.Attributes[IdAttr].Value),
+                                double.Parse(control.Attributes[TopAttr].Value),
+                                double.Parse(control.Attributes[LeftAttr].Value));
+                            break;
+                    }
+                }
+            }
         }
 
         private static string HexConverter(Color c) =>
             "0x" + c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
+
+        private static void LoadNetwork(string name, int number, string type, Color color)
+        {
+            DataNetwork.CurrentColor = color;
+            DataNetwork.Name = name;
+            DataNetwork.Type = type;
+            DataNetwork.Address = number;
+			DataNetwork.IsCreated = true;
+			Stock.workWindow.EnabledButton(true);
+        }
     }
 }

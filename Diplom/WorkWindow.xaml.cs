@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -12,11 +13,12 @@ namespace Diplom
 {
     public partial class WorkWindow : Window
     {
-		public List<int> numbersStations = new List<int>();
-		public List<int> numbersManagers = new List<int>();
-        public int maxStationNumber = 1;
-        public int maxManagerNumber = 1;
-        //public Color currentColor;
+		//public List<int> numbersStations = new List<int>();
+		//public List<int> numbersManagers = new List<int>();
+        //public int maxStationNumber = 1;
+        //public int maxManagerNumber = 1;
+		public List<int> numbersControls = new List<int>();
+        public int maxNumber = 1;
 
         public ConnectingType connecting = ConnectingType.None;
         public UserControl connector;
@@ -99,13 +101,16 @@ namespace Diplom
 			}
 		}
 
-        public void CreateStation(string name, int number = 0)
+        public void CreateStation(string name, int number = 0, double top = 0, double left = 0)
         {
-			numbersStations.Add(number);
-            numbersStations.Sort();
+            //numbersStations.Add(number);
+            //numbersStations.Sort();
+            numbersControls.Add(number);
+            numbersControls.Sort();
+
             var station = new StationControl(this, name, number, DataNetwork.CurrentColor);
-            Canvas.SetLeft(station, 0);
-            Canvas.SetTop(station, 0);
+            Canvas.SetLeft(station, left);
+            Canvas.SetTop(station, top);
             foreach (var control in canvas.Children)
             {
                 if (control is IFocusable)
@@ -119,12 +124,15 @@ namespace Diplom
             station.SetFocusBorder();
         }
 
-        public void CreateManager(string name, int number = 0)
+        public void CreateManager(string name, int number = 0, double top = 0, double left = 0)
         {
-            numbersManagers.Add(number);
+            //numbersManagers.Add(number);
+            numbersControls.Add(number);
+            numbersControls.Sort();
+
             var manager = new ManagerControl(this, name, number, DataNetwork.CurrentColor);
-            Canvas.SetLeft(manager, 0);
-            Canvas.SetTop(manager, 0);
+            Canvas.SetLeft(manager, left);
+            Canvas.SetTop(manager, top);
             foreach (var control in canvas.Children)
             {
                 if (control is IFocusable)
@@ -181,7 +189,7 @@ namespace Diplom
 				ShowErrorCreateNetwork();
 				return;
 			}
-			if (numbersStations.Count < Stock.numberLimit)
+			if (DataNetwork.Stations.Count < Stock.numberLimit - 1)
 			{
                 ConfigurationNetwork wnd = new ConfigurationNetwork { Owner = this };
                 wnd.ShowDialog();
@@ -192,7 +200,8 @@ namespace Diplom
 
         public void CreateStation_Click(object sender, RoutedEventArgs e)
         {
-			if (numbersStations.Count < Stock.numberLimit)
+			//if (numbersStations.Count < Stock.numberLimit)
+            if (DataNetwork.Stations.Count < Stock.numberLimit - 1)
 			{
                 ConfigurationStation wnd = new ConfigurationStation { Owner = this };
                 wnd.ShowDialog();
@@ -205,7 +214,8 @@ namespace Diplom
 
         private void CreateManager_Click(object sender, RoutedEventArgs e)
         {
-            if (numbersManagers.Count < 1)
+            //if (numbersManagers.Count < 1)
+            if (DataNetwork.Managers.Count < 1)
             {
                 ConfigurationManager wnd = new ConfigurationManager { Owner = this };
                 wnd.ShowDialog();
@@ -325,6 +335,20 @@ namespace Diplom
             }
         }
 
+        public void LoadStationConnection(int number1, int number2)
+        {
+            List<StationControl> stations =
+                DataNetwork.Stations.Where(
+                    s => s.Data.Number == number1 || s.Data.Number == number2
+                    ).ToList();
+
+            if (stations.Count != 2) throw new Exception("Unknown error");
+            ConnectionLine line = new ConnectionLine(stations[0], stations[1], canvas);
+            stations[0].stationLine = line;
+            stations[1].stationLine = line;
+            line.UpdatePosition();
+        }
+
         public void ConnectControls(ManagerControl manager)
         {
             switch (connecting)
@@ -412,8 +436,12 @@ namespace Diplom
             if (FocusedControl is StationControl)
             {
                 var station = FocusedControl as StationControl;
-                numbersStations.Remove(station.Data.Number);
-                numbersStations.Sort();
+
+                //numbersStations.Remove(station.Data.Number);
+                //numbersStations.Sort();
+                numbersControls.Remove(station.Data.Number);
+                numbersControls.Sort();
+                
                 if (station.managerLine != null)
                 {
                     canvas.Children.Remove(station.managerLine.line);
@@ -430,7 +458,11 @@ namespace Diplom
             else if (FocusedControl is ManagerControl)
             {
                 var manager = FocusedControl as ManagerControl;
-                numbersManagers.Remove(manager.Data.Number);
+
+                //numbersManagers.Remove(manager.Data.Number);
+                numbersControls.Remove(manager.Data.Number);
+                numbersControls.Sort();
+
                 if (manager.line != null)
                 {
                     canvas.Children.Remove(manager.line.line);
@@ -458,10 +490,14 @@ namespace Diplom
             DataNetwork.Managers.Clear();
             DataNetwork.Stations.Clear();
             DataNetwork.IsCreated = false;
-            numbersManagers.Clear();
-            numbersStations.Clear();
-            maxStationNumber = 1;
-            maxManagerNumber = 1;
+
+            //numbersManagers.Clear();
+            //numbersStations.Clear();
+            //maxStationNumber = 1;
+            //maxManagerNumber = 1;
+            numbersControls.Clear();
+            maxNumber = 1;
+
             FocusedControl = null;
             CancelConnection();
             NetworkMenuItem.Visibility = Visibility.Collapsed;
@@ -491,7 +527,13 @@ namespace Diplom
         {
             try
             {
-                var dialog = new SaveFileDialog();
+                var dialog = new SaveFileDialog
+                {
+                    Filter = "Networks schema|*.xml",
+                    Title = "Save As"
+                };
+                if (!string.IsNullOrEmpty(MapXmlHandler.LastPath))
+                    dialog.FileName = MapXmlHandler.LastPath;
                 if (dialog.ShowDialog() == true)
                 {
                     MapXmlHandler.LastPath = dialog.FileName;
@@ -513,7 +555,13 @@ namespace Diplom
         
         private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var dialog = new OpenFileDialog();
+            RemoveNetwork();
+            Title = DefaultTitle;
+            var dialog = new OpenFileDialog
+            {
+                Filter = "Network schema|*.xml",
+                Title = "Open"
+            };
             if (dialog.ShowDialog() == true)
             {
                 try
