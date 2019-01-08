@@ -193,5 +193,21 @@ namespace Diplom
             }
             return false;
         }
+
+        public static void WriteLastPath()
+        {
+            if (!string.IsNullOrEmpty(LastPath))
+            {
+                RegistryKey key = Registry.CurrentUser.OpenSubKey("Software", true);
+
+                try { key = key.OpenSubKey("Micran", true); }
+                catch (Exception) { key = key.CreateSubKey("Micran", true); }
+
+                try { key = key.OpenSubKey("Magapp", true); }
+                catch (Exception) { key = key.CreateSubKey("Magapp", true); }
+
+                key.SetValue("LastMap", LastPath);
+            }
+        }
     }
 }

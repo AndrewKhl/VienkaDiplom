@@ -573,6 +573,7 @@ namespace Diplom
                 try
                 {
                     MapXmlHandler.WriteMap(MapXmlHandler.LastPath);
+                    MapXmlHandler.WriteLastPath();
                     Title = $"{DefaultTitle} - {MapXmlHandler.LastPath}";
                     IsMapChanged = false;
                 }
@@ -600,6 +601,7 @@ namespace Diplom
                 {
                     MapXmlHandler.LastPath = dialog.FileName;
                     MapXmlHandler.WriteMap(dialog.FileName);
+                    MapXmlHandler.WriteLastPath();
                     Title = $"{DefaultTitle} - {MapXmlHandler.LastPath}";
                     IsMapChanged = false;
                 }
@@ -636,6 +638,7 @@ namespace Diplom
             {
                 MapXmlHandler.ReadMap(path);
                 MapXmlHandler.LastPath = path;
+                MapXmlHandler.WriteLastPath();
                 Title = $"{DefaultTitle} - {path}";
                 IsMapChanged = false;
             }
