@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace Diplom
@@ -669,6 +670,14 @@ namespace Diplom
         {
             if (e.Key == Key.Delete && FocusedControl != null)
                 RemoveElement();
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (canvas == null || ScaleComboBox == null) return;
+            string option = (e.AddedItems[0] as ComboBoxItem).Content as string;
+            double coeff = int.Parse(option.Remove(option.Length - 1)) / 100.0;
+            canvas.LayoutTransform = new ScaleTransform(coeff, coeff);
         }
     }
 }

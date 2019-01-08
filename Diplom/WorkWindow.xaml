@@ -233,7 +233,7 @@
                     </MenuItem.ToolTip>
                 </MenuItem>
             </Menu>
-            <ComboBox Width="60" Grid.Row="1" SelectedIndex="0" Height="25">
+            <ComboBox Width="60" Grid.Row="1" Name="ScaleComboBox" SelectedIndex="0" Height="25" SelectionChanged="ComboBox_SelectionChanged">
                 <ComboBox.ToolTip>
                     <ToolTip>Масштаб отображения карты</ToolTip>
                 </ComboBox.ToolTip>
