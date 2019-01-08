@@ -44,8 +44,8 @@ namespace Diplom
 		private void Open_Work_Window(object sender, RoutedEventArgs e)
 		{
 			WorkWindow wind = new WorkWindow();
-			wind.Show();
 			Close();
+			wind.Show();
 		}
 	}
 }

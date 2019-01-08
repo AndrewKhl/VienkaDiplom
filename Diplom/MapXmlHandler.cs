@@ -1,4 +1,5 @@
 ﻿using Diplom.Models;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -177,6 +178,20 @@ namespace Diplom
             DataNetwork.Address = number;
 			DataNetwork.IsCreated = true;
 			Stock.workWindow.EnabledButton(true);
+        }
+
+        public static bool ReadLastPath()
+        {
+            RegistryKey key = Registry.CurrentUser.OpenSubKey("Software", true);
+            key = key.OpenSubKey("Micran", true);
+            key = key.OpenSubKey("Magapp", true);
+            object path = key.GetValue("LastMap");
+            if (path != null && !string.IsNullOrEmpty(path as string))
+            {
+                LastPath = path as string;
+                return true;
+            }
+            return false;
         }
     }
 }

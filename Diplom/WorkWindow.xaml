@@ -8,6 +8,7 @@
         Icon="pack://application:,,,/Resources/icon.png"
         WindowStartupLocation="CenterScreen"
         KeyDown="Window_KeyDown"
+        ContentRendered="Window_ContentRendered"
         Height="800" Width="1200">
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.New"

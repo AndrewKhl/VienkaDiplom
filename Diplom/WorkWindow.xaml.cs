@@ -112,6 +112,24 @@ namespace Diplom
 			}
 		}
 
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            try
+            {
+                if (MapXmlHandler.ReadLastPath())
+                {
+                    OpenMap(MapXmlHandler.LastPath);
+                    IsMapChanged = false;
+                }
+                else
+                    throw new Exception();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Карта не считана", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
         public void CreateStation(string name, int number = 0, int top = 0, int left = 0)
         {
             numbersControls.Add(number);
@@ -228,8 +246,6 @@ namespace Diplom
 			{
                 ConfigurationStation wnd = new ConfigurationStation { Owner = this };
                 wnd.ShowDialog();
-                if (DataNetwork.Managers.Count > 0)
-                    NetworkMenuItem.Visibility = Visibility.Visible;
 
                 MapChanged();
 			}
@@ -317,8 +333,18 @@ namespace Diplom
             MapChanged();
         }
 
-        private void ContextMenu_Opened(object sender, RoutedEventArgs e) =>
-            NetworkMenuItem.Header = $"Сеть \"{DataNetwork.Name} ({DataNetwork.Type})\"";
+        private void ContextMenu_Opened(object sender, RoutedEventArgs e)
+        {
+            if (DataNetwork.IsCreated)
+            {
+                NetworkMenuItem.Visibility = Visibility.Visible;
+                NetworkMenuItem.Header = $"Сеть \"{DataNetwork.Name} ({DataNetwork.Type})\"";
+            }
+            else
+            {
+                NetworkMenuItem.Visibility = Visibility.Collapsed;
+            }
+        }
 
         public void UpdateColors()
         {
@@ -601,18 +627,21 @@ namespace Diplom
                 Title = "Open"
             };
             if (dialog.ShowDialog() == true)
+                OpenMap(dialog.FileName);
+        }
+
+        private void OpenMap(string path)
+        {
+            try
             {
-                try
-                {
-                    MapXmlHandler.ReadMap(dialog.FileName);
-                    MapXmlHandler.LastPath = dialog.FileName;
-                    Title = $"{DefaultTitle} - {dialog.FileName}";
-                    IsMapChanged = false;
-                }
-                catch (Exception ex)
-                {
-                    ShowMapError(ex.Message);
-                }
+                MapXmlHandler.ReadMap(path);
+                MapXmlHandler.LastPath = path;
+                Title = $"{DefaultTitle} - {path}";
+                IsMapChanged = false;
+            }
+            catch (Exception ex)
+            {
+                ShowMapError(ex.Message);
             }
         }
 
