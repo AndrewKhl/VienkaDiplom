@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -38,11 +39,11 @@ namespace Diplom
             get => isChanged;
             private set
             {
-                //!string.IsNullOrEmpty(MapXmlHandler.LastPath)
                 if (value && Title[Title.Length - 1] != '*')
                     Title = Title + '*';
                 else if (!value && Title[Title.Length - 1] == '*')
                     Title = Title.Remove(Title.Length - 1);
+                isChanged = value;
             }
         }
         public void MapChanged() => IsMapChanged = true;
@@ -533,7 +534,9 @@ namespace Diplom
             MapChanged();
         }
 
-        private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void Save_Executed(object sender, ExecutedRoutedEventArgs e) => SaveCommand();
+
+        private void SaveCommand()
         {
             if (string.IsNullOrEmpty(MapXmlHandler.LastPath))
                 SaveAsCommand();
@@ -611,6 +614,39 @@ namespace Diplom
             }
         }
 
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (ClosingMessage() == MessageBoxResult.Yes)
+            {
+                SavingMap();
+                base.OnClosing(e);
+            }
+        }
+
+        private void Close_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (ClosingMessage() == MessageBoxResult.Yes)
+            {
+                SavingMap();
+                Close();
+            }
+        }
+
+        private MessageBoxResult ClosingMessage() => 
+            MessageBox.Show("Вы действительно хотите выйти?", 
+                "Подтверждение выхода", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+        private void SavingMap()
+        {
+            if (IsMapChanged)
+            {
+                var result = MessageBox.Show("Карта была изменена. Сохранить изменения?",
+                    "Сохранить изменения?", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                    SaveCommand();
+            }
+        }
+
         private void New_CanExecute(object sender, CanExecuteRoutedEventArgs e) => 
             e.CanExecute = true;
 
@@ -621,6 +657,9 @@ namespace Diplom
             e.CanExecute = true;
 
         private void SaveAs_CanExecute(object sender, CanExecuteRoutedEventArgs e) => 
+            e.CanExecute = true;
+
+        private void Close_CanExecute(object sender, CanExecuteRoutedEventArgs e) => 
             e.CanExecute = true;
 
         private void ShowMapError(string message) => MessageBox.Show(message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
