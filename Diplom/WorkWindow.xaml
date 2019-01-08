@@ -328,7 +328,7 @@
 
                 <Canvas.ContextMenu>
                     <ContextMenu Opened="ContextMenu_Opened">
-                        <MenuItem Header="Выделить всё"/>
+                        <MenuItem Header="Выделить всё" IsEnabled="True" />
                         <MenuItem Header="Создать сеть" Click="CreateNetwork_Click">
                             <MenuItem.Icon>
                                 <Image Source="pack://application:,,,/Resources/Icons/Network.png"/>

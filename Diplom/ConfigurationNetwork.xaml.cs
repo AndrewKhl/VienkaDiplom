@@ -41,6 +41,8 @@ namespace Diplom
                 Stock.workWindow.CreateStation_Click(sender, e);
             if (IsEditing)
                 Stock.workWindow.UpdateColors();
+
+            Stock.workWindow.MapChanged();
 		}
 	}
 }

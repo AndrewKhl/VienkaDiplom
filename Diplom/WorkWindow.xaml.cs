@@ -6,7 +6,6 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace Diplom
@@ -33,6 +32,20 @@ namespace Diplom
         private static Uri disableDB = new Uri(@"pack://application:,,,/Resources/Icons/DisableDB.png");
 
         private static string DefaultTitle = "Мастер Link 3";
+
+        private bool isChanged = false;
+        public bool IsMapChanged {
+            get => isChanged;
+            private set
+            {
+                //!string.IsNullOrEmpty(MapXmlHandler.LastPath)
+                if (value && Title[Title.Length - 1] != '*')
+                    Title = Title + '*';
+                else if (!value && Title[Title.Length - 1] == '*')
+                    Title = Title.Remove(Title.Length - 1);
+            }
+        }
+        public void MapChanged() => IsMapChanged = true;
 
         private IFocusable _focusedControl;
         public IFocusable FocusedControl
@@ -116,6 +129,8 @@ namespace Diplom
             }
             canvas.Children.Add(station);
             station.SetFocusBorder();
+
+            MapChanged();
         }
 
         public void CreateManager(string name, int number = 0, double top = 0, double left = 0)
@@ -137,6 +152,8 @@ namespace Diplom
             }
             canvas.Children.Add(manager);
             manager.SetFocusBorder();
+
+            MapChanged();
         }
 
         public void SetFocus(IFocusable control) => FocusedControl = control;
@@ -149,19 +166,26 @@ namespace Diplom
 
         private void canvas_Drop(object sender, DragEventArgs e)
         {
-			UserControl control;
-			if (e.Data.GetDataPresent("Station"))
-				control = (StationControl)e.Data.GetData("Station");
-			else if (e.Data.GetDataPresent("Manager"))
-				control = (ManagerControl)e.Data.GetData("Manager");
-			else return;
+            UserControl control;
+            if (e.Data.GetDataPresent("Station"))
+                control = (StationControl)e.Data.GetData("Station");
+            else if (e.Data.GetDataPresent("Manager"))
+                control = (ManagerControl)e.Data.GetData("Manager");
+            else return;
 
-			double shiftX = (double)e.Data.GetData("shiftX");
-			double shiftY = (double)e.Data.GetData("shiftY");
+            double shiftX = (double)e.Data.GetData("shiftX");
+            double shiftY = (double)e.Data.GetData("shiftY");
+
+            if (e.GetPosition(canvas).X - shiftX == Canvas.GetLeft(control)
+                && e.GetPosition(canvas).Y - shiftY == Canvas.GetTop(control))
+                return;
+
 			Canvas.SetLeft(control, e.GetPosition(canvas).X - shiftX);
 			Canvas.SetTop(control, e.GetPosition(canvas).Y - shiftY);
             if (control is ManagerControl && (control as ManagerControl).line != null)
+            {
                 (control as ManagerControl).line.UpdatePosition();
+            }
             else if (control is StationControl)
             {
                 var station = control as StationControl;
@@ -171,6 +195,7 @@ namespace Diplom
                     station.stationLine.UpdatePosition();
             }
 			e.Handled = true;
+            MapChanged();
         }
 
         private void CreateNetwork_Click(object sender, RoutedEventArgs e) => CreateNetwork();
@@ -182,10 +207,13 @@ namespace Diplom
 				ShowErrorCreateNetwork();
 				return;
 			}
+
 			if (DataNetwork.Stations.Count < Stock.numberLimit - 1)
 			{
                 ConfigurationNetwork wnd = new ConfigurationNetwork { Owner = this };
                 wnd.ShowDialog();
+
+                MapChanged();
 			}
 			else
 				ShowErrorCountStations();
@@ -199,6 +227,8 @@ namespace Diplom
                 wnd.ShowDialog();
                 if (DataNetwork.Managers.Count > 0)
                     NetworkMenuItem.Visibility = Visibility.Visible;
+
+                MapChanged();
 			}
 			else
 				ShowErrorCountStations();
@@ -210,6 +240,8 @@ namespace Diplom
             {
                 ConfigurationManager wnd = new ConfigurationManager { Owner = this };
                 wnd.ShowDialog();
+
+                MapChanged();
             }
             else
             {
@@ -278,6 +310,8 @@ namespace Diplom
             }
             wnd.typeNetwork.IsEnabled = false;
             wnd.ShowDialog();
+
+            MapChanged();
         }
 
         private void ContextMenu_Opened(object sender, RoutedEventArgs e) =>
@@ -292,6 +326,7 @@ namespace Diplom
                 else if (child is ManagerControl)
                     (child as ManagerControl).SetColor(DataNetwork.CurrentColor);
             }
+            MapChanged();
         }
 
         public void ConnectControls(StationControl station, bool isRadio = true)
@@ -314,6 +349,7 @@ namespace Diplom
                     }
 
                     CancelConnection();
+                    MapChanged();
                     break;
                 case ConnectingType.Manager:
                     var manager = connector as ManagerControl;
@@ -322,6 +358,7 @@ namespace Diplom
                     station.managerLine = line;
 
                     CancelConnection();
+                    MapChanged();
                     break;
             }
         }
@@ -338,6 +375,8 @@ namespace Diplom
             stations[0].stationLine = line;
             stations[1].stationLine = line;
             line.UpdatePosition();
+
+            MapChanged();
         }
 
         public void ConnectControls(ManagerControl manager)
@@ -355,6 +394,7 @@ namespace Diplom
                     station.managerLine = line;
 
                     CancelConnection();
+                    MapChanged();
                     break;
             }
         }
@@ -402,24 +442,28 @@ namespace Diplom
                     (station.stationLine.secondControl as StationControl).stationGauge.Visibility = Visibility.Hidden;
                 }
             }
+            MapChanged();
         }
 
         public void RemoveRadioConnection(StationControl station)
         {
             canvas.Children.Remove(station.stationLine.line);
             ClearLineControls(station.stationLine);
+            MapChanged();
         }
 
         public void RemoveLocalConnection(StationControl station)
         {
             canvas.Children.Remove(station.managerLine.line);
             ClearLineControls(station.managerLine);
+            MapChanged();
         }
 
         public void RemoveLocalConnection(ManagerControl manager)
         {
             canvas.Children.Remove(manager.line.line);
             ClearLineControls(manager.line);
+            MapChanged();
         }
 
         public void RemoveElement()
@@ -468,6 +512,7 @@ namespace Diplom
             }
             FocusedControl = null;
             CancelConnection();
+            MapChanged();
         }
 
         public void RemoveNetwork_Click(object sender, RoutedEventArgs e) => RemoveNetwork();
@@ -485,6 +530,7 @@ namespace Diplom
             FocusedControl = null;
             CancelConnection();
             NetworkMenuItem.Visibility = Visibility.Collapsed;
+            MapChanged();
         }
 
         private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -497,6 +543,7 @@ namespace Diplom
                 {
                     MapXmlHandler.WriteMap(MapXmlHandler.LastPath);
                     Title = $"{DefaultTitle} - {MapXmlHandler.LastPath}";
+                    IsMapChanged = false;
                 }
                 catch (Exception ex)
                 {
@@ -523,6 +570,7 @@ namespace Diplom
                     MapXmlHandler.LastPath = dialog.FileName;
                     MapXmlHandler.WriteMap(dialog.FileName);
                     Title = $"{DefaultTitle} - {MapXmlHandler.LastPath}";
+                    IsMapChanged = false;
                 }
             }
             catch (Exception ex)
@@ -535,6 +583,7 @@ namespace Diplom
         {
             RemoveNetwork();
             Title = DefaultTitle;
+            IsMapChanged = false;
         }
         
         private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -553,6 +602,7 @@ namespace Diplom
                     MapXmlHandler.ReadMap(dialog.FileName);
                     MapXmlHandler.LastPath = dialog.FileName;
                     Title = $"{DefaultTitle} - {dialog.FileName}";
+                    IsMapChanged = false;
                 }
                 catch (Exception ex)
                 {

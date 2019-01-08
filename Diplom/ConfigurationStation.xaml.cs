@@ -55,6 +55,7 @@ namespace Diplom
                 station.Data.Name = nameNewStation.Text;
                 station.SetVisibleName();
             }
+            Stock.workWindow.MapChanged();
             Close();
 		}
 	}

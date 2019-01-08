@@ -55,6 +55,7 @@ namespace Diplom
                 manager.Data.Name = nameNewManager.Text;
                 manager.SetVisibleName();
             }
+            Stock.workWindow.MapChanged();
             Close();
 		}
     }
