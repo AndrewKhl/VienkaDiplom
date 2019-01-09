@@ -12,7 +12,7 @@ namespace Diplom.Models
         private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_relay.png");
         private static Uri enableParameters = new Uri(@"pack://application:,,,/Resources/Icons/Params.png");
         private static Uri disableParameters = new Uri(@"pack://application:,,,/Resources/Icons/DisabledShow.png");
-        private static Uri gaugeUri = new Uri("pack://application:,,,/Resources/gauge_1_30.png");
+        private static Uri gaugeUri = new Uri("pack://application:,,,/Resources/gauge_1_50.png");
 
         public WorkWindow workWindow { get; }
 		public event Action FocusedElement;
@@ -30,6 +30,7 @@ namespace Diplom.Models
             {
                 isUpdated = value;
                 Stock.workWindow.ToggleParametersButtons(value);
+                stationGauge.Visibility = (value ? Visibility.Visible : Visibility.Hidden);
             }
         }
 

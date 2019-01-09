@@ -298,5 +298,8 @@
   <ItemGroup>
     <Resource Include="Resources\Icons\disableParams.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\gauge_1_50.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

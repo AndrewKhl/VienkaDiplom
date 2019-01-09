@@ -398,11 +398,6 @@ namespace Diplom
                     line = new ConnectionLine(firstStation, station, canvas);
                     firstStation.stationLine = line;
                     station.stationLine = line;
-                    if (firstStation.IsConnectedToManager() || station.IsConnectedToManager())
-                    {
-                        firstStation.stationGauge.Visibility = Visibility.Visible;
-                        station.stationGauge.Visibility = Visibility.Visible;
-                    }
 
                     CancelConnection();
                     MapChanged();
@@ -467,10 +462,6 @@ namespace Diplom
             {
                 var first = line.firstControl as StationControl;
                 var second = line.secondControl as StationControl;
-
-                first.stationGauge.Visibility = Visibility.Hidden;
-                second.stationGauge.Visibility = Visibility.Hidden;
-
                 first.stationLine = null;
                 second.stationLine = null;
             }
@@ -488,21 +479,21 @@ namespace Diplom
                     manager = line.firstControl as ManagerControl;
                     station = line.secondControl as StationControl;
                 }
-
                 station.managerLine = null;
                 manager.line = null;
-
-                if (station.stationLine != null)
-                {
-                    (station.stationLine.firstControl as StationControl).stationGauge.Visibility = Visibility.Hidden;
-                    (station.stationLine.secondControl as StationControl).stationGauge.Visibility = Visibility.Hidden;
-                }
             }
             MapChanged();
         }
 
         public void RemoveRadioConnection(StationControl station)
         {
+            if (station.stationLine != null)
+            {
+                if (station.stationLine.firstControl == station)
+                    (station.stationLine.secondControl as StationControl).IsUpdated = false;
+                else
+                    (station.stationLine.firstControl as StationControl).IsUpdated = false;
+            }
             canvas.Children.Remove(station.stationLine.line);
             ClearLineControls(station.stationLine);
             MapChanged();
@@ -554,15 +545,9 @@ namespace Diplom
                 numbersControls.Sort();
                 
                 if (station.managerLine != null)
-                {
-                    canvas.Children.Remove(station.managerLine.line);
-                    ClearLineControls(station.managerLine);
-                }
+                    RemoveLocalConnection(station);
                 if (station.stationLine != null)
-                {
-                    canvas.Children.Remove(station.stationLine.line);
-                    ClearLineControls(station.stationLine);
-                }
+                    RemoveRadioConnection(station);
 
                 DataNetwork.Stations.Remove(station);
             }
@@ -574,10 +559,7 @@ namespace Diplom
                 numbersControls.Sort();
 
                 if (manager.line != null)
-                {
-                    canvas.Children.Remove(manager.line.line);
-                    ClearLineControls(manager.line);
-                }
+                    RemoveLocalConnection(manager);
 
                 DataNetwork.Managers.Remove(manager);
             }
