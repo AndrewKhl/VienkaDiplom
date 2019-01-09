@@ -23,15 +23,17 @@ namespace Diplom
         private static Uri enableRemove = new Uri(@"pack://application:,,,/Resources/Icons/Removed.png");
         private static Uri disableRemove = new Uri(@"pack://application:,,,/Resources/Icons/DisableRemoved.png");
         private static Uri enableManager = new Uri(@"pack://application:,,,/Resources/Icons/NewManager.png");
-        private static Uri disableManager = new Uri(@"pack://application:,,,/Resources/Icons/DisableCreateManager.png");
+        private static Uri disableManager = new Uri(@"pack://application:,,,/Resources/Icons/DisabledCreateManager.png");
         private static Uri enableStation = new Uri(@"pack://application:,,,/Resources/Icons/NewStation.png");
-        private static Uri disableStation = new Uri(@"pack://application:,,,/Resources/Icons/DisableCreateManager.png");
+        private static Uri disableStation = new Uri(@"pack://application:,,,/Resources/Icons/DisabledCreateStation.png");
         private static Uri enableProperties = new Uri(@"pack://application:,,,/Resources/Icons/CustomFile.png");
         private static Uri disableProperties = new Uri(@"pack://application:,,,/Resources/Icons/DisabledShowProperty.png");
         private static Uri enableParameters = new Uri(@"pack://application:,,,/Resources/Icons/Params.png");
         private static Uri disableParameters = new Uri(@"pack://application:,,,/Resources/Icons/DisabledShow.png");
         private static Uri enableDB = new Uri(@"pack://application:,,,/Resources/Icons/DBevent.png");
         private static Uri disableDB = new Uri(@"pack://application:,,,/Resources/Icons/DisableDB.png");
+        private static Uri enableRoute = new Uri(@"pack://application:,,,/Resources/Icons/Marsh.png");
+        private static Uri disableRoute = new Uri(@"pack://application:,,,/Resources/Icons/disableRoute.png");
 
         private static string DefaultTitle = "Мастер Link 3";
 
@@ -60,25 +62,33 @@ namespace Diplom
                     btnRemoveMenuItem.IsEnabled = true;
                     btnRemoveMenuItem.Icon = new Image {Source = new BitmapImage(enableRemove) };
 
+                    btnPropertiesFast.IsEnabled = true;
+                    btnPropertiesFast.Icon = new Image { Source = new BitmapImage(enableProperties) };
+
                     btnProperties.IsEnabled = true;
                     btnProperties.Icon = new Image { Source = new BitmapImage(enableProperties) };
 
+                    btnRouting.IsEnabled = true;
+                    btnRouting.Icon = new Image { Source = new BitmapImage(enableRoute) };
+
                     if (value is StationControl)
-                    {
-                        btnParameters.IsEnabled = true;
-                        btnParameters.Icon = new Image { Source = new BitmapImage(enableParameters) };
-                    }
+                        ToggleParametersButtons((value as StationControl).IsUpdated);
                 }
                 else
                 {
                     btnRemoveMenuItem.IsEnabled = false;
                     btnRemoveMenuItem.Icon = new Image { Source = new BitmapImage(disableRemove) };
 
+                    btnPropertiesFast.IsEnabled = false;
+                    btnPropertiesFast.Icon = new Image { Source = new BitmapImage(disableProperties) };
+
                     btnProperties.IsEnabled = false;
                     btnProperties.Icon = new Image { Source = new BitmapImage(disableProperties) };
 
-                    btnParameters.IsEnabled = false;
-                    btnParameters.Icon = new Image { Source = new BitmapImage(disableParameters) };
+                    btnRouting.IsEnabled = false;
+                    btnRouting.Icon = new Image { Source = new BitmapImage(disableRoute) };
+
+                    ToggleParametersButtons(false);
                 }
                 _focusedControl = value;
             }
@@ -89,27 +99,38 @@ namespace Diplom
             InitializeComponent();
             Title = DefaultTitle;
 			Stock.workWindow = this;
-			EnabledButton(false);
+			TogglePanelButtons(false);
 		}
 
-		public void EnabledButton(bool enabled)
+		public void TogglePanelButtons(bool isEnabled)
 		{
-			btnCreateManagerFast.IsEnabled = enabled;
-			btnCreateManagerMenu.IsEnabled = enabled;
-			btnCreateStationFast.IsEnabled = enabled;
-			btnCreateStationMenu.IsEnabled = enabled;
-			btnRemovedMenu.IsEnabled = enabled;
-			btnRemoveMenuItem.IsEnabled = enabled;
+			btnCreateManagerFast.IsEnabled = isEnabled;
+			btnCreateManagerMenu.IsEnabled = isEnabled;
+			btnCreateStationFast.IsEnabled = isEnabled;
+			btnCreateStationMenu.IsEnabled = isEnabled;
+			btnRemoveMenuItem.IsEnabled = isEnabled;
+			btnRemovedMenu.IsEnabled = isEnabled;
 
-			if (enabled)
+            btnEditNetwork.IsEnabled = isEnabled;
+
+			if (isEnabled)
 			{
-				btnRemoveMenuItem.Icon = new Image { Source = new BitmapImage(enableRemove) };
-				btnRemovedMenu.Icon = new Image { Source = new BitmapImage(enableRemove) };
 				btnCreateManagerFast.Icon = new Image { Source = new BitmapImage(enableManager) };
 				btnCreateManagerMenu.Icon = new Image { Source = new BitmapImage(enableManager) };
                 btnCreateStationFast.Icon = new Image { Source = new BitmapImage(enableStation) };
                 btnCreateStationMenu.Icon = new Image { Source = new BitmapImage(enableStation) };
+				btnRemoveMenuItem.Icon = new Image { Source = new BitmapImage(enableRemove) };
+				btnRemovedMenu.Icon = new Image { Source = new BitmapImage(enableRemove) };
 			}
+            else
+            {
+				btnCreateManagerFast.Icon = new Image { Source = new BitmapImage(disableManager) };
+				btnCreateManagerMenu.Icon = new Image { Source = new BitmapImage(disableManager) };
+                btnCreateStationFast.Icon = new Image { Source = new BitmapImage(disableStation) };
+                btnCreateStationMenu.Icon = new Image { Source = new BitmapImage(disableStation) };
+				btnRemoveMenuItem.Icon = new Image { Source = new BitmapImage(disableRemove) };
+				btnRemovedMenu.Icon = new Image { Source = new BitmapImage(disableRemove) };
+            }
 		}
 
         private void Window_ContentRendered(object sender, EventArgs e)
@@ -117,10 +138,7 @@ namespace Diplom
             try
             {
                 if (MapXmlHandler.ReadLastPath())
-                {
                     OpenMap(MapXmlHandler.LastPath);
-                    IsMapChanged = false;
-                }
                 else
                     throw new Exception();
             }
@@ -130,7 +148,7 @@ namespace Diplom
             }
         }
 
-        public void CreateStation(string name, int number = 0, int top = 0, int left = 0)
+        public void CreateStation(string name, int number = 0, int top = 0, int left = 0, bool setFocused = true)
         {
             numbersControls.Add(number);
             numbersControls.Sort();
@@ -148,13 +166,14 @@ namespace Diplom
                 }
             }
             canvas.Children.Add(station);
-            station.SetFocusBorder();
+            if (setFocused)
+                station.SetFocusBorder();
             station.UpdateLayout();
 
             MapChanged();
         }
 
-        public void CreateManager(string name, int number = 0, int top = 0, int left = 0)
+        public void CreateManager(string name, int number = 0, int top = 0, int left = 0, bool setFocused = true)
         {
             numbersControls.Add(number);
             numbersControls.Sort();
@@ -172,7 +191,9 @@ namespace Diplom
                 }
             }
             canvas.Children.Add(manager);
-            manager.SetFocusBorder();
+            if (setFocused)
+                manager.SetFocusBorder();
+            manager.UpdateLayout();
 
             MapChanged();
         }
@@ -242,6 +263,8 @@ namespace Diplom
 
         public void CreateStation_Click(object sender, RoutedEventArgs e)
         {
+            if (!DataNetwork.IsCreated) return;
+
             if (DataNetwork.Stations.Count < Stock.numberLimit - 1)
 			{
                 ConfigurationStation wnd = new ConfigurationStation { Owner = this };
@@ -255,6 +278,8 @@ namespace Diplom
 
         private void CreateManager_Click(object sender, RoutedEventArgs e)
         {
+            if (!DataNetwork.IsCreated) return;
+
             if (DataNetwork.Managers.Count < 1)
             {
                 ConfigurationManager wnd = new ConfigurationManager { Owner = this };
@@ -308,6 +333,8 @@ namespace Diplom
 
         public void EditNetwork_Click(object sender, RoutedEventArgs e)
         {
+            if (!DataNetwork.IsCreated) return;
+
             ConfigurationNetwork wnd = new ConfigurationNetwork { Owner = this, IsEditing = true };
             wnd.nameNewNetwork.Text = DataNetwork.Name;
             wnd.colorCanvas.SelectedColor = DataNetwork.CurrentColor;
@@ -483,6 +510,7 @@ namespace Diplom
 
         public void RemoveLocalConnection(StationControl station)
         {
+            station.IsUpdated = false;
             canvas.Children.Remove(station.managerLine.line);
             ClearLineControls(station.managerLine);
             MapChanged();
@@ -490,6 +518,9 @@ namespace Diplom
 
         public void RemoveLocalConnection(ManagerControl manager)
         {
+            var station = (manager.line.firstControl is StationControl ? 
+                manager.line.firstControl : manager.line.secondControl) as StationControl;
+            station.IsUpdated = false;
             canvas.Children.Remove(manager.line.line);
             ClearLineControls(manager.line);
             MapChanged();
@@ -497,6 +528,8 @@ namespace Diplom
 
         public void RemoveElement()
         {
+            if (FocusedControl == null) return;
+
             if (FocusedControl is StationControl)
             {
                 var station = FocusedControl as StationControl;
@@ -551,7 +584,7 @@ namespace Diplom
             canvas.Children.Clear();
             DataNetwork.Managers.Clear();
             DataNetwork.Stations.Clear();
-            DataNetwork.IsCreated = false;
+            ToggleNetwork(false);
 
             numbersControls.Clear();
             maxNumber = 1;
@@ -642,6 +675,7 @@ namespace Diplom
                 MapXmlHandler.WriteLastPath();
                 Title = $"{DefaultTitle} - {path}";
                 IsMapChanged = false;
+                DropFocus();
             }
             catch (Exception ex)
             {
@@ -686,6 +720,12 @@ namespace Diplom
             }
         }
 
+        private void Properties_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            PropertiesWindow wnd = new PropertiesWindow { Owner = this };
+            wnd.ShowDialog();
+        }
+
         private void New_CanExecute(object sender, CanExecuteRoutedEventArgs e) => 
             e.CanExecute = true;
 
@@ -699,6 +739,9 @@ namespace Diplom
             e.CanExecute = true;
 
         private void Close_CanExecute(object sender, CanExecuteRoutedEventArgs e) => 
+            e.CanExecute = true;
+
+        private void Properties_CanExecute(object sender, CanExecuteRoutedEventArgs e) => 
             e.CanExecute = true;
 
         private void ShowMapError(string message) => MessageBox.Show(message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -715,6 +758,31 @@ namespace Diplom
             string option = (e.AddedItems[0] as ComboBoxItem).Content as string;
             double coeff = int.Parse(option.Remove(option.Length - 1)) / 100.0;
             canvas.LayoutTransform = new ScaleTransform(coeff, coeff);
+        }
+
+        public void ToggleNetwork(bool value)
+        {
+            DataNetwork.IsCreated = value;
+            TogglePanelButtons(value);
+        }
+
+        private void btnProperties_Click(object sender, RoutedEventArgs e)
+        {
+            if (FocusedControl == null) return;
+
+            if (FocusedControl is StationControl)
+                (FocusedControl as StationControl).StationProperties_Click(sender, e);
+            else if (FocusedControl is ManagerControl)
+                (FocusedControl as ManagerControl).ManagerProperties_Click(sender, e);
+        }
+
+        public void ToggleParametersButtons(bool value)
+        {
+            btnParameters.IsEnabled = value;
+            btnParametersFast.IsEnabled = value;
+            
+            btnParameters.Icon = new Image { Source = new BitmapImage(value ? enableParameters : disableParameters) };
+            btnParametersFast.Icon = new Image { Source = new BitmapImage(value ? enableParameters : disableParameters) };
         }
     }
 }

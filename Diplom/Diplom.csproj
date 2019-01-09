@@ -98,6 +98,9 @@
     <Compile Include="Models\DataManagers.cs" />
     <Compile Include="Models\DataNetwork.cs" />
     <Compile Include="Models\DataStation.cs" />
+    <Compile Include="PropertiesWindow.xaml.cs">
+      <DependentUpon>PropertiesWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SetWindows\OnOffStation.xaml.cs">
       <DependentUpon>OnOffStation.xaml</DependentUpon>
     </Compile>
@@ -153,6 +156,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\StationControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PropertiesWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -284,6 +291,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\disableProtocol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\disableRoute.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Icons\disableParams.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

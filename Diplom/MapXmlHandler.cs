@@ -133,11 +133,13 @@ namespace Diplom
                     switch (kind)
                     {
                         case Kind.PDH_Relay:
-                            string name = control.Attributes[NameAttr].Value;
                             int controlId = int.Parse(control.Attributes[IdAttr].Value);
-                            int top = int.Parse(control.Attributes[TopAttr].Value);
-                            int left = int.Parse(control.Attributes[LeftAttr].Value);
-                            Stock.workWindow.CreateStation(name, controlId, top, left);
+                            Stock.workWindow.CreateStation(
+                                control.Attributes[NameAttr].Value, 
+                                controlId, 
+                                int.Parse(control.Attributes[TopAttr].Value),
+                                int.Parse(control.Attributes[LeftAttr].Value), 
+                                false);
 
                             foreach (XmlNode port in control.ChildNodes)
                             {
@@ -160,7 +162,8 @@ namespace Diplom
                                 control.Attributes[NameAttr].Value,
                                 int.Parse(control.Attributes[IdAttr].Value),
                                 int.Parse(control.Attributes[TopAttr].Value),
-                                int.Parse(control.Attributes[LeftAttr].Value));
+                                int.Parse(control.Attributes[LeftAttr].Value),
+                                false);
                             break;
                     }
                 }
@@ -176,8 +179,7 @@ namespace Diplom
             DataNetwork.Name = name;
             DataNetwork.Type = type;
             DataNetwork.Address = number;
-			DataNetwork.IsCreated = true;
-			Stock.workWindow.EnabledButton(true);
+            Stock.workWindow.ToggleNetwork(true);
         }
 
         public static bool ReadLastPath()

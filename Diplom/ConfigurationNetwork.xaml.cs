@@ -34,8 +34,7 @@ namespace Diplom
 			DataNetwork.Name = nameNewNetwork.Text.Trim();
 			DataNetwork.Type = (typeNetwork.SelectedItem as ComboBoxItem).Content.ToString();
             DataNetwork.Address = number;
-			DataNetwork.IsCreated = true;
-			Stock.workWindow.EnabledButton(true);
+            Stock.workWindow.ToggleNetwork(true);
 			Close();
             if (!IsEditing)
                 Stock.workWindow.CreateStation_Click(sender, e);

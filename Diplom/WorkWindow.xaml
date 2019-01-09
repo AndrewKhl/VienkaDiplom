@@ -26,7 +26,13 @@
         <CommandBinding Command="ApplicationCommands.Close"
                         Executed="Close_Executed"
                         CanExecute="Close_CanExecute"/>
+        <CommandBinding Command="ApplicationCommands.Properties"
+                        Executed="Properties_Executed"
+                        CanExecute="Properties_CanExecute"/>
     </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Command="ApplicationCommands.Properties" Key="T" Modifiers="Ctrl"/>
+    </Window.InputBindings>
     <Grid Name="main_grid">
         <Grid.Background>
             <SolidColorBrush Color="Gray" />
@@ -81,14 +87,14 @@
                         <Image Source="pack://application:,,,/Resources/Icons/DisabledCreateManager.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Name="btnRemovedMenu" Header="Удалить объект">
+                <MenuItem Name="btnRemovedMenu" Header="Удалить объект" Click="RemoveElement_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/DisableRemoved.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Управление">
-                <MenuItem Header="Макросы">
+                <MenuItem Header="Макросы" IsEnabled="False">
                     <MenuItem Header="Начать запись">
                         <MenuItem.Icon>
                             <Image Source="pack://application:,,,/Resources/Icons/Start.png"/>
@@ -110,34 +116,34 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem Header="Сеансы"></MenuItem>
-                <MenuItem Header="Свойства сети"></MenuItem>
-                <MenuItem Header="Свойства объекта">
+                <MenuItem Header="Сеансы" IsEnabled="False" />
+                <MenuItem Header="Свойства сети" Name="btnEditNetwork" Click="EditNetwork_Click" IsEnabled="False" />
+                <MenuItem Header="Свойства объекта" Name="btnProperties" IsEnabled="False" Click="btnProperties_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/CustomFile.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Параметры">
+                <MenuItem Header="Параметры" Name="btnParameters" Click="btnParameters_Click" IsEnabled="False">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Params.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Маршрутизация" Click="Routing_Click">
+                <MenuItem Header="Маршрутизация" Name="btnRouting" Click="Routing_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Marsh.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Пользователи">
+                <MenuItem Header="Пользователи" IsEnabled="False">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Users.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Обновить ПО на станции...">
+                <MenuItem Header="Обновить ПО на станции..." IsEnabled="False">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/UpdatePO.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Подключиться к удалённой сети">
+                <MenuItem Header="Подключиться к удалённой сети" IsEnabled="False">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/ConnectToRemoteNetwork.png"/>
                     </MenuItem.Icon>
@@ -146,40 +152,40 @@
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Commutation.png"/>
                     </MenuItem.Icon>
-                    <MenuItem Header="Управление потоками E1 и Enthernet (МД1-1Р)">
+                    <MenuItem Header="Управление потоками E1 и Enthernet (МД1-1Р)" IsEnabled="False">
                         <MenuItem.Icon>
                             <Image Source="pack://application:,,,/Resources/Icons/Thread1.png"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Управление потоками E1 (МД-ДК-1, Мультиплексоры SDH)">
+                    <MenuItem Header="Управление потоками E1 (МД-ДК-1, Мультиплексоры SDH)" IsEnabled="False">
                         <MenuItem.Icon>
                             <Image Source="pack://application:,,,/Resources/Icons/Thread2.png"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem Header="Настройка">
+                <MenuItem Header="Настройка" Command="ApplicationCommands.Properties" InputGestureText="Ctrl+T">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Settings.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Данные">
-                <MenuItem Header="События системы">
+                <MenuItem Header="События системы" IsEnabled="False">
                     <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/ShowEvents.png"/>
+                        <Image Source="pack://application:,,,/Resources/Icons/disableProtocol.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Просмотр базы данных">
+                <MenuItem Header="Просмотр базы данных" IsEnabled="False">
                     <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/dbevent.png"/>
+                        <Image Source="pack://application:,,,/Resources/Icons/disableDB.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Открыть историю мониторинга">
+                <MenuItem Header="Открыть историю мониторинга" IsEnabled="False">
                     <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/OpenMonitoringHistory.png"/>
+                        <Image Source="pack://application:,,,/Resources/Icons/disableParams.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Сводные параметры">
+                <MenuItem Header="Сводные параметры" IsEnabled="False">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/ShowParams.png"/>
                     </MenuItem.Icon>
@@ -283,7 +289,7 @@
                     </MenuItem.ToolTip>
                 </MenuItem>
 
-                <MenuItem Width="25" x:Name="btnProperties" IsEnabled="False">
+                <MenuItem Width="25" x:Name="btnPropertiesFast" IsEnabled="False" Click="btnProperties_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/DisabledShowProperty.png"/>
                     </MenuItem.Icon>
@@ -291,7 +297,7 @@
                         <ToolTip>Просмотреть свойства объекта</ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
-                <MenuItem Width="25" x:Name="btnParameters" Click="btnParameters_Click" IsEnabled="False">
+                <MenuItem Width="25" x:Name="btnParametersFast" Click="btnParameters_Click" IsEnabled="False">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/DisabledShow.png"/>
                     </MenuItem.Icon>
@@ -307,20 +313,20 @@
                         <ToolTip>Посмотреть данные и события в БД</ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
-                <MenuItem Width="25">
+                <MenuItem Width="25" IsEnabled="False">
                     <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/ShowEvents.png"/>
+                        <Image Source="pack://application:,,,/Resources/Icons/disableProtocol.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
                         <ToolTip>Посмотреть события</ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
-                <MenuItem Width="25">
+                <MenuItem Width="25" Command="ApplicationCommands.Properties">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Settings.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
-                        <ToolTip>Настройки</ToolTip>
+                        <ToolTip>Настройки (Ctrl+T)</ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
             </Menu>

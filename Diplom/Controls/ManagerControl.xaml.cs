@@ -28,6 +28,7 @@ namespace Diplom.Models
                 Number = number
             };
             SetVisibleName();
+            UnsetFocusBorder();
 
             DataNetwork.Managers.Add(this);
 
@@ -115,7 +116,7 @@ namespace Diplom.Models
             GetMenuItem("ManagerMenuItem").Header = $"Менеджер \"{Data.Name} ({Data.Number})\"";
         }
 
-        private void ManagerProperties_Click(object sender, RoutedEventArgs e)
+        public void ManagerProperties_Click(object sender, RoutedEventArgs e)
         {
             ConfigurationManager wnd = new ConfigurationManager(this) { Owner = workWindow };
             wnd.ShowDialog();

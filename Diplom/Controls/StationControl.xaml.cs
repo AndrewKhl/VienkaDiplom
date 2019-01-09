@@ -20,7 +20,18 @@ namespace Diplom.Models
 		public DataStation Data;
         public ConnectionLine stationLine;
         public ConnectionLine managerLine;
-        public bool IsRightRotation = true;
+        public bool IsRightRotation { get; set; } = true;
+
+        private bool isUpdated = false;
+        public bool IsUpdated
+        {
+            get => isUpdated;
+            set
+            {
+                isUpdated = value;
+                Stock.workWindow.ToggleParametersButtons(value);
+            }
+        }
 
         private static string[] UpdateMainStationMessages =
         {
@@ -50,6 +61,7 @@ namespace Diplom.Models
                 Number = number
             };
             SetVisibleName();
+            UnsetFocusBorder();
 
 			DataNetwork.Stations.Add(this);
 
@@ -127,11 +139,12 @@ namespace Diplom.Models
         {
             if (managerLine == null)
                 workWindow.ConnectControls(this, false);
+            else
+                workWindow.RemoveLocalConnection(this);
         }
 
         private void Update_Click(object sender, RoutedEventArgs e)
         {
-            var item = GetMenuItem("parameterItem");
             if (IsConnectedToManager())
             {
                 LoadingWindow wnd;
@@ -144,11 +157,7 @@ namespace Diplom.Models
                     }
                     catch (Exception) { return; }
                 }
-                if (item != null)
-                {
-                    item.IsEnabled = true;
-                    item.Icon = new Image { Source = new BitmapImage(enableParameters) };
-                }
+                IsUpdated = true;
             }
             else if (IsConnectedToStation())
             {
@@ -168,11 +177,7 @@ namespace Diplom.Models
                         }
                         catch (Exception) { return; }
                     }
-                    if (item != null)
-                    {
-                        item.IsEnabled = true;
-                        item.Icon = new Image { Source = new BitmapImage(enableParameters) };
-                    }
+                    IsUpdated = true;
                 }
             }
             else
@@ -204,6 +209,9 @@ namespace Diplom.Models
         private void ContextMenu_Opened(object sender, RoutedEventArgs e)
         {
             GetRadioItem().IsChecked = (stationLine != null);
+            var item = GetMenuItem("parameterItem");
+            item.IsEnabled = IsUpdated;
+            item.Icon = new Image { Source = new BitmapImage(IsUpdated ? enableParameters : disableParameters) };
             GetMenuItem("LocalMenuItem").IsChecked = (managerLine != null);
             GetMenuItem("NetworkMenuItem").Header = $"Сеть \"{DataNetwork.Name} ({DataNetwork.Type})\"";
             GetMenuItem("StationMenuItem").Header = $"Станция \"{Data.Name} ({Data.Number})\"";
@@ -235,7 +243,7 @@ namespace Diplom.Models
             stackPanel.ContextMenu = Resources[menu_type] as ContextMenu;
         }
 
-        private void StationProperties_Click(object sender, RoutedEventArgs e)
+        public void StationProperties_Click(object sender, RoutedEventArgs e)
         {
             ConfigurationStation wnd = new ConfigurationStation(this) { Owner = workWindow };
             wnd.ShowDialog();
