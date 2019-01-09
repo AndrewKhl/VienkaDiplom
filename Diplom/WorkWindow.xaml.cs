@@ -510,7 +510,15 @@ namespace Diplom
 
         public void RemoveLocalConnection(StationControl station)
         {
-            station.IsUpdated = false;
+            if (station.stationLine != null)
+            {
+                (station.stationLine.firstControl as StationControl).IsUpdated = false;
+                (station.stationLine.secondControl as StationControl).IsUpdated = false;
+            }
+            else
+            {
+                station.IsUpdated = false;
+            }
             canvas.Children.Remove(station.managerLine.line);
             ClearLineControls(station.managerLine);
             MapChanged();
@@ -520,7 +528,15 @@ namespace Diplom
         {
             var station = (manager.line.firstControl is StationControl ? 
                 manager.line.firstControl : manager.line.secondControl) as StationControl;
-            station.IsUpdated = false;
+            if (station.stationLine != null)
+            {
+                (station.stationLine.firstControl as StationControl).IsUpdated = false;
+                (station.stationLine.secondControl as StationControl).IsUpdated = false;
+            }
+            else
+            {
+                station.IsUpdated = false;
+            }
             canvas.Children.Remove(manager.line.line);
             ClearLineControls(manager.line);
             MapChanged();
@@ -748,8 +764,10 @@ namespace Diplom
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.Delete && FocusedControl != null)
+            if (FocusedControl != null && e.Key == Key.Delete)
                 RemoveElement();
+            else if (FocusedControl != null && FocusedControl is StationControl && e.Key == Key.F3 && Keyboard.IsKeyDown(Key.LeftShift))
+                (FocusedControl as StationControl).Update_Click(sender, e);
         }
 
         private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)

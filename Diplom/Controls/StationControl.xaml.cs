@@ -143,7 +143,7 @@ namespace Diplom.Models
                 workWindow.RemoveLocalConnection(this);
         }
 
-        private void Update_Click(object sender, RoutedEventArgs e)
+        public void Update_Click(object sender, RoutedEventArgs e)
         {
             if (IsConnectedToManager())
             {
@@ -179,14 +179,17 @@ namespace Diplom.Models
                     }
                     IsUpdated = true;
                 }
+                else
+                    ShowUpdateError();
             }
             else
-            {
-                MessageBox.Show("Не создано ни одного менеджера для осуществления запроса. " +
+                ShowUpdateError();
+        }
+
+        private void ShowUpdateError() => 
+            MessageBox.Show("Не создано ни одного менеджера для осуществления запроса. " +
                     "Создайте управляющий элемент и соедините его с сетью.", "Ошибка", 
                     MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }
 
         public bool IsConnectedToManager() => managerLine != null;
         public bool IsConnectedToStation() => stationLine != null;
