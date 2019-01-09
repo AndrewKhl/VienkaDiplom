@@ -656,6 +656,10 @@ namespace Diplom
                 SavingMap();
                 base.OnClosing(e);
             }
+            else
+            {
+                e.Cancel = true;
+            }
         }
 
         private void Close_Executed(object sender, ExecutedRoutedEventArgs e)
