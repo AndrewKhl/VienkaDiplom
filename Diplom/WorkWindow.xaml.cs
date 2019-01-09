@@ -616,6 +616,7 @@ namespace Diplom
         {
             RemoveNetwork();
             Title = DefaultTitle;
+            MapXmlHandler.LastPath = null;
             IsMapChanged = false;
         }
         
