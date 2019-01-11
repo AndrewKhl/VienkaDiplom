@@ -68,10 +68,12 @@ namespace Diplom
                     btnProperties.IsEnabled = true;
                     btnProperties.Icon = new Image { Source = new BitmapImage(enableProperties) };
 
-                    btnRouting.IsEnabled = true;
-                    btnRouting.Icon = new Image { Source = new BitmapImage(enableRoute) };
-
-                    if (value is StationControl)
+                    if (value is ManagerControl && (value as ManagerControl).line != null)
+                    {
+                        btnRouting.IsEnabled = true;
+                        btnRouting.Icon = new Image { Source = new BitmapImage(enableRoute) };
+                    }
+                    else if (value is StationControl)
                         ToggleParametersButtons((value as StationControl).IsUpdated);
                 }
                 else
@@ -321,14 +323,8 @@ namespace Diplom
 
         private void Routing_Click(object sender, RoutedEventArgs e)
         {
-            foreach (StationControl station in DataNetwork.Stations)
-            {
-                if (station.IsConnectedToStation() && station.IsConnectedToManager())
-                {
-                    (station.stationLine.firstControl as StationControl).stationGauge.Visibility = Visibility.Visible;
-                    (station.stationLine.secondControl as StationControl).stationGauge.Visibility = Visibility.Visible;
-                }
-            }
+            if (FocusedControl is ManagerControl)
+                (FocusedControl as ManagerControl).Route_Click(sender, e);
         }
 
         public void EditNetwork_Click(object sender, RoutedEventArgs e)
@@ -407,6 +403,8 @@ namespace Diplom
                     line = new ConnectionLine(manager, station, canvas, true);
                     manager.line = line;
                     station.managerLine = line;
+                    station.Data.State = "Включено";
+                    manager.Port = ManagerControl.LastPort;
 
                     CancelConnection();
                     MapChanged();
@@ -443,6 +441,7 @@ namespace Diplom
                     var line = new ConnectionLine(station, manager, canvas, true);
                     manager.line = line;
                     station.managerLine = line;
+                    manager.Port = ManagerControl.LastPort;
 
                     CancelConnection();
                     MapChanged();
@@ -510,6 +509,9 @@ namespace Diplom
             {
                 station.IsUpdated = false;
             }
+            var manager = (station.managerLine.firstControl == station ? 
+                station.managerLine.secondControl : station.managerLine.firstControl) as ManagerControl;
+            manager.Port = null;
             canvas.Children.Remove(station.managerLine.line);
             ClearLineControls(station.managerLine);
             MapChanged();
@@ -528,6 +530,7 @@ namespace Diplom
             {
                 station.IsUpdated = false;
             }
+            manager.Port = null;
             canvas.Children.Remove(manager.line.line);
             ClearLineControls(manager.line);
             MapChanged();

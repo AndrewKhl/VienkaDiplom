@@ -16,6 +16,9 @@ namespace Diplom.Models
         public WorkWindow workWindow { get; }
         public event Action FocusedElement;
 
+        public int? Port { get; set; }
+        public static int? LastPort { get; set; }
+
         public ManagerControl(WorkWindow window, string name, int number, Color color)
         {
             InitializeComponent();
@@ -80,12 +83,24 @@ namespace Diplom.Models
         private void Connect_Click(object sender, RoutedEventArgs e)
         {
             if (line == null)
+            {
+                var item = sender as MenuItem;
+                if (item.Name == "Com1MenuItem" || item.Name == "LocalCom1MenuItem")
+                    LastPort = 1;
+                else if (item.Name == "Com3MenuItem" || item.Name == "LocalCom3MenuItem")
+                    LastPort = 3;
+
                 workWindow.ConnectControls(this);
+            }
             else
                 workWindow.RemoveLocalConnection(this);
         }
 
-        private void Cancel_Click(object sender, RoutedEventArgs e) => workWindow.CancelConnection();
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            LastPort = null;
+            workWindow.CancelConnection();
+        }
 
         private void Context_Click(object sender, MouseButtonEventArgs e)
         {
@@ -95,7 +110,7 @@ namespace Diplom.Models
                 case ConnectingType.Manager: menu_type = "CancelMenu"; break;
                 case ConnectingType.StationLocal: menu_type = "LocalMenu"; break;
                 case ConnectingType.StationRadio: menu_type = "RadioMenu"; break;
-                default: menu_type = "MainMenu"; break;
+                default: menu_type = line == null ? "MainMenu" : "ConnectedMenu"; break;
             }
             stackPanel.ContextMenu = Resources[menu_type] as ContextMenu;
         }
@@ -111,7 +126,6 @@ namespace Diplom.Models
 
         private void ContextMenu_Opened(object sender, RoutedEventArgs e)
         {
-            GetMenuItem("Com3MenuItem").IsChecked = (line != null);
             GetMenuItem("NetworkMenuItem").Header = $"Сеть \"{DataNetwork.Name} ({DataNetwork.Type})\"";
             GetMenuItem("ManagerMenuItem").Header = $"Менеджер \"{Data.Name} ({Data.Number})\"";
         }
@@ -134,9 +148,40 @@ namespace Diplom.Models
 
         private void ContextMenu_Opened_1(object sender, RoutedEventArgs e)
         {
-            var item = GetMenuItem("LocalCom3MenuItem", "LocalMenu");
-            item.IsEnabled = (line == null);
-            item.IsChecked = (line != null);
+            if (line != null)
+            {
+                var station = (line.firstControl == this ? line.secondControl : line.firstControl) as StationControl;
+                var item = GetMenuItem("LocalConnectedMenuItem", "LocalMenu");
+                item.Visibility = Visibility.Visible;
+                item.Header = $"Соединение по COM{Port} c \"{station.Data.Name} [{station.Data.Number}]\"";
+                item.IsChecked = true;
+
+                GetMenuItem("LocalCom1MenuItem", "LocalMenu").Visibility = Visibility.Collapsed;
+                GetMenuItem("LocalCom3MenuItem", "LocalMenu").Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                GetMenuItem("LocalCom1MenuItem", "LocalMenu").Visibility = Visibility.Visible;
+                GetMenuItem("LocalCom3MenuItem", "LocalMenu").Visibility = Visibility.Visible;
+
+                GetMenuItem("LocalConnectedMenuItem", "LocalMenu").Visibility = Visibility.Collapsed;
+            }
+        }
+
+        private void ContextMenu_Opened_2(object sender, RoutedEventArgs e)
+        {
+            GetMenuItem("NetworkConnectedMenuItem", "ConnectedMenu").Header = $"Сеть \"{DataNetwork.Name} ({DataNetwork.Type})\"";
+            GetMenuItem("ManagerConnectedMenuItem", "ConnectedMenu").Header = $"Менеджер \"{Data.Name} ({Data.Number})\"";
+            var station = (line.firstControl == this ? line.secondControl : line.firstControl) as StationControl;
+            var item = GetMenuItem("ConnectedMenuItem", "ConnectedMenu");
+            item.Header = $"Соединение по COM{Port} c \"{station.Data.Name} [{station.Data.Number}]\"";
+            item.IsChecked = true;
+        }
+
+        public void Route_Click(object sender, RoutedEventArgs e)
+        {
+            var station = (line.firstControl == this ? line.secondControl : line.firstControl) as StationControl;
+            station.Update_Click(sender, e);
         }
     }
 }

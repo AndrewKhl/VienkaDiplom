@@ -1,16 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Diplom.Models
 {
-	public class DataStation: INotifyPropertyChanged
+    public class DataStation: INotifyPropertyChanged
 	{
-		private int _period = 0;
+		private int _period = 238;
 		private string _main = "Ведомая";
 		private string _synchronization = "Внутренняя";
 		public bool _onStation = true;
@@ -21,14 +17,10 @@ namespace Diplom.Models
 
 		public string State
 		{
-			get
-			{
-				return _onStation == true ? "включено" : "выключено";
-			}
-
+			get => _onStation ? "включено" : "выключено";
 			set
 			{
-				_onStation = value == "Включено" ? true : false;
+				_onStation = value == "Включено";
 				OnPropertyChanged("State");
 			}
 		} 

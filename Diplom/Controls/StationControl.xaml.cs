@@ -9,6 +9,9 @@ namespace Diplom.Models
 {
     public partial class StationControl : UserControl, IFocusable
     {
+        public static readonly int MinFrequency = 238;
+        public static readonly int MaxFrequency = 480;
+
         private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_relay.png");
         private static Uri enableParameters = new Uri(@"pack://application:,,,/Resources/Icons/Params.png");
         private static Uri disableParameters = new Uri(@"pack://application:,,,/Resources/Icons/DisabledShow.png");
@@ -30,7 +33,7 @@ namespace Diplom.Models
             {
                 isUpdated = value;
                 Stock.workWindow.ToggleParametersButtons(value);
-                stationGauge.Visibility = (value ? Visibility.Visible : Visibility.Hidden);
+                UpdateGauge(value);
             }
         }
 
@@ -121,7 +124,7 @@ namespace Diplom.Models
 		public void ShowParametrWindow(object sender, RoutedEventArgs e)
 		{
             ParamsWindow wnd = new ParamsWindow(this) { Owner = Stock.workWindow };
-            wnd.Show();
+            wnd.ShowDialog();
 		}
 
         private void RadioConnect_Click(object sender, RoutedEventArgs e)
@@ -270,6 +273,98 @@ namespace Diplom.Models
             var item = GetMenuItem("Radio2MenuItem", "RadioMenu");
             item.IsEnabled = (stationLine == null);
             item.IsChecked = (stationLine != null);
+        }
+
+        private static bool IsCorrectFrequency(StationControl station)
+        {
+            if (station.Data.Period < StationControl.MinFrequency 
+                || station.Data.Period > StationControl.MaxFrequency)
+            {
+                MessageBox.Show($"Частота станции \"{station.Data} [{station.Data.Number}]\" не входит в диапазон допустимых значений " +
+                    $"[{StationControl.MinFrequency}, {StationControl.MaxFrequency}]", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            return true;
+        }
+
+        private static bool IsFrequenciesEquals(StationControl station1, StationControl station2)
+        {
+            if (station1.Data.Period != station2.Data.Period)
+            {
+                //MessageBox.Show("Частоты станций не совпадают", "Ошибка", 
+                    //MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+            return true;
+        }
+
+        private static bool IsCorrectRegimes(StationControl station1, StationControl station2)
+        {
+            StationControl masterStation, slaveStation;
+            if (station1.Data.Main == "Ведущая")
+                masterStation = station1;
+            else if (station2.Data.Main == "Ведущая")
+                masterStation = station2;
+            else
+            {
+                //MessageBox.Show("Одна из станций должна быть ведущей", "Ошибка", 
+                    //MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            if (station1.Data.Main == "Ведомая")
+                slaveStation = station1;
+            else if (station2.Data.Main == "Ведомая")
+                slaveStation = station2;
+            else
+            {
+                //MessageBox.Show("Одна из станций должна быть ведомой", "Ошибка", 
+                    //MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            if (masterStation.Data.Synhronization != "Внутренняя")
+            {
+                //MessageBox.Show("Синхронизация ведущей станции должна иметь значение \"Внутренняя\"", 
+                    //"Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            if (slaveStation.Data.Synhronization != "РК")
+            {
+                //MessageBox.Show("Синхронизация ведущей станции должна иметь значение \"РК\"", 
+                    //"Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return false;
+            }
+
+            return true;
+        }
+
+        private void UpdateGauge(bool isUpdated)
+        {
+            if (!isUpdated)
+            {
+                stationGauge.Visibility = Visibility.Hidden;
+                return;
+            }
+
+            if (IsConnectedToManager())
+            {
+                stationGauge.Visibility = Visibility.Visible;
+                return;
+            }
+
+            // station updated and not connected to manager
+            var secondStation = (stationLine.firstControl == this ? 
+                stationLine.secondControl : stationLine.firstControl) as StationControl;
+            if (!IsCorrectFrequency(this)
+                || !IsCorrectFrequency(secondStation)
+                || !IsFrequenciesEquals(this, secondStation)
+                || !IsCorrectRegimes(this, secondStation))
+                return;
+
+            if (!IsConnectedToManager())
+                stationGauge.Visibility = Visibility.Visible;
         }
     }
 }

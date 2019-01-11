@@ -1,23 +1,11 @@
 ﻿using Diplom.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Diplom
 {
-    /// <summary>
-    /// Логика взаимодействия для ParamsWindow.xaml
-    /// </summary>
     public partial class ParamsWindow : Window
     {
 		private StationControl _currentStation;
@@ -35,7 +23,6 @@ namespace Diplom
 		{
 			if (sender is FrameworkElement obj)
 			{
-
 				int count = VisualTreeHelper.GetChildrenCount(obj);
 
 				if (sender as TextBlock != null && (sender as TextBlock).Tag?.ToString() == "changedElement")
@@ -78,35 +65,31 @@ namespace Diplom
 			}
 
 			MessageBox.Show("Параметры успешно обновлены", "Уведомление",
-			MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBoxButton.OK, MessageBoxImage.Information);
 		}
 
 		private void SetNewPeriodStation(object sender, RoutedEventArgs e)
 		{
-			SetPeriodWindow wnd = new SetPeriodWindow(_currentStation);
-			wnd.Owner = this;
-			wnd.Show();
+            SetPeriodWindow wnd = new SetPeriodWindow(_currentStation) { Owner = this };
+            wnd.ShowDialog();
 		}
 
 		private void SetNewMainStatusStation(object sender, RoutedEventArgs e)
 		{
-			SetMainStationWindow wnd = new SetMainStationWindow(_currentStation);
-			wnd.Owner = this;
-			wnd.Show();
+            SetMainStationWindow wnd = new SetMainStationWindow(_currentStation) { Owner = this };
+            wnd.ShowDialog();
 		}
 
 		private void SetNewSynhronizationStation(object sender, RoutedEventArgs e)
 		{
-			SetSynhronizationStation wnd = new SetSynhronizationStation(_currentStation);
-			wnd.Owner = this;
-			wnd.Show();
+            SetSynhronizationStation wnd = new SetSynhronizationStation(_currentStation) { Owner = this };
+            wnd.ShowDialog();
 		}
 
 		private void SetNewStateStation(object sender, RoutedEventArgs e)
 		{
-			OnOffStation wnd = new OnOffStation(_currentStation);
-			wnd.Owner = this;
-			wnd.Show();
-		}	
-	}
+            OnOffStation wnd = new OnOffStation(_currentStation) { Owner = this };
+            wnd.ShowDialog();
+		}
+    }
 }

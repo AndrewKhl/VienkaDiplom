@@ -19,7 +19,6 @@
                 <Setter Property="TextBlock.Visibility" Value="Hidden"/>
                 <Setter Property="TextBlock.Padding" Value="1"/>
                 <Setter Property="TextBlock.Tag" Value="changedElement"/>
-
             </Style.Setters>
             <Style.Triggers>
                 <Trigger Property="TextBlock.IsHitTestVisible" Value="True">
@@ -144,6 +143,7 @@
                                         <ColumnDefinition Width="150"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="Режим работы" Grid.Column="0"/>
+                                    <TextBlock Text="1+0" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
                                 </Grid>
                             </Border>
                         </TreeViewItem.Header>
@@ -158,6 +158,7 @@
                                         <ColumnDefinition Width="150"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="Слот 1" Grid.Column="0"/>
+                                    <TextBlock Text="БИ-RS" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
                                 </Grid>
                             </Border>
                         </TreeViewItem.Header>
@@ -172,6 +173,7 @@
                                         <ColumnDefinition Width="150"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="Версия фрэймера" Grid.Column="0"/>
+                                    <TextBlock Text="Поток 1" Grid.Column="1" Style="{StaticResource TextViewStyle1Column}"/>
                                 </Grid>
                             </Border>
                         </TreeViewItem.Header>
@@ -267,7 +269,6 @@
                             </Grid>
                         </Border>
                     </TreeViewItem>
-                    
                     <TreeViewItem>
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
@@ -297,8 +298,6 @@
                             </Grid>
                         </Border>
                     </TreeViewItem>
-                    
-                    
                     <TreeViewItem>
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
@@ -390,8 +389,6 @@
                             </Grid>
                         </Border>
                     </TreeViewItem>
-                    
-                    
                     <TreeViewItem>
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
@@ -424,7 +421,7 @@
                                 <TextBlock Text="100%" Grid.Row="0" Style="{StaticResource TextViewStyle1Column}"/>
 
                                 <TextBlock Text="Уровень сигнала" Grid.Row="1"/>
-                                <TextBlock Text="21%" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
+                                <TextBlock Text="50%" Grid.Row="1" Style="{StaticResource TextViewStyle1Column}"/>
 
                                 <TextBlock Text="К3 кабель" Grid.Row="2"/>
                                 <TextBlock Text="нет" Grid.Row="2" Style="{StaticResource TextViewStyle1Column}"/>
@@ -432,8 +429,6 @@
                             </Grid>
                         </Border>
                     </TreeViewItem>
-                    
-                    
                     <TreeViewItem>
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
@@ -476,8 +471,6 @@
                             </Grid>
                         </Border>
                     </TreeViewItem>
-                    
-                    
                 </TreeViewItem>
                 <TreeViewItem>
                     <TreeViewItem.Header>
@@ -507,7 +500,6 @@
                             </Border>
                         </TreeViewItem.Header>
                     </TreeViewItem>
-
                     <TreeViewItem Margin="0 1">
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1">
@@ -523,7 +515,6 @@
                             </Border>
                         </TreeViewItem.Header>
                     </TreeViewItem>
-                    
                     <TreeViewItem Margin="0 1">
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1">
@@ -550,7 +541,6 @@
                             </Border>
                         </TreeViewItem.Header>
                     </TreeViewItem>
-                    
                     <TreeViewItem Margin="0 1 0 4">
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1">
@@ -566,7 +556,6 @@
                             </Border>
                         </TreeViewItem.Header>
                     </TreeViewItem>
-
                     <TreeViewItem>
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
@@ -612,7 +601,6 @@
                             </Grid>
                         </Border>
                     </TreeViewItem>
-
                     <TreeViewItem>
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1">
@@ -628,7 +616,6 @@
                             </Border>
                         </TreeViewItem.Header>
                     </TreeViewItem>
-
                     <TreeViewItem>
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
@@ -654,7 +641,6 @@
                             </Grid>
                         </Border>
                     </TreeViewItem>
-
                     <TreeViewItem>
                         <TreeViewItem.Header>
                             <Border BorderBrush="Black" BorderThickness="1" Margin="0 0 0 -3">
@@ -707,7 +693,6 @@
                     </TreeViewItem>
                 </TreeViewItem>
             </TreeViewItem>
-            
             
             <TreeViewItem>
                 <TreeViewItem.Header>
@@ -897,7 +882,6 @@
                     </TreeViewItem>
 
                 </TreeViewItem>
-
                 <TreeViewItem>
                     <TreeViewItem.Header>
                         <Border BorderBrush="Black" BorderThickness="1">
@@ -1029,8 +1013,6 @@
                         </Border>
                     </TreeViewItem>
                 </TreeViewItem>
-                
-                
                 <TreeViewItem>
                     <TreeViewItem.Header>
                         <Border BorderBrush="Black" BorderThickness="1">
@@ -1101,7 +1083,6 @@
                     </Border>
                 </TreeViewItem>
             </TreeViewItem>
-            
             
             <TreeViewItem>
                 <TreeViewItem.Header>
@@ -1211,7 +1192,6 @@
                 </TreeViewItem>
             </TreeViewItem>
             
-            
             <TreeViewItem>
                 <TreeViewItem.Header>
                     <Border BorderBrush="Black" BorderThickness="1">
@@ -1308,7 +1288,6 @@
                         </Grid>
                     </Border>
                 </TreeViewItem>
-                
                 
                 <TreeViewItem>
                     <TreeViewItem.Header>
