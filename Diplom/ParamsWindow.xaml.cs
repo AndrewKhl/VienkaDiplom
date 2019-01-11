@@ -1,8 +1,10 @@
 ﻿using Diplom.Models;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -29,13 +31,34 @@ namespace Diplom
 			periodStationTextBlock.Text = _currentStation.Data.Period.ToString() + " МГц";
 			DataContext = _currentStation.Data;
 			StateStation.Visibility = Visibility.Visible;
+
+            Closing += ParamsWindowClosing;
+            Closed += ParamsWindowClosed;
+        }
+
+        private void ParamsWindowClosing(object sender, CancelEventArgs e)
+        {
+            Owner.Topmost = true;
+        }
+
+        private void ParamsWindowClosed(object sender, EventArgs e)
+        {
+            Owner.Topmost = false;
+        }
+
+        private void OpenCloseTree(object item, bool state)
+        {
+            if (!(item is TreeViewItem node))
+                return;
+            node.IsExpanded = state;
+            foreach (var child in node.Items)
+                OpenCloseTree(child, state);
         }
 
 		public void VisualTree(object sender, Visibility visible)
 		{
 			if (sender is FrameworkElement obj)
 			{
-
 				int count = VisualTreeHelper.GetChildrenCount(obj);
 
 				if (sender as TextBlock != null && (sender as TextBlock).Tag?.ToString() == "changedElement")
@@ -49,19 +72,22 @@ namespace Diplom
 			}
 		}
 
-		private void RefreshParams(object sender, RoutedEventArgs e)
+		async private void RefreshParams(object sender, RoutedEventArgs e)
 		{
 			FrameworkElement obj = sender as FrameworkElement;
 			ContextMenu menu = obj.Parent as ContextMenu;
 
-			if (_currentStation.Data.State == "включено")
-				VisualTree(menu.PlacementTarget, Visibility.Visible);
-			else
-			{
-				MessageBox.Show("Включите станцию", "Ошибка",
-				MessageBoxButton.OK, MessageBoxImage.Information);
-				return;
-			}
+            if (_currentStation.Data.State == "включено")
+            {
+                //OpenCloseTree(menu.PlacementTarget, true);
+                VisualTree(menu.PlacementTarget, Visibility.Visible);
+            }
+            else
+            {
+                MessageBox.Show("Включите станцию", "Ошибка",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
 
 			if (_currentStation.Data.firstRefreshStation == DateTime.MinValue)
 			{
@@ -77,7 +103,7 @@ namespace Diplom
 				timeCalculated.Text = (period.Hours * 3600 + period.Minutes * 60 + period.Seconds).ToString();
 			}
 
-			MessageBox.Show("Параметры успешно обновлены", "Уведомление",
+            MessageBox.Show("Параметры успешно обновлены", "Уведомление",
 			MessageBoxButton.OK, MessageBoxImage.Information);
 		}
 
@@ -108,5 +134,7 @@ namespace Diplom
 			wnd.Owner = this;
 			wnd.Show();
 		}	
+
+
 	}
 }
