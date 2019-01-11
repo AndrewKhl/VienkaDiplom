@@ -7,7 +7,32 @@
         mc:Ignorable="d"
         Icon="pack://application:,,,/Resources/icon.png"
         WindowStartupLocation="CenterScreen"
-        Title="Мастер Link 3" Height="800" Width="1200">
+        KeyDown="Window_KeyDown"
+        ContentRendered="Window_ContentRendered"
+        Height="800" Width="1200">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.New"
+                        Executed="New_Executed"
+                        CanExecute="New_CanExecute"/>
+        <CommandBinding Command="ApplicationCommands.Open"
+                        Executed="Open_Executed"
+                        CanExecute="Open_CanExecute"/>
+        <CommandBinding Command="ApplicationCommands.Save"
+                        Executed="Save_Executed"
+                        CanExecute="Save_CanExecute"/>
+        <CommandBinding Command="ApplicationCommands.SaveAs"
+                        Executed="SaveAs_Executed"
+                        CanExecute="SaveAs_CanExecute"/>
+        <CommandBinding Command="ApplicationCommands.Close"
+                        Executed="Close_Executed"
+                        CanExecute="Close_CanExecute"/>
+        <CommandBinding Command="ApplicationCommands.Properties"
+                        Executed="Properties_Executed"
+                        CanExecute="Properties_CanExecute"/>
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Command="ApplicationCommands.Properties" Key="T" Modifiers="Ctrl"/>
+    </Window.InputBindings>
     <Grid Name="main_grid">
         <Grid.Background>
             <SolidColorBrush Color="Gray" />
@@ -20,27 +45,27 @@
 
         <Menu VerticalAlignment="Top" Grid.Row="0">
             <MenuItem Header="Файл">
-                <MenuItem Header="Создать">
+                <MenuItem Header="Создать" Command="ApplicationCommands.New">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/AddFile.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Открыть">
+                <MenuItem Header="Открыть" Command="ApplicationCommands.Open">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/FolderOpen.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Сохранить">
+                <MenuItem Header="Сохранить" Command="ApplicationCommands.Save">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Save.bmp"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Сохранить как">
+                <MenuItem Header="Сохранить как" Command="ApplicationCommands.SaveAs">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/SaveAll.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Выход">
+                <MenuItem Header="Выход" Command="ApplicationCommands.Close">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Exit.png"/>
                     </MenuItem.Icon>
@@ -62,14 +87,14 @@
                         <Image Source="pack://application:,,,/Resources/Icons/DisabledCreateManager.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Name="btnRemovedMenu" Header="Удалить объект">
+                <MenuItem Name="btnRemovedMenu" Header="Удалить объект" Click="RemoveElement_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/DisableRemoved.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Управление">
-                <MenuItem Header="Макросы">
+                <MenuItem Header="Макросы" IsEnabled="False">
                     <MenuItem Header="Начать запись">
                         <MenuItem.Icon>
                             <Image Source="pack://application:,,,/Resources/Icons/Start.png"/>
@@ -91,34 +116,34 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem Header="Сеансы"></MenuItem>
-                <MenuItem Header="Свойства сети"></MenuItem>
-                <MenuItem Header="Свойства объекта">
+                <MenuItem Header="Сеансы" IsEnabled="False" />
+                <MenuItem Header="Свойства сети" Name="btnEditNetwork" Click="EditNetwork_Click" IsEnabled="False" />
+                <MenuItem Header="Свойства объекта" Name="btnProperties" IsEnabled="False" Click="btnProperties_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/CustomFile.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Параметры">
+                <MenuItem Header="Параметры" Name="btnParameters" Click="btnParameters_Click" IsEnabled="False">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Params.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Маршрутизация" Click="Routing_Click">
+                <MenuItem Header="Маршрутизация" Name="btnRouting" Click="Routing_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Marsh.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Пользователи">
+                <MenuItem Header="Пользователи" IsEnabled="False">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Users.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Обновить ПО на станции...">
+                <MenuItem Header="Обновить ПО на станции..." IsEnabled="False">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/UpdatePO.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Подключиться к удалённой сети">
+                <MenuItem Header="Подключиться к удалённой сети" IsEnabled="False">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/ConnectToRemoteNetwork.png"/>
                     </MenuItem.Icon>
@@ -127,52 +152,52 @@
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Commutation.png"/>
                     </MenuItem.Icon>
-                    <MenuItem Header="Управление потоками E1 и Enthernet (МД1-1Р)">
+                    <MenuItem Header="Управление потоками E1 и Enthernet (МД1-1Р)" IsEnabled="False">
                         <MenuItem.Icon>
                             <Image Source="pack://application:,,,/Resources/Icons/Thread1.png"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <MenuItem Header="Управление потоками E1 (МД-ДК-1, Мультиплексоры SDH)">
+                    <MenuItem Header="Управление потоками E1 (МД-ДК-1, Мультиплексоры SDH)" IsEnabled="False">
                         <MenuItem.Icon>
                             <Image Source="pack://application:,,,/Resources/Icons/Thread2.png"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem Header="Настройка">
+                <MenuItem Header="Настройка" Command="ApplicationCommands.Properties" InputGestureText="Ctrl+T">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Settings.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Данные">
-                <MenuItem Header="События системы">
+                <MenuItem Header="События системы" IsEnabled="False">
                     <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/ShowEvents.png"/>
+                        <Image Source="pack://application:,,,/Resources/Icons/disableProtocol.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Просмотр базы данных">
+                <MenuItem Header="Просмотр базы данных" IsEnabled="False">
                     <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/dbevent.png"/>
+                        <Image Source="pack://application:,,,/Resources/Icons/disableDB.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Открыть историю мониторинга">
+                <MenuItem Header="Открыть историю мониторинга" IsEnabled="False">
                     <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/OpenMonitoringHistory.png"/>
+                        <Image Source="pack://application:,,,/Resources/Icons/disableParams.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="Сводные параметры">
+                <MenuItem Header="Сводные параметры" IsEnabled="False">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/ShowParams.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Справка">
-                <MenuItem Header="Помощь">
+                <MenuItem Header="Помощь" IsEnabled="False">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Help.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="О программе...">
+                <MenuItem Header="О программе..." IsEnabled="False">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Information.png"/>
                     </MenuItem.Icon>
@@ -182,52 +207,42 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="1">
             <Menu VerticalAlignment="Top">
-                <MenuItem Width="25">
+                <MenuItem Width="25" Command="ApplicationCommands.New">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/AddFile.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
-                        <ToolTip>
-                            Создать новую карту
-                        </ToolTip>
+                        <ToolTip>Создать новую карту</ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
-                <MenuItem Width="25">
+                <MenuItem Width="25" Command="ApplicationCommands.Open">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/FolderOpen.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
-                        <ToolTip>
-                            Открыть
-                        </ToolTip>
+                        <ToolTip>Открыть</ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
-                <MenuItem Width="25">
+                <MenuItem Width="25" Command="ApplicationCommands.Save">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Save.bmp"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
-                        <ToolTip>
-                            Сохранить
-                        </ToolTip>
+                        <ToolTip>Сохранить</ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
-                <MenuItem Width="25">
+                <MenuItem Width="25" Command="ApplicationCommands.SaveAs">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/SaveAll.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
-                        <ToolTip>
-                            Созранить под новым именем
-                        </ToolTip>
+                        <ToolTip>Соxранить под новым именем</ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
             </Menu>
-            <ComboBox Width="60" Grid.Row="1" SelectedIndex="0" Height="25">
+            <ComboBox Width="60" Grid.Row="1" Name="ScaleComboBox" SelectedIndex="0" Height="25" SelectionChanged="ComboBox_SelectionChanged">
                 <ComboBox.ToolTip>
-                    <ToolTip>
-                        Масштаб отображения карты
-                    </ToolTip>
+                    <ToolTip>Масштаб отображения карты</ToolTip>
                 </ComboBox.ToolTip>
                 <ComboBoxItem>100%</ComboBoxItem>
                 <ComboBoxItem>90%</ComboBoxItem>
@@ -246,9 +261,7 @@
                         <Image Source="pack://application:,,,/Resources/Icons/Network.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
-                        <ToolTip>
-                            Создать сеть
-                        </ToolTip>
+                        <ToolTip>Создать сеть</ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
                 <MenuItem Name="btnCreateStationFast" Width="25" Click="CreateStation_Click">
@@ -256,9 +269,7 @@
                         <Image Source="pack://application:,,,/Resources/Icons/DisabledCreateStation.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
-                        <ToolTip>
-                            Создать станцию
-                        </ToolTip>
+                        <ToolTip>Создать станцию</ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
                 <MenuItem Name="btnCreateManagerFast" Width="25" Click="CreateManager_Click">
@@ -266,9 +277,7 @@
                         <Image Source="pack://application:,,,/Resources/Icons/DisabledCreateManager.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
-                        <ToolTip>
-                            Создать менеджера
-                        </ToolTip>
+                        <ToolTip>Создать менеджера</ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
                 <MenuItem Width="25" Click="RemoveElement_Click" x:Name="btnRemoveMenuItem">
@@ -276,30 +285,24 @@
                         <Image Source="pack://application:,,,/Resources/Icons/DisableRemoved.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
-                        <ToolTip>
-                            Удалить объект
-                        </ToolTip>
+                        <ToolTip>Удалить объект</ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
 
-                <MenuItem Width="25" x:Name="btnProperties" IsEnabled="False">
+                <MenuItem Width="25" x:Name="btnPropertiesFast" IsEnabled="False" Click="btnProperties_Click">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/DisabledShowProperty.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
-                        <ToolTip>
-                            Просмотреть свойства объекта
-                        </ToolTip>
+                        <ToolTip>Просмотреть свойства объекта</ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
-                <MenuItem Width="25" x:Name="btnParameters" Click="btnParameters_Click" IsEnabled="False">
+                <MenuItem Width="25" x:Name="btnParametersFast" Click="btnParameters_Click" IsEnabled="False">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/DisabledShow.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
-                        <ToolTip>
-                            Открыть окно параметров
-                        </ToolTip>
+                        <ToolTip>Открыть окно параметров</ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
                 <MenuItem Width="25" IsEnabled="False">
@@ -307,29 +310,23 @@
                         <Image Source="pack://application:,,,/Resources/Icons/DisableDB.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
-                        <ToolTip>
-                            Посмотреть данные и события в БД
-                        </ToolTip>
+                        <ToolTip>Посмотреть данные и события в БД</ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
-                <MenuItem Width="25">
+                <MenuItem Width="25" IsEnabled="False">
                     <MenuItem.Icon>
-                        <Image Source="pack://application:,,,/Resources/Icons/ShowEvents.png"/>
+                        <Image Source="pack://application:,,,/Resources/Icons/disableProtocol.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
-                        <ToolTip>
-                            Посмотреть события
-                        </ToolTip>
+                        <ToolTip>Посмотреть события</ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
-                <MenuItem Width="25">
+                <MenuItem Width="25" Command="ApplicationCommands.Properties">
                     <MenuItem.Icon>
                         <Image Source="pack://application:,,,/Resources/Icons/Settings.png"/>
                     </MenuItem.Icon>
                     <MenuItem.ToolTip>
-                        <ToolTip>
-                            Настройки
-                        </ToolTip>
+                        <ToolTip>Настройки (Ctrl+T)</ToolTip>
                     </MenuItem.ToolTip>
                 </MenuItem>
             </Menu>
@@ -342,7 +339,7 @@
 
                 <Canvas.ContextMenu>
                     <ContextMenu Opened="ContextMenu_Opened">
-                        <MenuItem Header="Выделить всё"/>
+                        <MenuItem Header="Выделить всё" IsEnabled="True" />
                         <MenuItem Header="Создать сеть" Click="CreateNetwork_Click">
                             <MenuItem.Icon>
                                 <Image Source="pack://application:,,,/Resources/Icons/Network.png"/>

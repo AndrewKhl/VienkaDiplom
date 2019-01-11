@@ -48,24 +48,26 @@ namespace Diplom
                     second.RotateRight();
                 }
 
+                int shift = 3;
+
                 var station = firstControl as StationControl;
                 line.Y1 = (double)station.GetValue(Canvas.TopProperty) + station.stationNameBorder.ActualHeight
                     + station.indentText.ActualHeight + station.stationImageBorder.ActualHeight / 2;
                 if ((station as StationControl).IsRightRotation)
-                    line.X1 = (double)station.GetValue(Canvas.LeftProperty) + station.indentLabel.ActualWidth 
-                        + station.stationImageBorder.ActualWidth;
+                    line.X1 = (double)station.GetValue(Canvas.LeftProperty) + station.indentLabel.ActualWidth
+                        + station.stationImageBorder.ActualWidth - shift;
                 else
-                    line.X1 = (double)station.GetValue(Canvas.LeftProperty) + station.indentLabel.ActualWidth;
+                    line.X1 = (double)station.GetValue(Canvas.LeftProperty) + station.indentLabel.ActualWidth + shift;
 
 
                 station = secondControl as StationControl;
                 line.Y2 = (double)station.GetValue(Canvas.TopProperty) + station.stationNameBorder.ActualHeight
                     + station.indentText.ActualHeight + station.stationImageBorder.ActualHeight / 2;
                 if ((station as StationControl).IsRightRotation)
-                    line.X2 = (double)station.GetValue(Canvas.LeftProperty) + station.indentLabel.ActualWidth 
-                        + station.stationImageBorder.ActualWidth;
+                    line.X2 = (double)station.GetValue(Canvas.LeftProperty) + station.indentLabel.ActualWidth
+                        + station.stationImageBorder.ActualWidth - shift;
                 else
-                    line.X2 = (double)station.GetValue(Canvas.LeftProperty) + station.indentLabel.ActualWidth;
+                    line.X2 = (double)station.GetValue(Canvas.LeftProperty) + station.indentLabel.ActualWidth + shift;
             }
             else
             {

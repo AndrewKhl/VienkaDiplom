@@ -5,9 +5,6 @@ using System.Windows;
 
 namespace Diplom
 {
-    /// <summary>
-    /// Interaction logic for ConfigurationManager.xaml
-    /// </summary>
     public partial class ConfigurationManager : Window
     {
         private ManagerControl manager;
@@ -18,7 +15,7 @@ namespace Diplom
 			List<string> list = new List<string>();
 			for (int i = 1; i <= Stock.numberLimit; ++i)
 			{
-				if (!Stock.workWindow.numbersManagers.Contains(i))
+				if (!Stock.workWindow.numbersControls.Contains(i))
 					list.Add(i.ToString());
 			}
 				
@@ -40,10 +37,7 @@ namespace Diplom
             }
         }
 
-        private void CloseWindow(object sender, RoutedEventArgs e)
-		{
-			Close();
-		}
+        private void CloseWindow(object sender, RoutedEventArgs e) => Close();
 
 		private void CreateManager(object sender, RoutedEventArgs e)
 		{
@@ -54,12 +48,14 @@ namespace Diplom
             }
             else
             {
-                Stock.workWindow.numbersStations.Remove(manager.Data.Number);
-                Stock.workWindow.numbersStations.Add(number);
+                Stock.workWindow.numbersControls.Remove(manager.Data.Number);
+                Stock.workWindow.numbersControls.Add(number);
+
                 manager.Data.Number = number;
                 manager.Data.Name = nameNewManager.Text;
                 manager.SetVisibleName();
             }
+            Stock.workWindow.MapChanged();
             Close();
 		}
     }

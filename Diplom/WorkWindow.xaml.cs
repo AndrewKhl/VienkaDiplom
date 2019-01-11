@@ -1,6 +1,9 @@
 ﻿using Diplom.Models;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,11 +14,8 @@ namespace Diplom
 {
     public partial class WorkWindow : Window
     {
-		public List<int> numbersStations = new List<int>();
-		public List<int> numbersManagers = new List<int>();
-        public int maxStationNumber = 1;
-        public int maxManagerNumber = 1;
-        public Color currentColor;
+		public List<int> numbersControls = new List<int>();
+        public int maxNumber = 1;
 
         public ConnectingType connecting = ConnectingType.None;
         public UserControl connector;
@@ -23,15 +23,33 @@ namespace Diplom
         private static Uri enableRemove = new Uri(@"pack://application:,,,/Resources/Icons/Removed.png");
         private static Uri disableRemove = new Uri(@"pack://application:,,,/Resources/Icons/DisableRemoved.png");
         private static Uri enableManager = new Uri(@"pack://application:,,,/Resources/Icons/NewManager.png");
-        private static Uri disableManager = new Uri(@"pack://application:,,,/Resources/Icons/DisableCreateManager.png");
+        private static Uri disableManager = new Uri(@"pack://application:,,,/Resources/Icons/DisabledCreateManager.png");
         private static Uri enableStation = new Uri(@"pack://application:,,,/Resources/Icons/NewStation.png");
-        private static Uri disableStation = new Uri(@"pack://application:,,,/Resources/Icons/DisableCreateManager.png");
+        private static Uri disableStation = new Uri(@"pack://application:,,,/Resources/Icons/DisabledCreateStation.png");
         private static Uri enableProperties = new Uri(@"pack://application:,,,/Resources/Icons/CustomFile.png");
         private static Uri disableProperties = new Uri(@"pack://application:,,,/Resources/Icons/DisabledShowProperty.png");
         private static Uri enableParameters = new Uri(@"pack://application:,,,/Resources/Icons/Params.png");
         private static Uri disableParameters = new Uri(@"pack://application:,,,/Resources/Icons/DisabledShow.png");
         private static Uri enableDB = new Uri(@"pack://application:,,,/Resources/Icons/DBevent.png");
         private static Uri disableDB = new Uri(@"pack://application:,,,/Resources/Icons/DisableDB.png");
+        private static Uri enableRoute = new Uri(@"pack://application:,,,/Resources/Icons/Marsh.png");
+        private static Uri disableRoute = new Uri(@"pack://application:,,,/Resources/Icons/disableRoute.png");
+
+        private static string DefaultTitle = "Мастер Link 3";
+
+        private bool isChanged = false;
+        public bool IsMapChanged {
+            get => isChanged;
+            private set
+            {
+                if (value && Title[Title.Length - 1] != '*')
+                    Title = Title + '*';
+                else if (!value && Title[Title.Length - 1] == '*')
+                    Title = Title.Remove(Title.Length - 1);
+                isChanged = value;
+            }
+        }
+        public void MapChanged() => IsMapChanged = true;
 
         private IFocusable _focusedControl;
         public IFocusable FocusedControl
@@ -44,25 +62,35 @@ namespace Diplom
                     btnRemoveMenuItem.IsEnabled = true;
                     btnRemoveMenuItem.Icon = new Image {Source = new BitmapImage(enableRemove) };
 
+                    btnPropertiesFast.IsEnabled = true;
+                    btnPropertiesFast.Icon = new Image { Source = new BitmapImage(enableProperties) };
+
                     btnProperties.IsEnabled = true;
                     btnProperties.Icon = new Image { Source = new BitmapImage(enableProperties) };
 
-                    if (value is StationControl)
+                    if (value is ManagerControl && (value as ManagerControl).line != null)
                     {
-                        btnParameters.IsEnabled = true;
-                        btnParameters.Icon = new Image { Source = new BitmapImage(enableParameters) };
+                        btnRouting.IsEnabled = true;
+                        btnRouting.Icon = new Image { Source = new BitmapImage(enableRoute) };
                     }
+                    else if (value is StationControl)
+                        ToggleParametersButtons((value as StationControl).IsUpdated);
                 }
                 else
                 {
                     btnRemoveMenuItem.IsEnabled = false;
                     btnRemoveMenuItem.Icon = new Image { Source = new BitmapImage(disableRemove) };
 
+                    btnPropertiesFast.IsEnabled = false;
+                    btnPropertiesFast.Icon = new Image { Source = new BitmapImage(disableProperties) };
+
                     btnProperties.IsEnabled = false;
                     btnProperties.Icon = new Image { Source = new BitmapImage(disableProperties) };
 
-                    btnParameters.IsEnabled = false;
-                    btnParameters.Icon = new Image { Source = new BitmapImage(disableParameters) };
+                    btnRouting.IsEnabled = false;
+                    btnRouting.Icon = new Image { Source = new BitmapImage(disableRoute) };
+
+                    ToggleParametersButtons(false);
                 }
                 _focusedControl = value;
             }
@@ -71,37 +99,65 @@ namespace Diplom
         public WorkWindow()
         {
             InitializeComponent();
+            Title = DefaultTitle;
 			Stock.workWindow = this;
-			EnabledButton(false);
+			TogglePanelButtons(false);
 		}
 
-		public void EnabledButton(bool enabled)
+		public void TogglePanelButtons(bool isEnabled)
 		{
-			btnCreateManagerFast.IsEnabled = enabled;
-			btnCreateManagerMenu.IsEnabled = enabled;
-			btnCreateStationFast.IsEnabled = enabled;
-			btnCreateStationMenu.IsEnabled = enabled;
-			btnRemovedMenu.IsEnabled = enabled;
-			btnRemoveMenuItem.IsEnabled = enabled;
+			btnCreateManagerFast.IsEnabled = isEnabled;
+			btnCreateManagerMenu.IsEnabled = isEnabled;
+			btnCreateStationFast.IsEnabled = isEnabled;
+			btnCreateStationMenu.IsEnabled = isEnabled;
+			btnRemoveMenuItem.IsEnabled = isEnabled;
+			btnRemovedMenu.IsEnabled = isEnabled;
 
-			if (enabled)
+            btnEditNetwork.IsEnabled = isEnabled;
+
+			if (isEnabled)
 			{
-				btnRemoveMenuItem.Icon = new Image { Source = new BitmapImage(enableRemove) };
-				btnRemovedMenu.Icon = new Image { Source = new BitmapImage(enableRemove) };
 				btnCreateManagerFast.Icon = new Image { Source = new BitmapImage(enableManager) };
 				btnCreateManagerMenu.Icon = new Image { Source = new BitmapImage(enableManager) };
                 btnCreateStationFast.Icon = new Image { Source = new BitmapImage(enableStation) };
                 btnCreateStationMenu.Icon = new Image { Source = new BitmapImage(enableStation) };
+				btnRemoveMenuItem.Icon = new Image { Source = new BitmapImage(enableRemove) };
+				btnRemovedMenu.Icon = new Image { Source = new BitmapImage(enableRemove) };
 			}
+            else
+            {
+				btnCreateManagerFast.Icon = new Image { Source = new BitmapImage(disableManager) };
+				btnCreateManagerMenu.Icon = new Image { Source = new BitmapImage(disableManager) };
+                btnCreateStationFast.Icon = new Image { Source = new BitmapImage(disableStation) };
+                btnCreateStationMenu.Icon = new Image { Source = new BitmapImage(disableStation) };
+				btnRemoveMenuItem.Icon = new Image { Source = new BitmapImage(disableRemove) };
+				btnRemovedMenu.Icon = new Image { Source = new BitmapImage(disableRemove) };
+            }
 		}
 
-        public void CreateStation(string name, int number = 0)
+        private void Window_ContentRendered(object sender, EventArgs e)
         {
-			numbersStations.Add(number);
-            numbersStations.Sort();
-            var station = new StationControl(this, name, number, currentColor);
-            Canvas.SetLeft(station, 0);
-            Canvas.SetTop(station, 0);
+            try
+            {
+                if (MapXmlHandler.ReadLastPath())
+                    OpenMap(MapXmlHandler.LastPath);
+                else
+                    throw new Exception();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Карта не считана", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        public void CreateStation(string name, int number = 0, int top = 0, int left = 0, bool setFocused = true)
+        {
+            numbersControls.Add(number);
+            numbersControls.Sort();
+
+            var station = new StationControl(this, name, number, DataNetwork.CurrentColor);
+            Canvas.SetLeft(station, left);
+            Canvas.SetTop(station, top);
             foreach (var control in canvas.Children)
             {
                 if (control is IFocusable)
@@ -112,15 +168,21 @@ namespace Diplom
                 }
             }
             canvas.Children.Add(station);
-            station.SetFocusBorder();
+            if (setFocused)
+                station.SetFocusBorder();
+            station.UpdateLayout();
+
+            MapChanged();
         }
 
-        public void CreateManager(string name, int number = 0)
+        public void CreateManager(string name, int number = 0, int top = 0, int left = 0, bool setFocused = true)
         {
-            numbersManagers.Add(number);
-            var manager = new ManagerControl(this, name, number, currentColor);
-            Canvas.SetLeft(manager, 0);
-            Canvas.SetTop(manager, 0);
+            numbersControls.Add(number);
+            numbersControls.Sort();
+
+            var manager = new ManagerControl(this, name, number, DataNetwork.CurrentColor);
+            Canvas.SetLeft(manager, left);
+            Canvas.SetTop(manager, top);
             foreach (var control in canvas.Children)
             {
                 if (control is IFocusable)
@@ -131,7 +193,11 @@ namespace Diplom
                 }
             }
             canvas.Children.Add(manager);
-            manager.SetFocusBorder();
+            if (setFocused)
+                manager.SetFocusBorder();
+            manager.UpdateLayout();
+
+            MapChanged();
         }
 
         public void SetFocus(IFocusable control) => FocusedControl = control;
@@ -144,19 +210,26 @@ namespace Diplom
 
         private void canvas_Drop(object sender, DragEventArgs e)
         {
-			UserControl control;
-			if (e.Data.GetDataPresent("Station"))
-				control = (StationControl)e.Data.GetData("Station");
-			else if (e.Data.GetDataPresent("Manager"))
-				control = (ManagerControl)e.Data.GetData("Manager");
-			else return;
+            UserControl control;
+            if (e.Data.GetDataPresent("Station"))
+                control = (StationControl)e.Data.GetData("Station");
+            else if (e.Data.GetDataPresent("Manager"))
+                control = (ManagerControl)e.Data.GetData("Manager");
+            else return;
 
-			double shiftX = (double)e.Data.GetData("shiftX");
-			double shiftY = (double)e.Data.GetData("shiftY");
+            double shiftX = (double)e.Data.GetData("shiftX");
+            double shiftY = (double)e.Data.GetData("shiftY");
+
+            if (e.GetPosition(canvas).X - shiftX == Canvas.GetLeft(control)
+                && e.GetPosition(canvas).Y - shiftY == Canvas.GetTop(control))
+                return;
+
 			Canvas.SetLeft(control, e.GetPosition(canvas).X - shiftX);
 			Canvas.SetTop(control, e.GetPosition(canvas).Y - shiftY);
             if (control is ManagerControl && (control as ManagerControl).line != null)
+            {
                 (control as ManagerControl).line.UpdatePosition();
+            }
             else if (control is StationControl)
             {
                 var station = control as StationControl;
@@ -166,6 +239,7 @@ namespace Diplom
                     station.stationLine.UpdatePosition();
             }
 			e.Handled = true;
+            MapChanged();
         }
 
         private void CreateNetwork_Click(object sender, RoutedEventArgs e) => CreateNetwork();
@@ -177,10 +251,13 @@ namespace Diplom
 				ShowErrorCreateNetwork();
 				return;
 			}
-			if (numbersStations.Count < Stock.numberLimit)
+
+			if (DataNetwork.Stations.Count < Stock.numberLimit - 1)
 			{
                 ConfigurationNetwork wnd = new ConfigurationNetwork { Owner = this };
                 wnd.ShowDialog();
+
+                MapChanged();
 			}
 			else
 				ShowErrorCountStations();
@@ -188,29 +265,29 @@ namespace Diplom
 
         public void CreateStation_Click(object sender, RoutedEventArgs e)
         {
-			if (numbersStations.Count < Stock.numberLimit)
+            if (!DataNetwork.IsCreated) return;
+
+            if (DataNetwork.Stations.Count < Stock.numberLimit - 1)
 			{
                 ConfigurationStation wnd = new ConfigurationStation { Owner = this };
                 wnd.ShowDialog();
-                if (DataNetwork.Managers.Count > 0)
-                    NetworkMenuItem.Visibility = Visibility.Visible;
+
+                MapChanged();
 			}
 			else
 				ShowErrorCountStations();
 		}
 
-		private void ShowErrorCountStations() =>
-			MessageBox.Show("Максимальное кол-во станций", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-
-		private void ShowErrorCreateNetwork() =>
-			MessageBox.Show("Максимальное кол-во сетей", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-
         private void CreateManager_Click(object sender, RoutedEventArgs e)
         {
-            if (numbersManagers.Count < 1)
+            if (!DataNetwork.IsCreated) return;
+
+            if (DataNetwork.Managers.Count < 1)
             {
                 ConfigurationManager wnd = new ConfigurationManager { Owner = this };
                 wnd.ShowDialog();
+
+                MapChanged();
             }
             else
             {
@@ -221,6 +298,12 @@ namespace Diplom
             }
         }
 
+		private void ShowErrorCountStations() =>
+			MessageBox.Show("Максимальное кол-во станций", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+
+		private void ShowErrorCreateNetwork() =>
+			MessageBox.Show("Максимальное кол-во сетей", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+
         private void canvas_MouseDown(object sender, MouseButtonEventArgs e)
         {
             DropFocus();
@@ -228,7 +311,6 @@ namespace Diplom
         }
 
         private void RemoveElement_Click(object sender, RoutedEventArgs e) => RemoveElement();
-
 
         private void btnParameters_Click(object sender, RoutedEventArgs e) =>
             (FocusedControl as StationControl).ShowParametrWindow(sender, e);
@@ -241,21 +323,17 @@ namespace Diplom
 
         private void Routing_Click(object sender, RoutedEventArgs e)
         {
-            foreach (StationControl station in DataNetwork.Stations)
-            {
-                if (station.IsConnectedToStation() && station.IsConnectedToManager())
-                {
-                    (station.stationLine.firstControl as StationControl).stationGauge.Visibility = Visibility.Visible;
-                    (station.stationLine.secondControl as StationControl).stationGauge.Visibility = Visibility.Visible;
-                }
-            }
+            if (FocusedControl is ManagerControl)
+                (FocusedControl as ManagerControl).Route_Click(sender, e);
         }
 
         public void EditNetwork_Click(object sender, RoutedEventArgs e)
         {
+            if (!DataNetwork.IsCreated) return;
+
             ConfigurationNetwork wnd = new ConfigurationNetwork { Owner = this, IsEditing = true };
             wnd.nameNewNetwork.Text = DataNetwork.Name;
-            wnd.colorCanvas.SelectedColor = currentColor;
+            wnd.colorCanvas.SelectedColor = DataNetwork.CurrentColor;
             foreach (string item in wnd.listOfAdress.Items)
             {
                 if (item == DataNetwork.Address.ToString())
@@ -274,23 +352,35 @@ namespace Diplom
             }
             wnd.typeNetwork.IsEnabled = false;
             wnd.ShowDialog();
+
+            MapChanged();
         }
 
-        private void ContextMenu_Opened(object sender, RoutedEventArgs e) =>
-            NetworkMenuItem.Header = $"Сеть \"{DataNetwork.Name} ({DataNetwork.Type})\"";
+        private void ContextMenu_Opened(object sender, RoutedEventArgs e)
+        {
+            if (DataNetwork.IsCreated)
+            {
+                NetworkMenuItem.Visibility = Visibility.Visible;
+                NetworkMenuItem.Header = $"Сеть \"{DataNetwork.Name} ({DataNetwork.Type})\"";
+            }
+            else
+            {
+                NetworkMenuItem.Visibility = Visibility.Collapsed;
+            }
+        }
 
         public void UpdateColors()
         {
             foreach (var child in canvas.Children)
             {
                 if (child is StationControl)
-                    (child as StationControl).SetColor(currentColor);
+                    (child as StationControl).SetColor(DataNetwork.CurrentColor);
                 else if (child is ManagerControl)
-                    (child as ManagerControl).SetColor(currentColor);
+                    (child as ManagerControl).SetColor(DataNetwork.CurrentColor);
             }
+            MapChanged();
         }
 
-        //FUCK
         public void ConnectControls(StationControl station, bool isRadio = true)
         {
             ConnectionLine line;
@@ -304,23 +394,38 @@ namespace Diplom
                     line = new ConnectionLine(firstStation, station, canvas);
                     firstStation.stationLine = line;
                     station.stationLine = line;
-                    if (firstStation.IsConnectedToManager() || station.IsConnectedToManager())
-                    {
-                        firstStation.stationGauge.Visibility = Visibility.Visible;
-                        station.stationGauge.Visibility = Visibility.Visible;
-                    }
 
                     CancelConnection();
+                    MapChanged();
                     break;
                 case ConnectingType.Manager:
                     var manager = connector as ManagerControl;
                     line = new ConnectionLine(manager, station, canvas, true);
                     manager.line = line;
                     station.managerLine = line;
+                    station.Data.State = "Включено";
+                    manager.Port = ManagerControl.LastPort;
 
                     CancelConnection();
+                    MapChanged();
                     break;
             }
+        }
+
+        public void LoadStationConnection(int number1, int number2)
+        {
+            List<StationControl> stations =
+                DataNetwork.Stations.Where(
+                    s => s.Data.Number == number1 || s.Data.Number == number2
+                    ).ToList();
+
+            if (stations.Count != 2) throw new Exception("Unknown error");
+            ConnectionLine line = new ConnectionLine(stations[0], stations[1], canvas);
+            stations[0].stationLine = line;
+            stations[1].stationLine = line;
+            line.UpdatePosition();
+
+            MapChanged();
         }
 
         public void ConnectControls(ManagerControl manager)
@@ -336,8 +441,10 @@ namespace Diplom
                     var line = new ConnectionLine(station, manager, canvas, true);
                     manager.line = line;
                     station.managerLine = line;
+                    manager.Port = ManagerControl.LastPort;
 
                     CancelConnection();
+                    MapChanged();
                     break;
             }
         }
@@ -354,10 +461,6 @@ namespace Diplom
             {
                 var first = line.firstControl as StationControl;
                 var second = line.secondControl as StationControl;
-
-                first.stationGauge.Visibility = Visibility.Hidden;
-                second.stationGauge.Visibility = Visibility.Hidden;
-
                 first.stationLine = null;
                 second.stationLine = null;
             }
@@ -375,65 +478,91 @@ namespace Diplom
                     manager = line.firstControl as ManagerControl;
                     station = line.secondControl as StationControl;
                 }
-
                 station.managerLine = null;
                 manager.line = null;
-
-                if (station.stationLine != null)
-                {
-                    (station.stationLine.firstControl as StationControl).stationGauge.Visibility = Visibility.Hidden;
-                    (station.stationLine.secondControl as StationControl).stationGauge.Visibility = Visibility.Hidden;
-                }
             }
+            MapChanged();
         }
 
         public void RemoveRadioConnection(StationControl station)
         {
+            if (station.stationLine != null)
+            {
+                if (station.stationLine.firstControl == station)
+                    (station.stationLine.secondControl as StationControl).IsUpdated = false;
+                else
+                    (station.stationLine.firstControl as StationControl).IsUpdated = false;
+            }
             canvas.Children.Remove(station.stationLine.line);
             ClearLineControls(station.stationLine);
+            MapChanged();
         }
 
         public void RemoveLocalConnection(StationControl station)
         {
+            if (station.stationLine != null)
+            {
+                (station.stationLine.firstControl as StationControl).IsUpdated = false;
+                (station.stationLine.secondControl as StationControl).IsUpdated = false;
+            }
+            else
+            {
+                station.IsUpdated = false;
+            }
+            var manager = (station.managerLine.firstControl == station ? 
+                station.managerLine.secondControl : station.managerLine.firstControl) as ManagerControl;
+            manager.Port = null;
             canvas.Children.Remove(station.managerLine.line);
             ClearLineControls(station.managerLine);
+            MapChanged();
         }
 
         public void RemoveLocalConnection(ManagerControl manager)
         {
+            var station = (manager.line.firstControl is StationControl ? 
+                manager.line.firstControl : manager.line.secondControl) as StationControl;
+            if (station.stationLine != null)
+            {
+                (station.stationLine.firstControl as StationControl).IsUpdated = false;
+                (station.stationLine.secondControl as StationControl).IsUpdated = false;
+            }
+            else
+            {
+                station.IsUpdated = false;
+            }
+            manager.Port = null;
             canvas.Children.Remove(manager.line.line);
             ClearLineControls(manager.line);
+            MapChanged();
         }
 
         public void RemoveElement()
         {
+            if (FocusedControl == null) return;
+
             if (FocusedControl is StationControl)
             {
                 var station = FocusedControl as StationControl;
-                numbersStations.Remove(station.Data.Number);
-                numbersStations.Sort();
+
+                numbersControls.Remove(station.Data.Number);
+                numbersControls.Sort();
+                
                 if (station.managerLine != null)
-                {
-                    canvas.Children.Remove(station.managerLine.line);
-                    ClearLineControls(station.managerLine);
-                }
+                    RemoveLocalConnection(station);
                 if (station.stationLine != null)
-                {
-                    canvas.Children.Remove(station.stationLine.line);
-                    ClearLineControls(station.stationLine);
-                }
+                    RemoveRadioConnection(station);
 
                 DataNetwork.Stations.Remove(station);
             }
             else if (FocusedControl is ManagerControl)
             {
                 var manager = FocusedControl as ManagerControl;
-                numbersManagers.Remove(manager.Data.Number);
+
+                numbersControls.Remove(manager.Data.Number);
+                numbersControls.Sort();
+
                 if (manager.line != null)
-                {
-                    canvas.Children.Remove(manager.line.line);
-                    ClearLineControls(manager.line);
-                }
+                    RemoveLocalConnection(manager);
 
                 DataNetwork.Managers.Remove(manager);
             }
@@ -446,21 +575,217 @@ namespace Diplom
             }
             FocusedControl = null;
             CancelConnection();
+            MapChanged();
         }
 
-        public void RemoveNetwork_Click(object sender, RoutedEventArgs e)
+        public void RemoveNetwork_Click(object sender, RoutedEventArgs e) => RemoveNetwork();
+
+        private void RemoveNetwork()
         {
             canvas.Children.Clear();
             DataNetwork.Managers.Clear();
             DataNetwork.Stations.Clear();
-            DataNetwork.IsCreated = false;
-            numbersManagers.Clear();
-            numbersStations.Clear();
-            maxStationNumber = 1;
-            maxManagerNumber = 1;
+            ToggleNetwork(false);
+
+            numbersControls.Clear();
+            maxNumber = 1;
+
             FocusedControl = null;
             CancelConnection();
             NetworkMenuItem.Visibility = Visibility.Collapsed;
+            MapChanged();
         }
-	}
+
+        private void Save_Executed(object sender, ExecutedRoutedEventArgs e) => SaveCommand();
+
+        private void SaveCommand()
+        {
+            if (string.IsNullOrEmpty(MapXmlHandler.LastPath))
+                SaveAsCommand();
+            else
+            {
+                try
+                {
+                    MapXmlHandler.WriteMap(MapXmlHandler.LastPath);
+                    MapXmlHandler.WriteLastPath();
+                    Title = $"{DefaultTitle} - {MapXmlHandler.LastPath}";
+                    IsMapChanged = false;
+                }
+                catch (Exception ex)
+                {
+                    ShowMapError(ex.Message);
+                }
+            }
+        }
+
+        private void SaveAs_Executed(object sender, ExecutedRoutedEventArgs e) => SaveAsCommand();
+
+        private void SaveAsCommand()
+        {
+            try
+            {
+                var dialog = new SaveFileDialog
+                {
+                    Filter = "Networks schema|*.xml",
+                    Title = "Save As"
+                };
+                if (!string.IsNullOrEmpty(MapXmlHandler.LastPath))
+                    dialog.FileName = MapXmlHandler.LastPath;
+                if (dialog.ShowDialog() == true)
+                {
+                    MapXmlHandler.LastPath = dialog.FileName;
+                    MapXmlHandler.WriteMap(dialog.FileName);
+                    MapXmlHandler.WriteLastPath();
+                    Title = $"{DefaultTitle} - {MapXmlHandler.LastPath}";
+                    IsMapChanged = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowMapError(ex.Message);
+            }
+        }
+
+        private void New_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            RemoveNetwork();
+            Title = DefaultTitle;
+            MapXmlHandler.LastPath = null;
+            IsMapChanged = false;
+        }
+        
+        private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            RemoveNetwork();
+            Title = DefaultTitle;
+            var dialog = new OpenFileDialog
+            {
+                Filter = "Network schema|*.xml",
+                Title = "Open"
+            };
+            if (dialog.ShowDialog() == true)
+                OpenMap(dialog.FileName);
+        }
+
+        private void OpenMap(string path)
+        {
+            try
+            {
+                MapXmlHandler.ReadMap(path);
+                MapXmlHandler.LastPath = path;
+                MapXmlHandler.WriteLastPath();
+                Title = $"{DefaultTitle} - {path}";
+                IsMapChanged = false;
+                DropFocus();
+            }
+            catch (Exception ex)
+            {
+                ShowMapError(ex.Message);
+            }
+        }
+
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            if (ClosingMessage() == MessageBoxResult.Yes)
+            {
+                SavingMap();
+                base.OnClosing(e);
+            }
+            else
+            {
+                e.Cancel = true;
+            }
+        }
+
+        private void Close_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (ClosingMessage() == MessageBoxResult.Yes)
+            {
+                SavingMap();
+                Close();
+            }
+        }
+
+        private MessageBoxResult ClosingMessage() => 
+            MessageBox.Show("Вы действительно хотите выйти?", 
+                "Подтверждение выхода", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+        private void SavingMap()
+        {
+            if (IsMapChanged)
+            {
+                var result = MessageBox.Show("Карта была изменена. Сохранить изменения?",
+                    "Сохранить изменения?", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.Yes)
+                    SaveCommand();
+            }
+        }
+
+        private void Properties_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            PropertiesWindow wnd = new PropertiesWindow { Owner = this };
+            wnd.ShowDialog();
+        }
+
+        private void New_CanExecute(object sender, CanExecuteRoutedEventArgs e) => 
+            e.CanExecute = true;
+
+        private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e) => 
+            e.CanExecute = true;
+
+        private void Save_CanExecute(object sender, CanExecuteRoutedEventArgs e) => 
+            e.CanExecute = true;
+
+        private void SaveAs_CanExecute(object sender, CanExecuteRoutedEventArgs e) => 
+            e.CanExecute = true;
+
+        private void Close_CanExecute(object sender, CanExecuteRoutedEventArgs e) => 
+            e.CanExecute = true;
+
+        private void Properties_CanExecute(object sender, CanExecuteRoutedEventArgs e) => 
+            e.CanExecute = true;
+
+        private void ShowMapError(string message) => MessageBox.Show(message, "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (FocusedControl != null && e.Key == Key.Delete)
+                RemoveElement();
+            else if (FocusedControl != null && FocusedControl is StationControl && e.Key == Key.F3 && Keyboard.IsKeyDown(Key.LeftShift))
+                (FocusedControl as StationControl).Update_Click(sender, e);
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (canvas == null || ScaleComboBox == null) return;
+            string option = (e.AddedItems[0] as ComboBoxItem).Content as string;
+            double coeff = int.Parse(option.Remove(option.Length - 1)) / 100.0;
+            canvas.LayoutTransform = new ScaleTransform(coeff, coeff);
+        }
+
+        public void ToggleNetwork(bool value)
+        {
+            DataNetwork.IsCreated = value;
+            TogglePanelButtons(value);
+        }
+
+        private void btnProperties_Click(object sender, RoutedEventArgs e)
+        {
+            if (FocusedControl == null) return;
+
+            if (FocusedControl is StationControl)
+                (FocusedControl as StationControl).StationProperties_Click(sender, e);
+            else if (FocusedControl is ManagerControl)
+                (FocusedControl as ManagerControl).ManagerProperties_Click(sender, e);
+        }
+
+        public void ToggleParametersButtons(bool value)
+        {
+            btnParameters.IsEnabled = value;
+            btnParametersFast.IsEnabled = value;
+            
+            btnParameters.Icon = new Image { Source = new BitmapImage(value ? enableParameters : disableParameters) };
+            btnParametersFast.Icon = new Image { Source = new BitmapImage(value ? enableParameters : disableParameters) };
+        }
+    }
 }

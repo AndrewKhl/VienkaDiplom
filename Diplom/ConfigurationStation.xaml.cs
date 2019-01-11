@@ -5,9 +5,6 @@ using System.Windows;
 
 namespace Diplom
 {
-    /// <summary>
-    /// Логика взаимодействия для ConfigurationStation.xaml
-    /// </summary>
     public partial class ConfigurationStation : Window
     {
         private StationControl station;
@@ -18,10 +15,9 @@ namespace Diplom
 			List<string> list = new List<string>();
 			for (int i = 1; i <= Stock.numberLimit; ++i)
 			{
-                if (!Stock.workWindow.numbersStations.Contains(i))
+                if (!Stock.workWindow.numbersControls.Contains(i))
                     list.Add(i.ToString());
 			}
-
 
             if (editedStation != null)
             {
@@ -41,10 +37,7 @@ namespace Diplom
             }
         }
 
-        private void CloseWindow(object sender, RoutedEventArgs e)
-		{
-			Close();
-		}
+        private void CloseWindow(object sender, RoutedEventArgs e) => Close();
 
 		private void CreateNetwork(object sender, RoutedEventArgs e)
 		{
@@ -55,12 +48,14 @@ namespace Diplom
             }
             else
             {
-                Stock.workWindow.numbersStations.Remove(station.Data.Number);
-                Stock.workWindow.numbersStations.Add(number);
+                Stock.workWindow.numbersControls.Remove(station.Data.Number);
+                Stock.workWindow.numbersControls.Add(number);
+
                 station.Data.Number = number;
                 station.Data.Name = nameNewStation.Text;
                 station.SetVisibleName();
             }
+            Stock.workWindow.MapChanged();
             Close();
 		}
 	}

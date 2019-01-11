@@ -15,15 +15,50 @@
             <MenuItem Header="Настройки" IsEnabled="False" />
             <MenuItem Header="Контроль сети" IsEnabled="False" />
             <Separator></Separator>
-            <MenuItem Header="Связать по COM1" />
-            <MenuItem Header="Связать по COM3" Name="LocalCom3MenuItem" Click="Connect_Click" />
-            <MenuItem Header="Связать по COM4" />
-            <MenuItem Header="Связаться по удалённом COM-порту" />
+            <MenuItem Header="Связать по COM1" Name="LocalCom1MenuItem" Click="Connect_Click" Visibility="Collapsed" />
+            <MenuItem Header="Связать по COM3" Name="LocalCom3MenuItem" Click="Connect_Click" Visibility="Collapsed" />
+            <MenuItem Header="Соединение" Name="LocalConnectedMenuItem" IsCheckable="True" IsEnabled="False" Visibility="Collapsed" />
+            <MenuItem Header="Связаться по удалённом COM-порту" IsEnabled="False" />
         </ContextMenu>
 
         <ContextMenu x:Key="RadioMenu">
             <MenuItem Header="Настройки" IsEnabled="False" />
             <MenuItem Header="Контроль сети" IsEnabled="False" />
+        </ContextMenu>
+
+        <ContextMenu x:Key="ConnectedMenu" Opened="ContextMenu_Opened_2">
+            <MenuItem Header="Менеджер" Name="ManagerConnectedMenuItem">
+                <MenuItem Header="Свойства" Click="ManagerProperties_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/CustomFile.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Удалить" Click="ManagerRemove_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Сеть (PDH)" Name="NetworkConnectedMenuItem">
+                <MenuItem Header="Выделить" IsEnabled="False" />
+                <MenuItem Header="Свойства" Click="NetworkProperties_Click"/>
+                <MenuItem Header="Удалить" Click="NetworkRemove_Click">
+                    <MenuItem.Icon>
+                        <Image Source="pack://application:,,,/Resources/Icons/Removed.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="Настройки" IsEnabled="False" />
+            <MenuItem Header="Контроль сети" IsEnabled="False" />
+            <Separator />
+            <MenuItem Header="Соединение" Click="Connect_Click" Name="ConnectedMenuItem" IsCheckable="True" />
+            <MenuItem Header="Маршрутизация" Click="Route_Click" >
+                <MenuItem.Icon>
+                    <Image Source="pack://application:,,,/Resources/Icons/Marsh.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Статистика канала" IsEnabled="False" />
         </ContextMenu>
         
         <ContextMenu x:Key="MainMenu" Opened="ContextMenu_Opened">
@@ -51,11 +86,10 @@
             <Separator />
             <MenuItem Header="Настройки" IsEnabled="False" />
             <MenuItem Header="Контроль сети" IsEnabled="False" />
-            <Separator></Separator>
-            <MenuItem Header="Связать по COM1" />
-            <MenuItem Header="Связать по COM3" Click="Connect_Click" Name="Com3MenuItem" IsCheckable="True" IsChecked="False" />
-            <MenuItem Header="Связать по COM4" />
-            <MenuItem Header="Связаться по удалённом COM-порту" />
+            <Separator />
+            <MenuItem Header="Связать по COM1" Click="Connect_Click" Name="Com1MenuItem" />
+            <MenuItem Header="Связать по COM3" Click="Connect_Click" Name="Com3MenuItem" />
+            <MenuItem Header="Связаться по удалённом COM-порту" IsEnabled="False" />
         </ContextMenu>
     </UserControl.Resources>
     <StackPanel ContextMenu="{StaticResource MainMenu}" Name="stackPanel" Orientation="Vertical" MouseRightButtonDown="Context_Click">

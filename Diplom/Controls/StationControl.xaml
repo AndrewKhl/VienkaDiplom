@@ -42,7 +42,7 @@
             <MenuItem Header="Связать по радиоканалу" Name="RadioItem" Click="RadioConnect_Click" 
                       IsCheckable="True" IsChecked="False" />
             <Separator />
-            <MenuItem Header="Обновить конфигурацию" Click="Update_Click">
+            <MenuItem Header="Обновить конфигурацию" Click="Update_Click" InputGestureText="Shift+F3">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
                 </MenuItem.Icon>
@@ -65,10 +65,10 @@
             </MenuItem>
         </ContextMenu>
 
-        <ContextMenu x:Key="RadioMenu">
-            <MenuItem Header="Связать по радиоканалу" Click="RadioConnect_Click" />
+        <ContextMenu x:Key="RadioMenu" Opened="ContextMenu_Opened_1">
+            <MenuItem Header="Связать по радиоканалу" Name="Radio2MenuItem" Click="RadioConnect_Click" />
             <Separator />
-            <MenuItem Header="Обновить конфигурацию" Click="Update_Click">
+            <MenuItem Header="Обновить конфигурацию" Click="Update_Click" InputGestureText="Shift+F3">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
                 </MenuItem.Icon>
@@ -96,7 +96,7 @@
             <MenuItem Header="Связать по порту А" />
             <MenuItem Header="Связать по порту Б" />
             <Separator />
-            <MenuItem Header="Обновить конфигурацию" IsEnabled="False" >
+            <MenuItem Header="Обновить конфигурацию" IsEnabled="False">
                 <MenuItem.Icon>
                     <Image Source="pack://application:,,,/Resources/Icons/RefreshConfiguration.png"/>
                 </MenuItem.Icon>

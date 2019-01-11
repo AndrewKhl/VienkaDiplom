@@ -1,0 +1,122 @@
+﻿<Window x:Class="Diplom.PropertiesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:local="clr-namespace:Diplom"
+        mc:Ignorable="d"
+        Icon="pack://application:,,,/Resources/icon.png"
+        WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
+        Title="Настройки" Height="300" Width="470">
+    <Window.Resources>
+        <Style x:Key="CellStyle">
+            <Setter Property="Control.Margin" Value="10 7" />
+        </Style>
+        <Style x:Key="IntegerStyle" BasedOn="{StaticResource CellStyle}" TargetType="{x:Type xctk:IntegerUpDown}">
+            <Setter Property="Control.Width" Value="70" />
+            <Setter Property="Control.MaxWidth" Value="70" />
+            <Setter Property="Control.HorizontalAlignment" Value="Right" />
+        </Style>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <TabControl Grid.Row="0">
+            <TabItem>
+                <TabItem.Header>Общие</TabItem.Header>
+                <TabItem.Content>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="7*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource CellStyle}" Text="Язык интерфейса"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource CellStyle}" Text="Файл изображения с картой"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource CellStyle}" Text="Файл экспорта сообщений"/>
+
+                        <ComboBox Grid.Row="0" Grid.Column="1" SelectedIndex="0" Style="{StaticResource CellStyle}">
+                            <ComboBoxItem>Russian (Russia)</ComboBoxItem>
+                        </ComboBox>
+                        <TextBox Grid.Row="1" Grid.Column="1" Text="map.jpg" Style="{StaticResource CellStyle}" IsEnabled="False"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Text="alarms.txt" Style="{StaticResource CellStyle}" IsEnabled="False"/>
+
+                        <Button Grid.Row="1" Grid.Column="2" IsEnabled="False" Style="{StaticResource CellStyle}">...</Button>
+                        <Button Grid.Row="2" Grid.Column="2" IsEnabled="False" Style="{StaticResource CellStyle}">...</Button>
+
+                        <StackPanel Grid.Column="0" Grid.Row="3" Grid.ColumnSpan="3" Orientation="Horizontal" Margin="0 10 0 0">
+                            <CheckBox Style="{StaticResource CellStyle}"/>
+                            <TextBlock Style="{StaticResource CellStyle}" Text="Проверять наличие обновлений при запуске программы" />
+                        </StackPanel>
+                    </Grid>
+                </TabItem.Content>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>Настройки мониторинга по умолчанию</TabItem.Header>
+                <StackPanel Orientation="Vertical">
+                    <TextBlock TextWrapping="Wrap" TextBlock.FontWeight="Bold" TextBlock.Foreground="Gray" Style="{StaticResource CellStyle}">
+                        Настройки будут применены ко вновь созданным менеджерам сети.
+                               Для задания текущих значений используйте пункт "Настройки" контекстного меню менеджера сети
+                    </TextBlock>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="1*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Row="0" Text="Период опроса параметров (сек):" Style="{StaticResource CellStyle}"/>
+                        <TextBlock Grid.Row="1" Text="Период обновления содержимого сети (мин):" Style="{StaticResource CellStyle}"/>
+                        <TextBlock Grid.Row="2" Text="Тайм-аут (сек):" Style="{StaticResource CellStyle}"/>
+                        <TextBlock Grid.Row="3" Text="Задержка перед посылкой (мсек):" Style="{StaticResource CellStyle}"/>
+
+                        <xctk:IntegerUpDown Grid.Row="0" Grid.Column="1" Style="{StaticResource IntegerStyle}" IsEnabled="False" Maximum="65535" Minimum="3" Value="5"/>
+                        <xctk:IntegerUpDown Grid.Row="1" Grid.Column="1" Style="{StaticResource IntegerStyle}" IsEnabled="False" Maximum="65535" Minimum="1" Value="60"/>
+                        <xctk:IntegerUpDown Grid.Row="2" Grid.Column="1" Style="{StaticResource IntegerStyle}" IsEnabled="False" Maximum="65535" Minimum="1" Value="2"/>
+                        <xctk:IntegerUpDown Grid.Row="3" Grid.Column="1" Style="{StaticResource IntegerStyle}" IsEnabled="False" Maximum="65535" Minimum="5" Value="200"/>
+                    </Grid>
+                </StackPanel>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>Сервер подключений</TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="3*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Orientation="Horizontal">
+                        <CheckBox Style="{StaticResource CellStyle}" IsEnabled="False" />
+                        <TextBlock Style="{StaticResource CellStyle}" Text="Разрешить входящие подключения" />
+                    </StackPanel>
+                    <TextBlock Grid.Row="1" Text="Порт входящих подключений:" Style="{StaticResource CellStyle}" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Row="2" Text="Максимальное количество пользователей:" Style="{StaticResource CellStyle}" VerticalAlignment="Center"/>
+                    <xctk:IntegerUpDown Grid.Row="1" Grid.Column="1" Style="{StaticResource IntegerStyle}" Value="3128" IsEnabled="False" />
+                    <xctk:IntegerUpDown Grid.Row="2" Grid.Column="1" Style="{StaticResource IntegerStyle}" Value="10" IsEnabled="False" />
+
+                    <Button Grid.Row="3" Height="20" Width="150" HorizontalAlignment="Left" VerticalAlignment="Bottom" IsEnabled="False" Margin="15 0 0 20" >
+                        Фильтрация IP-адресов...
+                    </Button>
+                </Grid>
+            </TabItem>
+        </TabControl>
+        <StackPanel Grid.Row="1" MaxHeight="40" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Style="{StaticResource CellStyle}" Width="70" Click="Button_Click">Отмена</Button>
+            <Button Style="{StaticResource CellStyle}" Width="70" Click="Button_Click">ОК</Button>
+        </StackPanel>
+    </Grid>
+</Window>
