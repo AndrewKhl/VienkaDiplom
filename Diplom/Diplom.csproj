@@ -73,6 +73,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ColorBrushConverter.cs" />
     <Compile Include="ConfigurationManager.xaml.cs">
       <DependentUpon>ConfigurationManager.xaml</DependentUpon>
     </Compile>

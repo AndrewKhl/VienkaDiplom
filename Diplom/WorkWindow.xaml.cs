@@ -150,7 +150,7 @@ namespace Diplom
             }
         }
 
-        public void CreateStation(string name, int number = 0, int top = 0, int left = 0, bool setFocused = true)
+        public void CreateStation(string name, int number = 0, int top = 0, int left = 0)
         {
             numbersControls.Add(number);
             numbersControls.Sort();
@@ -163,14 +163,12 @@ namespace Diplom
                 if (control is IFocusable)
                 {
                     IFocusable focusable = control as IFocusable;
-                    station.FocusedElement += focusable.UnsetFocusBorder;
-                    focusable.FocusedElement += station.UnsetFocusBorder;
+                    station.FocusedElement += focusable.UpdateLook;
+                    focusable.FocusedElement += station.UpdateLook;
                 }
             }
             canvas.Children.Add(station);
-            if (setFocused)
-                station.SetFocusBorder();
-            station.UpdateLayout();
+            station.UpdateLook();
 
             MapChanged();
         }
@@ -188,14 +186,12 @@ namespace Diplom
                 if (control is IFocusable)
                 {
                     IFocusable focusable = control as IFocusable;
-                    manager.FocusedElement += focusable.UnsetFocusBorder;
-                    focusable.FocusedElement += manager.UnsetFocusBorder;
+                    manager.FocusedElement += focusable.UpdateLook;
+                    focusable.FocusedElement += manager.UpdateLook;
                 }
             }
             canvas.Children.Add(manager);
-            if (setFocused)
-                manager.SetFocusBorder();
-            manager.UpdateLayout();
+            manager.UpdateLook();
 
             MapChanged();
         }
@@ -204,8 +200,9 @@ namespace Diplom
 
         public void DropFocus()
         {
-            FocusedControl?.UnsetFocusBorder();
+            IFocusable control = FocusedControl;
             FocusedControl = null;
+            control?.UpdateLook();
         }
 
         private void canvas_Drop(object sender, DragEventArgs e)
@@ -374,7 +371,8 @@ namespace Diplom
             foreach (var child in canvas.Children)
             {
                 if (child is StationControl)
-                    (child as StationControl).SetColor(DataNetwork.CurrentColor);
+                    //(child as StationControl).SetColor(DataNetwork.CurrentColor);
+                    (child as StationControl).CurrentColor = DataNetwork.CurrentColor;
                 else if (child is ManagerControl)
                     (child as ManagerControl).SetColor(DataNetwork.CurrentColor);
             }
@@ -400,7 +398,7 @@ namespace Diplom
                     break;
                 case ConnectingType.Manager:
                     var manager = connector as ManagerControl;
-                    line = new ConnectionLine(manager, station, canvas, true);
+                    line = new ConnectionLine(manager, station, canvas);
                     manager.line = line;
                     station.managerLine = line;
                     station.Data.State = "Включено";
@@ -415,9 +413,7 @@ namespace Diplom
         public void LoadStationConnection(int number1, int number2)
         {
             List<StationControl> stations =
-                DataNetwork.Stations.Where(
-                    s => s.Data.Number == number1 || s.Data.Number == number2
-                    ).ToList();
+                DataNetwork.Stations.Where(s => s.Data.Number == number1 || s.Data.Number == number2).ToList();
 
             if (stations.Count != 2) throw new Exception("Unknown error");
             ConnectionLine line = new ConnectionLine(stations[0], stations[1], canvas);
@@ -438,7 +434,7 @@ namespace Diplom
                     break;
                 case ConnectingType.StationLocal:
                     var station = connector as StationControl;
-                    var line = new ConnectionLine(station, manager, canvas, true);
+                    var line = new ConnectionLine(station, manager, canvas);
                     manager.line = line;
                     station.managerLine = line;
                     manager.Port = ManagerControl.LastPort;
@@ -455,72 +451,28 @@ namespace Diplom
             connecting = ConnectingType.None;
         }
 
-        private void ClearLineControls(ConnectionLine line)
-        {
-            if (line.firstControl is StationControl && line.secondControl is StationControl)
-            {
-                var first = line.firstControl as StationControl;
-                var second = line.secondControl as StationControl;
-                first.stationLine = null;
-                second.stationLine = null;
-            }
-            else
-            {
-                StationControl station;
-                ManagerControl manager;
-                if (line.firstControl is StationControl && line.secondControl is ManagerControl)
-                {
-                    station = line.firstControl as StationControl;
-                    manager = line.secondControl as ManagerControl;
-                }
-                else
-                {
-                    manager = line.firstControl as ManagerControl;
-                    station = line.secondControl as StationControl;
-                }
-                station.managerLine = null;
-                manager.line = null;
-            }
-            MapChanged();
-        }
-
         public void RemoveRadioConnection(StationControl station)
         {
+            // connection between two stations
             if (station.stationLine != null)
             {
-                if (station.stationLine.firstControl == station)
-                    (station.stationLine.secondControl as StationControl).IsUpdated = false;
-                else
-                    (station.stationLine.firstControl as StationControl).IsUpdated = false;
+                var another = station.stationLine.GetAnotherStation(station);
+                if (station.IsConnectedToManager())
+                    another.IsUpdated = false;
+                else if (another.IsConnectedToManager())
+                    station.IsUpdated = false;
             }
             canvas.Children.Remove(station.stationLine.line);
-            ClearLineControls(station.stationLine);
+            station.stationLine.ClearControls();
             MapChanged();
         }
 
-        public void RemoveLocalConnection(StationControl station)
+        public void RemoveLocalConnection(ConnectionLine line)
         {
-            if (station.stationLine != null)
-            {
-                (station.stationLine.firstControl as StationControl).IsUpdated = false;
-                (station.stationLine.secondControl as StationControl).IsUpdated = false;
-            }
-            else
-            {
-                station.IsUpdated = false;
-            }
-            var manager = (station.managerLine.firstControl == station ? 
-                station.managerLine.secondControl : station.managerLine.firstControl) as ManagerControl;
-            manager.Port = null;
-            canvas.Children.Remove(station.managerLine.line);
-            ClearLineControls(station.managerLine);
-            MapChanged();
-        }
-
-        public void RemoveLocalConnection(ManagerControl manager)
-        {
-            var station = (manager.line.firstControl is StationControl ? 
-                manager.line.firstControl : manager.line.secondControl) as StationControl;
+            // connection between station and manager
+            var manager = (line.firstControl is ManagerControl ? 
+                line.firstControl : line.secondControl) as ManagerControl;
+            var station = line.GetConnectedStation(manager);
             if (station.stationLine != null)
             {
                 (station.stationLine.firstControl as StationControl).IsUpdated = false;
@@ -531,8 +483,8 @@ namespace Diplom
                 station.IsUpdated = false;
             }
             manager.Port = null;
-            canvas.Children.Remove(manager.line.line);
-            ClearLineControls(manager.line);
+            canvas.Children.Remove(line.line);
+            manager.line.ClearControls();
             MapChanged();
         }
 
@@ -548,7 +500,7 @@ namespace Diplom
                 numbersControls.Sort();
                 
                 if (station.managerLine != null)
-                    RemoveLocalConnection(station);
+                    RemoveLocalConnection(station.managerLine);
                 if (station.stationLine != null)
                     RemoveRadioConnection(station);
 
@@ -562,7 +514,7 @@ namespace Diplom
                 numbersControls.Sort();
 
                 if (manager.line != null)
-                    RemoveLocalConnection(manager);
+                    RemoveLocalConnection(manager.line);
 
                 DataNetwork.Managers.Remove(manager);
             }
@@ -571,7 +523,7 @@ namespace Diplom
             foreach (var control in canvas.Children)
             {
                 if (control is IFocusable)
-                    (control as IFocusable).FocusedElement -= FocusedControl.UnsetFocusBorder;
+                    (control as IFocusable).FocusedElement -= FocusedControl.UpdateLook;
             }
             FocusedControl = null;
             CancelConnection();

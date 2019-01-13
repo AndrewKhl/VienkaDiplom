@@ -34,7 +34,7 @@ namespace Diplom
 				pWnd.VisualTree(pWnd.MainTree, Visibility.Hidden);
 				pWnd.StateStation.Visibility = Visibility.Visible;
 				_currentStation.Data.firstRefreshStation = DateTime.MinValue;
-				Stock.workWindow.RemoveLocalConnection(_currentStation);
+				Stock.workWindow.RemoveLocalConnection(_currentStation.managerLine);
 				pWnd.Close();
 			}
 		}

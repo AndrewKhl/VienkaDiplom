@@ -7,7 +7,7 @@ namespace Diplom.Models
     public class DataStation: INotifyPropertyChanged
 	{
 		private int _period = 238;
-		private string _main = "Ведомая";
+		private string _main = "Ведущая";
 		private string _synchronization = "Внутренняя";
 		public bool _onStation = true;
 

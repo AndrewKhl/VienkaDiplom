@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -7,7 +9,7 @@ using System.Windows.Media.Imaging;
 
 namespace Diplom.Models
 {
-    public partial class StationControl : UserControl, IFocusable
+    public partial class StationControl : UserControl, IFocusable, INotifyPropertyChanged
     {
         public static readonly int MinFrequency = 238;
         public static readonly int MaxFrequency = 480;
@@ -17,10 +19,29 @@ namespace Diplom.Models
         private static Uri disableParameters = new Uri(@"pack://application:,,,/Resources/Icons/DisabledShow.png");
         private static Uri gaugeUri = new Uri("pack://application:,,,/Resources/gauge_1_50.png");
 
+        private static Color FocusedColor = Colors.White;
+        private static Color UnfocusedColor = Colors.Black;
+        private static Color ErrorsColor = Colors.Red;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+		public void OnPropertyChanged([CallerMemberName]string prop = "") =>
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+
+        private Color currentColor;
+        public Color CurrentColor
+        {
+            get => currentColor;
+            set
+            {
+                currentColor = value;
+                OnPropertyChanged("CurrentColor");
+            }
+        }
+
         public WorkWindow workWindow { get; }
 		public event Action FocusedElement;
 
-		public DataStation Data;
+        public DataStation Data;
         public ConnectionLine stationLine;
         public ConnectionLine managerLine;
         public bool IsRightRotation { get; set; } = true;
@@ -32,8 +53,8 @@ namespace Diplom.Models
             set
             {
                 isUpdated = value;
+                CheckErrors(value);
                 Stock.workWindow.ToggleParametersButtons(value);
-                UpdateGauge(value);
             }
         }
 
@@ -55,17 +76,14 @@ namespace Diplom.Models
 
 		public StationControl(WorkWindow window, string name, int number, Color color)
         {
+            DataContext = this;
             InitializeComponent();
+
             SetColor(color);
             image.Source = new BitmapImage(ImageUri);
-            BorderThickness = new Thickness(2);
-            Data = new DataStation
-            {
-                Name = name,
-                Number = number
-            };
+            Data = new DataStation { Name = name, Number = number };
             SetVisibleName();
-            UnsetFocusBorder();
+            UpdateLook();
 
 			DataNetwork.Stations.Add(this);
 
@@ -76,7 +94,7 @@ namespace Diplom.Models
             gauge.UriSource = gaugeUri;
 			gauge.EndInit();
 			stationGauge.Source = gauge;
-			stationGauge.Visibility = Visibility.Hidden;
+            HideGauge();
 		}
 
         public void SetVisibleName() => stationName.Text = $"{Data.Name} [{Data.Number}]";
@@ -86,24 +104,22 @@ namespace Diplom.Models
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             base.OnMouseDown(e);
-            SetFocusBorder();
             workWindow.SetFocus(this);
+            UpdateLook();
             e.Handled = true;
         }
 
-        public void SetFocusBorder()
+        private void SetFocusBorder()
         {
-            stationImageBorder.BorderBrush = new SolidColorBrush(Colors.White);
-            stationNameBorder.BorderBrush = new SolidColorBrush(Colors.White);
+            CurrentColor = stationLine != null && stationLine.HasErrors ? ErrorsColor : FocusedColor;
             stationImageBorder.Background.Opacity = 0.5;
             stationNameBorder.Background.Opacity = 0.5;
             FocusedElement?.Invoke();
         }
 
-        public void UnsetFocusBorder()
+        private void UnsetFocusBorder()
         {
-            stationImageBorder.BorderBrush = new SolidColorBrush(Colors.Black);
-            stationNameBorder.BorderBrush = new SolidColorBrush(Colors.Black);
+            CurrentColor = stationLine != null && stationLine.HasErrors ? ErrorsColor : UnfocusedColor;
             stationImageBorder.Background.Opacity = 0.2;
             stationNameBorder.Background.Opacity = 0.2;
         }
@@ -129,10 +145,6 @@ namespace Diplom.Models
 
         private void RadioConnect_Click(object sender, RoutedEventArgs e)
         {
-            var item = GetRadioItem();
-            if (item != null)
-                item.IsChecked = false;
-
             if (stationLine == null)
                 workWindow.ConnectControls(this);
             else
@@ -144,56 +156,8 @@ namespace Diplom.Models
             if (managerLine == null)
                 workWindow.ConnectControls(this, false);
             else
-                workWindow.RemoveLocalConnection(this);
+                workWindow.RemoveLocalConnection(managerLine);
         }
-
-        public void Update_Click(object sender, RoutedEventArgs e)
-        {
-            if (IsConnectedToManager())
-            {
-                LoadingWindow wnd;
-                foreach (string message in UpdateMainStationMessages)
-                {
-                    try
-                    {
-                        wnd = new LoadingWindow(string.Format(message, stationName.Text), 1);
-                        wnd.ShowDialog();
-                    }
-                    catch (Exception) { return; }
-                }
-                IsUpdated = true;
-            }
-            else if (IsConnectedToStation())
-            {
-                StationControl another;
-                if (stationLine.firstControl == this)
-                    another = stationLine.secondControl as StationControl;
-                else another = stationLine.firstControl as StationControl;
-                if (another.IsConnectedToManager())
-                {
-                    LoadingWindow wnd;
-                    foreach (string message in UpdateAnotherStationMessages)
-                    {
-                        try
-                        {
-                            wnd = new LoadingWindow(string.Format(message, another.stationName.Text), 1);
-                            wnd.ShowDialog();
-                        }
-                        catch (Exception) { return; }
-                    }
-                    IsUpdated = true;
-                }
-                else
-                    ShowUpdateError();
-            }
-            else
-                ShowUpdateError();
-        }
-
-        private void ShowUpdateError() => 
-            MessageBox.Show("Не создано ни одного менеджера для осуществления запроса. " +
-                    "Создайте управляющий элемент и соедините его с сетью.", "Ошибка", 
-                    MessageBoxButton.OK, MessageBoxImage.Error);
 
         public bool IsConnectedToManager() => managerLine != null;
         public bool IsConnectedToStation() => stationLine != null;
@@ -275,96 +239,115 @@ namespace Diplom.Models
             item.IsChecked = (stationLine != null);
         }
 
-        private static bool IsCorrectFrequency(StationControl station)
-        {
-            if (station.Data.Period < StationControl.MinFrequency 
-                || station.Data.Period > StationControl.MaxFrequency)
-            {
-                MessageBox.Show($"Частота станции \"{station.Data} [{station.Data.Number}]\" не входит в диапазон допустимых значений " +
-                    $"[{StationControl.MinFrequency}, {StationControl.MaxFrequency}]", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
-            }
-            return true;
-        }
+        private static bool IsFrequenciesEquals(StationControl station1, StationControl station2) =>
+            station1.Data.Period == station2.Data.Period;
 
-        private static bool IsFrequenciesEquals(StationControl station1, StationControl station2)
-        {
-            if (station1.Data.Period != station2.Data.Period)
-            {
-                //MessageBox.Show("Частоты станций не совпадают", "Ошибка", 
-                    //MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
-            }
-            return true;
-        }
+        private static bool IsCorrectRegime(StationControl station) =>
+           (station.Data.Main == "Ведущая" && station.Data.Synhronization == "Внутренняя")
+                || (station.Data.Main == "Ведомая" && station.Data.Synhronization == "РК");
 
-        private static bool IsCorrectRegimes(StationControl station1, StationControl station2)
+        private static bool IsRegimesDiffers(StationControl station1, StationControl station2) =>
+            station1.Data.Main != station2.Data.Main;
+
+        public void CheckErrors(bool isUpdated)
         {
-            StationControl masterStation, slaveStation;
-            if (station1.Data.Main == "Ведущая")
-                masterStation = station1;
-            else if (station2.Data.Main == "Ведущая")
-                masterStation = station2;
+            StationControl another = stationLine?.GetAnotherStation(this);
+            if (isUpdated && !IsConnectedToManager() && IsConnectedToStation() && another.IsUpdated)
+            {
+                if (!IsFrequenciesEquals(this, another))
+                {
+                    // error: частоты не равны
+                    stationLine.HasErrors = true;
+                }
+                else if (!IsRegimesDiffers(this, another))
+                {
+                    // error: одинаковые режимы
+                    stationLine.HasErrors = true;
+                }
+                else if (!IsCorrectRegime(this) || !IsCorrectRegime(another))
+                {
+                    // error: неправильная синхронизация
+                    stationLine.HasErrors = true;
+                }
+                else
+                {
+                    stationLine.HasErrors = false;
+                }
+            }
+            else if (stationLine != null)
+                stationLine.HasErrors = false;
             else
-            {
-                //MessageBox.Show("Одна из станций должна быть ведущей", "Ошибка", 
-                    //MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
-            }
-
-            if (station1.Data.Main == "Ведомая")
-                slaveStation = station1;
-            else if (station2.Data.Main == "Ведомая")
-                slaveStation = station2;
-            else
-            {
-                //MessageBox.Show("Одна из станций должна быть ведомой", "Ошибка", 
-                    //MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
-            }
-
-            if (masterStation.Data.Synhronization != "Внутренняя")
-            {
-                //MessageBox.Show("Синхронизация ведущей станции должна иметь значение \"Внутренняя\"", 
-                    //"Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
-            }
-
-            if (slaveStation.Data.Synhronization != "РК")
-            {
-                //MessageBox.Show("Синхронизация ведущей станции должна иметь значение \"РК\"", 
-                    //"Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
-                return false;
-            }
-
-            return true;
+                UpdateLook();
         }
 
-        private void UpdateGauge(bool isUpdated)
+        public void UpdateLook()
         {
-            if (!isUpdated)
-            {
-                stationGauge.Visibility = Visibility.Hidden;
-                return;
-            }
+            if (isUpdated && (IsConnectedToManager() || !stationLine.HasErrors))
+                ShowGauge();
+            else
+                HideGauge();
 
+            if (Stock.workWindow.FocusedControl == this)
+                SetFocusBorder();
+            else
+                UnsetFocusBorder();
+
+            UpdateLayout();
+        }
+
+        public void Update_Click(object sender, RoutedEventArgs e)
+        {
             if (IsConnectedToManager())
             {
-                stationGauge.Visibility = Visibility.Visible;
-                return;
+                LoadingWindow wnd;
+                foreach (string message in UpdateMainStationMessages)
+                {
+                    try
+                    {
+                        wnd = new LoadingWindow(string.Format(message, stationName.Text), 1);
+                        wnd.ShowDialog();
+                    }
+                    catch (Exception) { return; }
+                }
+                IsUpdated = true;
             }
-
-            // station updated and not connected to manager
-            var secondStation = (stationLine.firstControl == this ? 
-                stationLine.secondControl : stationLine.firstControl) as StationControl;
-            if (!IsCorrectFrequency(this)
-                || !IsCorrectFrequency(secondStation)
-                || !IsFrequenciesEquals(this, secondStation)
-                || !IsCorrectRegimes(this, secondStation))
-                return;
-
-            if (!IsConnectedToManager())
-                stationGauge.Visibility = Visibility.Visible;
+            else if (IsConnectedToStation())
+            {
+                var another = stationLine.GetAnotherStation(this);
+                if (another.IsConnectedToManager())
+                {
+                    if (another.IsUpdated)
+                    {
+                        LoadingWindow wnd;
+                        foreach (string message in UpdateAnotherStationMessages)
+                        {
+                            try
+                            {
+                                wnd = new LoadingWindow(string.Format(message, another.stationName.Text), 0.5);
+                                wnd.ShowDialog();
+                            }
+                            catch (Exception) { return; }
+                        }
+                        IsUpdated = true;
+                    }
+                    else
+                        MessageBox.Show("Для обновления параметров этой станции необходимо " +
+                            $"обновить параметры станции \"{another.Data.Name} [{another.Data.Number}]\"", 
+                            "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                    ShowUpdateError();
+            }
+            else
+                ShowUpdateError();
         }
+
+        private void ShowUpdateError() => 
+            MessageBox.Show("Не создано ни одного менеджера для осуществления запроса. " +
+                    "Создайте управляющий элемент и соедините его с сетью.", "Ошибка", 
+                    MessageBoxButton.OK, MessageBoxImage.Error);
+
+        public void HideGauge() => stationGauge.Visibility = Visibility.Hidden;
+        public void ShowGauge() => stationGauge.Visibility = Visibility.Visible;
     }
 }

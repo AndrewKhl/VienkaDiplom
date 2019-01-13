@@ -1,28 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Diplom
 {
-    /// <summary>
-    /// Interaction logic for LoadingWindow.xaml
-    /// </summary>
     public partial class LoadingWindow : Window
     {
-        private int seconds;
-        public LoadingWindow(string name, int seconds)
+        private double seconds;
+        public LoadingWindow(string name, double seconds)
         {
             InitializeComponent();
 
@@ -45,7 +31,7 @@ namespace Diplom
             for (int i = 0; i <= 100; i++)
             {
                 (sender as BackgroundWorker).ReportProgress(i);
-                Thread.Sleep(seconds * 10);
+                Thread.Sleep((int)(seconds*10));
             }
         }
 

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -7,7 +9,7 @@ using System.Windows.Media.Imaging;
 
 namespace Diplom.Models
 {
-    public partial class ManagerControl : UserControl, IFocusable
+    public partial class ManagerControl : UserControl, IFocusable, INotifyPropertyChanged
     {
         private static Uri ImageUri { get; } = new Uri("pack://application:,,,/Resources/Canvas/pdh_manager.png");
 		public DataManagers Data;
@@ -16,22 +18,37 @@ namespace Diplom.Models
         public WorkWindow workWindow { get; }
         public event Action FocusedElement;
 
+        private static Color FocusedColor = Colors.White;
+        private static Color UnfocusedColor = Colors.Black;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+		public void OnPropertyChanged([CallerMemberName]string prop = "") =>
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+
+        private Color currentColor;
+        public Color CurrentColor
+        {
+            get => currentColor;
+            set
+            {
+                currentColor = value;
+                OnPropertyChanged("CurrentColor");
+            }
+        }
+
         public int? Port { get; set; }
         public static int? LastPort { get; set; }
 
         public ManagerControl(WorkWindow window, string name, int number, Color color)
         {
+            DataContext = this;
             InitializeComponent();
+
             SetColor(color);
             image.Source = new BitmapImage(ImageUri);
-            BorderThickness = new Thickness(2);
-            Data = new DataManagers
-            {
-                Name = name,
-                Number = number
-            };
+            Data = new DataManagers { Name = name, Number = number };
             SetVisibleName();
-            UnsetFocusBorder();
+            UpdateLook();
 
             DataNetwork.Managers.Add(this);
 
@@ -45,26 +62,24 @@ namespace Diplom.Models
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
             base.OnMouseDown(e);
-            SetFocusBorder();
             workWindow.SetFocus(this);
+            UpdateLook();
             e.Handled = true;
         }
 
-        public void SetFocusBorder()
+        private void SetFocusBorder()
         {
-            managerImageBorder.BorderBrush = new SolidColorBrush(Colors.White);
-            managerNameBorder.BorderBrush = new SolidColorBrush(Colors.White);
+            CurrentColor = FocusedColor;
             managerImageBorder.Background.Opacity = 0.5;
             managerNameBorder.Background.Opacity = 0.5;
             FocusedElement?.Invoke();
         }
 
-        public void UnsetFocusBorder()
+        private void UnsetFocusBorder()
         {
-            managerImageBorder.BorderBrush = new SolidColorBrush(Colors.Black);
-            managerNameBorder.BorderBrush = new SolidColorBrush(Colors.Black);
-            managerImageBorder.Background.Opacity = 0.3;
-            managerNameBorder.Background.Opacity = 0.3;
+            CurrentColor = UnfocusedColor;
+            managerImageBorder.Background.Opacity = 0.2;
+            managerNameBorder.Background.Opacity = 0.2;
         }
 
         protected override void OnMouseMove(MouseEventArgs e)
@@ -93,7 +108,7 @@ namespace Diplom.Models
                 workWindow.ConnectControls(this);
             }
             else
-                workWindow.RemoveLocalConnection(this);
+                workWindow.RemoveLocalConnection(line);
         }
 
         private void Cancel_Click(object sender, RoutedEventArgs e)
@@ -182,6 +197,16 @@ namespace Diplom.Models
         {
             var station = (line.firstControl == this ? line.secondControl : line.firstControl) as StationControl;
             station.Update_Click(sender, e);
+        }
+
+        public void UpdateLook()
+        {
+            if (Stock.workWindow.FocusedControl == this)
+                SetFocusBorder();
+            else
+                UnsetFocusBorder();
+
+            UpdateLayout();
         }
     }
 }

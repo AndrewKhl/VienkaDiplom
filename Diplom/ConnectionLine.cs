@@ -9,21 +9,37 @@ namespace Diplom
     {
 		public UserControl firstControl;
 		public UserControl secondControl;
-		Canvas canvas;
-		SolidColorBrush brush;
+		private Canvas canvas;
 		public Line line = new Line();
+        private bool hasErrors = false;
+        public bool HasErrors
+        {
+            get => hasErrors;
+            set
+            {
+                hasErrors = value;
+                if (value)
+                    line.Stroke = new SolidColorBrush(Colors.Red);
+                else
+                    line.Stroke = new SolidColorBrush(Colors.Green);
+                if (firstControl is StationControl && secondControl is StationControl)
+                {
+                    (firstControl as StationControl).UpdateLook();
+                    (secondControl as StationControl).UpdateLook();
+                }
+            }
+        }
 
-		public ConnectionLine(UserControl station1, UserControl station2, Canvas canvas, bool isManager = false)
+		public ConnectionLine(UserControl control1, UserControl control2, Canvas canvas)
 		{
-			firstControl = station1;
-			secondControl = station2;
+			firstControl = control1;
+			secondControl = control2;
 			this.canvas = canvas;
-			if (isManager)
-				brush = new SolidColorBrush(Colors.Blue);
+			if (firstControl is ManagerControl || secondControl is ManagerControl)
+				line.Stroke = new SolidColorBrush(Colors.Blue);
 			else
-				brush = new SolidColorBrush(Colors.Green);
+				line.Stroke = new SolidColorBrush(Colors.Green);
 
-			line.Stroke = brush;
 			line.StrokeThickness = 3;
 			Canvas.SetLeft(line, 0);
 			Canvas.SetTop(line, 0);
@@ -76,7 +92,51 @@ namespace Diplom
                 line.X2 = (double)secondControl.GetValue(Canvas.LeftProperty) + secondControl.ActualWidth / 2;
                 line.Y2 = (double)secondControl.GetValue(Canvas.TopProperty) + secondControl.ActualHeight / 2;
             }
+        }
 
+        public StationControl GetAnotherStation(StationControl station)
+        {
+            if (firstControl is StationControl && secondControl is StationControl)
+                return (firstControl == station ? secondControl : firstControl) as StationControl;
+            else
+                return null;
+        }
+
+        public StationControl GetConnectedStation(ManagerControl manager)
+        {
+            if ((firstControl is StationControl && secondControl is ManagerControl)
+                || (firstControl is ManagerControl && secondControl is StationControl))
+                return (firstControl == manager ? secondControl : firstControl) as StationControl;
+            else
+                return null;
+        }
+        
+        public ManagerControl GetConnectedManager(StationControl station)
+        {
+            if ((firstControl is StationControl && secondControl is ManagerControl)
+                || (firstControl is ManagerControl && secondControl is StationControl))
+                return (firstControl == station ? secondControl : firstControl) as ManagerControl;
+            else
+                return null;
+        }
+        
+        public void ClearControls()
+        {
+            if (firstControl is StationControl && secondControl is StationControl)
+            {
+                (firstControl as StationControl).stationLine = null;
+                (secondControl as StationControl).stationLine = null;
+            }
+            else if (firstControl is StationControl && secondControl is ManagerControl)
+            {
+                (firstControl as StationControl).managerLine = null;
+                (secondControl as ManagerControl).line = null;
+            }
+            else
+            {
+                (secondControl as StationControl).managerLine = null;
+                (firstControl as ManagerControl).line = null;
+            }
         }
     }
 }

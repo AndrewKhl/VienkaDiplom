@@ -138,8 +138,7 @@ namespace Diplom
                                 control.Attributes[NameAttr].Value, 
                                 controlId, 
                                 int.Parse(control.Attributes[TopAttr].Value),
-                                int.Parse(control.Attributes[LeftAttr].Value), 
-                                false);
+                                int.Parse(control.Attributes[LeftAttr].Value));
 
                             foreach (XmlNode port in control.ChildNodes)
                             {
