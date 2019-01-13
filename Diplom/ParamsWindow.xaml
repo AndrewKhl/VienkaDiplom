@@ -93,6 +93,12 @@
 
         <Style TargetType="RowDefinition">
             <Setter Property="Height" Value="22"/>
+            <Style.Triggers>
+                <Trigger Property="TextBlock.IsMouseOver" Value="true">
+                    <Setter Property="TextBlock.Foreground" Value="White"/>
+                    <Setter Property="TextBlock.Background" Value="Gray"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
         
     </Window.Resources>
@@ -107,7 +113,7 @@
                                 <ColumnDefinition Width="150"/>
                                 <ColumnDefinition Width="150"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="МДР-1" Grid.Column="0"/>
+                            <TextBlock Text="МДР-1" Foreground="Red" Grid.Column="0"/>
                         </Grid>
                     </Border>
                 </TreeViewItem.Header>
@@ -129,7 +135,7 @@
                                     <ColumnDefinition Width="150"/>
                                     <ColumnDefinition Width="150"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Паспорт" Grid.Column="0"/>
+                                <TextBlock Text="Паспорт" Foreground="Red" Grid.Column="0"/>
                             </Grid>
                         </Border>
                     </TreeViewItem.Header>
@@ -187,7 +193,7 @@
                                         <ColumnDefinition Width="150"/>
                                         <ColumnDefinition Width="150"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Text="Версии ПО" Grid.Column="0" IsEnabled="False"/>
+                                    <TextBlock Text="Версии ПО" Foreground="Red" Grid.Column="0" IsEnabled="False"/>
                                 </Grid>
                             </Border>
                         </TreeViewItem.Header>
@@ -226,7 +232,7 @@
                                     <ColumnDefinition Width="150"/>
                                     <ColumnDefinition Width="150"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Телеметрия" Grid.Column="0"/>
+                                <TextBlock Text="Телеметрия" Foreground="Red" Grid.Column="0"/>
                             </Grid>
                         </Border>
                     </TreeViewItem.Header>
@@ -481,7 +487,7 @@
                                     <ColumnDefinition Width="150"/>
                                     <ColumnDefinition Width="150"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Управление" Grid.Column="0"/>
+                                <TextBlock Text="Управление" Foreground="Red" Grid.Column="0"/>
                             </Grid>
                         </Border>
                     </TreeViewItem.Header>
@@ -703,7 +709,7 @@
                                 <ColumnDefinition Width="150"/>
                                 <ColumnDefinition Width="150"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="ППУ" Grid.Column="0"/>
+                            <TextBlock Text="ППУ" Foreground="Red" Grid.Column="0"/>
                         </Grid>
                     </Border>
                 </TreeViewItem.Header>
@@ -725,7 +731,7 @@
                                     <ColumnDefinition Width="150"/>
                                     <ColumnDefinition Width="150"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Паспорт" Grid.Column="0"/>
+                                <TextBlock Text="Паспорт" Foreground="Red" Grid.Column="0"/>
                             </Grid>
                         </Border>
                     </TreeViewItem.Header>
@@ -891,7 +897,7 @@
                                     <ColumnDefinition Width="150"/>
                                     <ColumnDefinition Width="150"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Телеметрия" Grid.Column="0"/>
+                                <TextBlock Text="Телеметрия" Foreground="Red" Grid.Column="0"/>
                             </Grid>
                         </Border>
                     </TreeViewItem.Header>
@@ -1022,7 +1028,7 @@
                                     <ColumnDefinition Width="150"/>
                                     <ColumnDefinition Width="150"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Управление" Grid.Column="0"/>
+                                <TextBlock Text="Управление" Foreground="Red" Grid.Column="0"/>
                             </Grid>
                         </Border>
                     </TreeViewItem.Header>
@@ -1093,7 +1099,7 @@
                                 <ColumnDefinition Width="150"/>
                                 <ColumnDefinition Width="150"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="БИ-RS" Grid.Column="0"/>
+                            <TextBlock Text="БИ-RS" Foreground="Red" Grid.Column="0"/>
                         </Grid>
                     </Border>
                 </TreeViewItem.Header>
@@ -1115,7 +1121,7 @@
                                     <ColumnDefinition Width="150"/>
                                     <ColumnDefinition Width="150"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Паспорт" Grid.Column="0"/>
+                                <TextBlock Text="Паспорт" Foreground="Red" Grid.Column="0"/>
                             </Grid>
                         </Border>
                     </TreeViewItem.Header>
@@ -1145,7 +1151,7 @@
                                     <ColumnDefinition Width="150"/>
                                     <ColumnDefinition Width="150"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Управление" Grid.Column="0"/>
+                                <TextBlock Text="Управление" Foreground="Red" Grid.Column="0"/>
                             </Grid>
                         </Border>
                     </TreeViewItem.Header>
@@ -1201,7 +1207,7 @@
                                 <ColumnDefinition Width="150"/>
                                 <ColumnDefinition Width="150"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock Text="БИ-ETH" Grid.Column="0"/>
+                            <TextBlock Text="БИ-ETH" Foreground="Red" Grid.Column="0"/>
                         </Grid>
                     </Border>
                 </TreeViewItem.Header>
@@ -1223,7 +1229,7 @@
                                     <ColumnDefinition Width="150"/>
                                     <ColumnDefinition Width="150"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Паспорт" Grid.Column="0"/>
+                                <TextBlock Text="Паспорт" Foreground="Red" Grid.Column="0"/>
                             </Grid>
                         </Border>
                     </TreeViewItem.Header>
@@ -1253,7 +1259,7 @@
                                     <ColumnDefinition Width="150"/>
                                     <ColumnDefinition Width="150"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Телеметрия" Grid.Column="0"/>
+                                <TextBlock Text="Телеметрия" Foreground="Red" Grid.Column="0"/>
                             </Grid>
                         </Border>
                     </TreeViewItem.Header>
@@ -1298,7 +1304,6 @@
                                     <ColumnDefinition Width="150"/>
                                     <ColumnDefinition Width="150"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Управление" Grid.Column="0"/>
                             </Grid>
                         </Border>
                     </TreeViewItem.Header>

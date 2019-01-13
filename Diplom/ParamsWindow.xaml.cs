@@ -1,5 +1,6 @@
 ﻿using Diplom.Models;
 using System;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -17,6 +18,28 @@ namespace Diplom
 			periodStationTextBlock.Text = _currentStation.Data.Period.ToString() + " МГц";
 			DataContext = _currentStation.Data;
 			StateStation.Visibility = Visibility.Visible;
+
+            Closing += ParamsWindowClosing;
+            Closed += ParamsWindowClosed;
+        }
+
+        private void ParamsWindowClosing(object sender, CancelEventArgs e)
+        {
+            Owner.Topmost = true;
+        }
+
+        private void ParamsWindowClosed(object sender, EventArgs e)
+        {
+            Owner.Topmost = false;
+        }
+
+        private void OpenCloseTree(object item, bool state)
+        {
+            if (!(item is TreeViewItem node))
+                return;
+            node.IsExpanded = state;
+            foreach (var child in node.Items)
+                OpenCloseTree(child, state);
         }
 
 		public void VisualTree(object sender, Visibility visible)
@@ -36,19 +59,22 @@ namespace Diplom
 			}
 		}
 
-		private void RefreshParams(object sender, RoutedEventArgs e)
+		async private void RefreshParams(object sender, RoutedEventArgs e)
 		{
 			FrameworkElement obj = sender as FrameworkElement;
 			ContextMenu menu = obj.Parent as ContextMenu;
 
-			if (_currentStation.Data.State == "включено")
-				VisualTree(menu.PlacementTarget, Visibility.Visible);
-			else
-			{
-				MessageBox.Show("Включите станцию", "Ошибка",
-				MessageBoxButton.OK, MessageBoxImage.Information);
-				return;
-			}
+            if (_currentStation.Data.State == "включено")
+            {
+                //OpenCloseTree(menu.PlacementTarget, true);
+                VisualTree(menu.PlacementTarget, Visibility.Visible);
+            }
+            else
+            {
+                MessageBox.Show("Включите станцию", "Ошибка",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+                return;
+            }
 
 			if (_currentStation.Data.firstRefreshStation == DateTime.MinValue)
 			{
@@ -64,8 +90,8 @@ namespace Diplom
 				timeCalculated.Text = (period.Hours * 3600 + period.Minutes * 60 + period.Seconds).ToString();
 			}
 
-			MessageBox.Show("Параметры успешно обновлены", "Уведомление",
-                MessageBoxButton.OK, MessageBoxImage.Information);
+            MessageBox.Show("Параметры успешно обновлены", "Уведомление",
+			MessageBoxButton.OK, MessageBoxImage.Information);
 		}
 
 		private void SetNewPeriodStation(object sender, RoutedEventArgs e)
