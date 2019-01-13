@@ -10,6 +10,7 @@ namespace Diplom.Models
 		private string _main = "Ведущая";
 		private string _synchronization = "Внутренняя";
 		public bool _onStation = true;
+        public ErrorType errorType = ErrorType.None;
 
 		public DateTime firstRefreshStation = DateTime.MinValue;
 		public string Name { get; set; }

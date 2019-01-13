@@ -9,6 +9,14 @@ using System.Windows.Media.Imaging;
 
 namespace Diplom.Models
 {
+    public enum ErrorType
+    {
+        None,
+        Frequency,
+        Main,
+        Synch
+    }
+
     public partial class StationControl : UserControl, IFocusable, INotifyPropertyChanged
     {
         public static readonly int MinFrequency = 238;
@@ -256,22 +264,30 @@ namespace Diplom.Models
             {
                 if (!IsFrequenciesEquals(this, another))
                 {
-                    // error: частоты не равны
+                    this.Data.errorType = ErrorType.Frequency;
+                    another.Data.errorType = ErrorType.Frequency;
+
                     stationLine.HasErrors = true;
                 }
                 else if (!IsRegimesDiffers(this, another))
                 {
-                    // error: одинаковые режимы
+                    this.Data.errorType = ErrorType.Main;
+                    another.Data.errorType = ErrorType.Main;
+
                     stationLine.HasErrors = true;
                 }
                 else if (!IsCorrectRegime(this) || !IsCorrectRegime(another))
                 {
-                    // error: неправильная синхронизация
+                    this.Data.errorType = ErrorType.Synch;
+                    another.Data.errorType = ErrorType.Synch;
+
                     stationLine.HasErrors = true;
                 }
                 else
                 {
-                    // no error: отключи подсветку
+                    this.Data.errorType = ErrorType.None;
+                    another.Data.errorType = ErrorType.None;
+
                     stationLine.HasErrors = false;
                 }
             }

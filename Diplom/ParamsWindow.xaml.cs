@@ -15,12 +15,72 @@ namespace Diplom
         {
 			_currentStation = station;
             InitializeComponent();
-			periodStationTextBlock.Text = _currentStation.Data.Period.ToString() + " МГц";
+            VisibilityParams();
+            PPUFreqNumberTextBlock.Text = _currentStation.Data.Period.ToString() + " МГц";
 			DataContext = _currentStation.Data;
 			StateStation.Visibility = Visibility.Visible;
 
             Closing += ParamsWindowClosing;
             Closed += ParamsWindowClosed;
+
+            if (_currentStation.Data.errorType != ErrorType.None)
+                HighlightErrors();
+        }
+
+        private void VisibilityParams()
+        {
+            if (_currentStation.Data.firstRefreshStation != DateTime.MinValue)
+            {
+                Resources["VisibilityParams"] = Visibility.Visible;
+            }
+        }
+
+        private void HighlightErrors()
+        {
+            var red = Brushes.Red;
+
+            switch (_currentStation.Data.errorType)
+            {
+                case ErrorType.Main:
+                    PPUControlsTextBlock.Foreground = red;
+                    PPUmodeTextBlock.Foreground = red;
+                    PPUmodeNumberTextBlock.Foreground = red;
+                    PPUtextBlock.Foreground = red;
+                    break;
+
+                case ErrorType.Synch:
+                    MD1ControlsTextBlock.Foreground = red;
+                    MD1SyncTextBlock.Foreground = red;
+                    MD1SyncNumberTextBlock.Foreground = red;
+                    MD1TextBlock.Foreground = red;
+                    break;
+
+                case ErrorType.Frequency:
+                    PPUControlsTextBlock.Foreground = red;
+                    PPUFreqTextBlock.Foreground = red;
+                    PPUFreqNumberTextBlock.Foreground = red;
+                    PPUtextBlock.Foreground = red;
+                    break;
+                
+                default:
+                    break;
+            }
+        }
+
+        private void ClearErrors()
+        {
+            var black = Brushes.Black;
+
+            PPUControlsTextBlock.Foreground = black;
+            PPUFreqNumberTextBlock.Foreground = black;
+            PPUFreqTextBlock.Foreground = black;
+            PPUmodeNumberTextBlock.Foreground = black;
+            PPUmodeTextBlock.Foreground = black;
+            PPUtextBlock.Foreground = black;
+            MD1ControlsTextBlock.Foreground = black;
+            MD1SyncNumberTextBlock.Foreground = black;
+            MD1SyncTextBlock.Foreground = black;
+            MD1TextBlock.Foreground = black;
         }
 
         private void ParamsWindowClosing(object sender, CancelEventArgs e)
