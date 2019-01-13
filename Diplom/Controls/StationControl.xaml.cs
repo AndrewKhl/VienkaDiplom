@@ -271,6 +271,7 @@ namespace Diplom.Models
                 }
                 else
                 {
+                    // no error: отключи подсветку
                     stationLine.HasErrors = false;
                 }
             }
