@@ -119,7 +119,7 @@ namespace Diplom
 			}
 		}
 
-		async private void RefreshParams(object sender, RoutedEventArgs e)
+		private void RefreshParams(object sender, RoutedEventArgs e)
 		{
 			FrameworkElement obj = sender as FrameworkElement;
 			ContextMenu menu = obj.Parent as ContextMenu;

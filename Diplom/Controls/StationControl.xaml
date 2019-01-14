@@ -8,7 +8,7 @@
              mc:Ignorable="d">
     <UserControl.Resources>
         <dip:ColorBrushConverter x:Key="backConverter" />
-        <SolidColorBrush x:Key="fontColor" Color="Green" Opacity="0.5" />
+        <SolidColorBrush x:Key="backgroundColor" Color="Green" Opacity="0.5" />
 
         <ContextMenu x:Key="CancelMenu">
             <MenuItem Header="Отмена" Click="Cancel_Click" />
@@ -147,7 +147,7 @@
     </UserControl.Resources>
     <StackPanel ContextMenu="{StaticResource MainMenu}" Orientation="Vertical" Name="stackPanel" MouseRightButtonDown="Context_Click">
         <Border BorderBrush="{Binding Path=CurrentColor, Converter={StaticResource backConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                Background="{StaticResource fontColor}" Name="stationNameBorder" BorderThickness="1" Padding="3 1">
+                Background="{StaticResource backgroundColor}" Name="stationNameBorder" BorderThickness="1" Padding="3 1">
             <TextBlock Name="stationName" HorizontalAlignment="Center" FontWeight="SemiBold" Foreground="White"/>
         </Border>
         <TextBlock Name="indentText" Visibility="Hidden" />
@@ -160,7 +160,7 @@
             <Label Grid.Column="0" Name="indentLabel" Visibility="Hidden" />
             <Border Name="stationImageBorder"
                 BorderBrush="{Binding Path=CurrentColor, Converter={StaticResource backConverter}, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
-                Background="{StaticResource fontColor}" BorderThickness="1" Grid.Column="1">
+                Background="{StaticResource backgroundColor}" BorderThickness="1" Grid.Column="1">
                 <Image Name="image" Stretch="None" />
             </Border>
             <Image Name="stationGauge" Grid.Column="2"/>

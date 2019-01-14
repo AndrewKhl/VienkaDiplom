@@ -87,7 +87,7 @@ namespace Diplom.Models
             DataContext = this;
             InitializeComponent();
 
-            SetColor(color);
+            SetBackgroundColor(color);
             image.Source = new BitmapImage(ImageUri);
             Data = new DataStation { Name = name, Number = number };
             SetVisibleName();
@@ -107,7 +107,7 @@ namespace Diplom.Models
 
         public void SetVisibleName() => stationName.Text = $"{Data.Name} [{Data.Number}]";
 
-        public void SetColor(Color color) => (Resources["fontColor"] as SolidColorBrush).Color = color;
+        public void SetBackgroundColor(Color color) => (Resources["backgroundColor"] as SolidColorBrush).Color = color;
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
@@ -260,32 +260,33 @@ namespace Diplom.Models
         public void CheckErrors(bool isUpdated)
         {
             StationControl another = stationLine?.GetAnotherStation(this);
-            if (isUpdated && !IsConnectedToManager() && IsConnectedToStation() && another.IsUpdated)
+            //if (isUpdated && (!IsConnectedToManager() && IsConnectedToStation() && another.IsUpdated) || (IsConnectedToManager() && IsConnectedToStation() && another.IsUpdated))
+            if (isUpdated && IsConnectedToStation() && another.IsUpdated)
             {
                 if (!IsFrequenciesEquals(this, another))
                 {
-                    this.Data.errorType = ErrorType.Frequency;
+                    Data.errorType = ErrorType.Frequency;
                     another.Data.errorType = ErrorType.Frequency;
 
                     stationLine.HasErrors = true;
                 }
                 else if (!IsRegimesDiffers(this, another))
                 {
-                    this.Data.errorType = ErrorType.Main;
+                    Data.errorType = ErrorType.Main;
                     another.Data.errorType = ErrorType.Main;
 
                     stationLine.HasErrors = true;
                 }
                 else if (!IsCorrectRegime(this) || !IsCorrectRegime(another))
                 {
-                    this.Data.errorType = ErrorType.Synch;
+                    Data.errorType = ErrorType.Synch;
                     another.Data.errorType = ErrorType.Synch;
 
                     stationLine.HasErrors = true;
                 }
                 else
                 {
-                    this.Data.errorType = ErrorType.None;
+                    Data.errorType = ErrorType.None;
                     another.Data.errorType = ErrorType.None;
 
                     stationLine.HasErrors = false;

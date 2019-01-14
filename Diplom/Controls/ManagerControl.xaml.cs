@@ -44,7 +44,7 @@ namespace Diplom.Models
             DataContext = this;
             InitializeComponent();
 
-            SetColor(color);
+            SetBackgroundColor(color);
             image.Source = new BitmapImage(ImageUri);
             Data = new DataManagers { Name = name, Number = number };
             SetVisibleName();
@@ -57,7 +57,7 @@ namespace Diplom.Models
 
         public void SetVisibleName() => managerName.Text = $"{Data.Name} [{Data.Number}]";
 
-        public void SetColor(Color color) => (Resources["fontColor"] as SolidColorBrush).Color = color;
+        public void SetBackgroundColor(Color color) => (Resources["backgroundColor"] as SolidColorBrush).Color = color;
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
