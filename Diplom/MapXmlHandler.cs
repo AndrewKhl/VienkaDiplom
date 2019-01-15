@@ -36,6 +36,10 @@ namespace Diplom
         private static readonly string TimeoutAttr = "TIMEOUT";
         private static readonly string DelayAttr = "DELAY";
 
+        private static readonly string MainRegistryKey = "Software";
+        private static readonly string SubRegistryKey = "BSUIRMicran";
+        private static readonly string RegistryValueKey = "LastMap";
+
         public static void WriteMap(string path)
         {
             XmlWriterSettings settings = new XmlWriterSettings
@@ -183,10 +187,9 @@ namespace Diplom
 
         public static bool ReadLastPath()
         {
-            RegistryKey key = Registry.CurrentUser.OpenSubKey("Software", true);
-            key = key.OpenSubKey("Micran", true);
-            key = key.OpenSubKey("Magapp", true);
-            object path = key.GetValue("LastMap");
+            RegistryKey key = Registry.CurrentUser.OpenSubKey(MainRegistryKey, true);
+            key = key.OpenSubKey(SubRegistryKey, true);
+            object path = key.GetValue(RegistryValueKey);
             if (path != null && !string.IsNullOrEmpty(path as string))
             {
                 LastPath = path as string;
@@ -199,15 +202,18 @@ namespace Diplom
         {
             if (!string.IsNullOrEmpty(LastPath))
             {
-                RegistryKey key = Registry.CurrentUser.OpenSubKey("Software", true);
-
-                try { key = key.OpenSubKey("Micran", true); }
-                catch (Exception) { key = key.CreateSubKey("Micran", true); }
-
-                try { key = key.OpenSubKey("Magapp", true); }
-                catch (Exception) { key = key.CreateSubKey("Magapp", true); }
-
-                key.SetValue("LastMap", LastPath);
+                RegistryKey key = Registry.CurrentUser.OpenSubKey(MainRegistryKey, true);
+                string key0 = SubRegistryKey;
+                try
+                {
+                    var subkey = key.OpenSubKey(key0, true);
+                    if (subkey == null)
+                        key = key.CreateSubKey(key0, true);
+                    else
+                        key = subkey;
+                }
+                catch (Exception) { key = key.CreateSubKey(key0, true); }
+                key.SetValue(RegistryValueKey, LastPath);
             }
         }
     }

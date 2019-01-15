@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -87,7 +88,7 @@ namespace Diplom.Models
             DataContext = this;
             InitializeComponent();
 
-            SetColor(color);
+            SetBackgroundColor(color);
             image.Source = new BitmapImage(ImageUri);
             Data = new DataStation { Name = name, Number = number };
             SetVisibleName();
@@ -107,7 +108,7 @@ namespace Diplom.Models
 
         public void SetVisibleName() => stationName.Text = $"{Data.Name} [{Data.Number}]";
 
-        public void SetColor(Color color) => (Resources["fontColor"] as SolidColorBrush).Color = color;
+        public void SetBackgroundColor(Color color) => (Resources["backgroundColor"] as SolidColorBrush).Color = color;
 
         protected override void OnMouseDown(MouseButtonEventArgs e)
         {
@@ -147,9 +148,35 @@ namespace Diplom.Models
 
 		public void ShowParametrWindow(object sender, RoutedEventArgs e)
 		{
-            ParamsWindow wnd = new ParamsWindow(this) { Owner = Stock.workWindow };
-            wnd.ShowDialog();
+            if (!ParamsWindow.IsParametersOpened(this))
+            {
+                ParamsWindow wnd = new ParamsWindow(this) { Owner = Stock.workWindow };
+                wnd.Show();
+            }
 		}
+
+        private ParamsWindow FindParameterWindow()
+        {
+            return Application.Current.Windows.OfType<ParamsWindow>()
+                .Where(w => w.CurrentStation == this).FirstOrDefault();
+        }
+
+        public void UpdateParameterWindow()
+        {
+            ParamsWindow window = FindParameterWindow();
+            if (window != null)
+            {
+                window.ClearErrors();
+                window.HighlightErrors();
+            }
+        }
+
+        public void CloseParameterWindow()
+        {
+            ParamsWindow window = FindParameterWindow();
+            if (window != null)
+                window.Close();
+        }
 
         private void RadioConnect_Click(object sender, RoutedEventArgs e)
         {
@@ -260,41 +287,43 @@ namespace Diplom.Models
         public void CheckErrors(bool isUpdated)
         {
             StationControl another = stationLine?.GetAnotherStation(this);
-            if (isUpdated && !IsConnectedToManager() && IsConnectedToStation() && another.IsUpdated)
+            if (isUpdated && IsConnectedToStation() && another.IsUpdated)
             {
                 if (!IsFrequenciesEquals(this, another))
                 {
-                    this.Data.errorType = ErrorType.Frequency;
+                    Data.errorType = ErrorType.Frequency;
                     another.Data.errorType = ErrorType.Frequency;
 
                     stationLine.HasErrors = true;
                 }
                 else if (!IsRegimesDiffers(this, another))
                 {
-                    this.Data.errorType = ErrorType.Main;
+                    Data.errorType = ErrorType.Main;
                     another.Data.errorType = ErrorType.Main;
 
                     stationLine.HasErrors = true;
                 }
                 else if (!IsCorrectRegime(this) || !IsCorrectRegime(another))
                 {
-                    this.Data.errorType = ErrorType.Synch;
+                    Data.errorType = ErrorType.Synch;
                     another.Data.errorType = ErrorType.Synch;
 
                     stationLine.HasErrors = true;
                 }
                 else
                 {
-                    this.Data.errorType = ErrorType.None;
+                    Data.errorType = ErrorType.None;
                     another.Data.errorType = ErrorType.None;
 
                     stationLine.HasErrors = false;
                 }
+                another.UpdateParameterWindow();
             }
             else if (stationLine != null)
                 stationLine.HasErrors = false;
             else
                 UpdateLook();
+            UpdateParameterWindow();
         }
 
         public void UpdateLook()

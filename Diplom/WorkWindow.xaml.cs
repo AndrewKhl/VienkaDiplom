@@ -371,10 +371,9 @@ namespace Diplom
             foreach (var child in canvas.Children)
             {
                 if (child is StationControl)
-                    //(child as StationControl).SetColor(DataNetwork.CurrentColor);
-                    (child as StationControl).CurrentColor = DataNetwork.CurrentColor;
+                    (child as StationControl).SetBackgroundColor(DataNetwork.CurrentColor);
                 else if (child is ManagerControl)
-                    (child as ManagerControl).SetColor(DataNetwork.CurrentColor);
+                    (child as ManagerControl).SetBackgroundColor(DataNetwork.CurrentColor);
             }
             MapChanged();
         }
@@ -405,7 +404,7 @@ namespace Diplom
                     manager.Port = ManagerControl.LastPort;
 
                     CancelConnection();
-                    MapChanged();
+                    //MapChanged();
                     break;
             }
         }
@@ -440,7 +439,7 @@ namespace Diplom
                     manager.Port = ManagerControl.LastPort;
 
                     CancelConnection();
-                    MapChanged();
+                    //MapChanged();
                     break;
             }
         }
@@ -454,16 +453,26 @@ namespace Diplom
         public void RemoveRadioConnection(StationControl station)
         {
             // connection between two stations
-            if (station.stationLine != null)
-            {
-                var another = station.stationLine.GetAnotherStation(station);
-                if (station.IsConnectedToManager())
-                    another.IsUpdated = false;
-                else if (another.IsConnectedToManager())
-                    station.IsUpdated = false;
-            }
+            StationControl another = station.stationLine?.GetAnotherStation(station);
             canvas.Children.Remove(station.stationLine.line);
             station.stationLine.ClearControls();
+            if (another != null)
+            {
+                if (station.IsConnectedToManager())
+                {
+                    another.IsUpdated = false;
+                    another.CloseParameterWindow();
+                    station.Data.errorType = ErrorType.None;
+                    station.UpdateLook();
+                }
+                else if (another.IsConnectedToManager())
+                {
+                    station.IsUpdated = false;
+                    station.CloseParameterWindow();
+                    another.Data.errorType = ErrorType.None;
+                    another.UpdateLook();
+                }
+            }
             MapChanged();
         }
 
@@ -477,10 +486,13 @@ namespace Diplom
             {
                 (station.stationLine.firstControl as StationControl).IsUpdated = false;
                 (station.stationLine.secondControl as StationControl).IsUpdated = false;
+                (station.stationLine.firstControl as StationControl).CloseParameterWindow();
+                (station.stationLine.secondControl as StationControl).CloseParameterWindow();
             }
             else
             {
                 station.IsUpdated = false;
+                station.CloseParameterWindow();
             }
             manager.Port = null;
             canvas.Children.Remove(line.line);
@@ -608,15 +620,17 @@ namespace Diplom
         
         private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            RemoveNetwork();
-            Title = DefaultTitle;
             var dialog = new OpenFileDialog
             {
                 Filter = "Network schema|*.xml",
                 Title = "Open"
             };
             if (dialog.ShowDialog() == true)
+            {
+                RemoveNetwork();
+                Title = DefaultTitle;
                 OpenMap(dialog.FileName);
+            }
         }
 
         private void OpenMap(string path)
