@@ -23,12 +23,10 @@ namespace Diplom
             StateStation.Visibility = Visibility.Visible;
 
             PPUFreqNumberTextBlock.Text = _currentStation.Data.Period.ToString() + " МГц";
-<<<<<<< HEAD
-			DataContext = _currentStation.Data;	
-=======
+
             DataContext = _currentStation.Data;
             StateStation.Visibility = Visibility.Visible;
->>>>>>> a21487673bef53802795d1a7c1d573617fdb8f04
+
 
             Closing += ParamsWindowClosing;
             Closed += ParamsWindowClosed;
@@ -45,16 +43,7 @@ namespace Diplom
             }
         }
 
-<<<<<<< HEAD
-        private void TreeOpenFunc(bool open)
-        {
-            Resources["TreeOpen"] = open;
-        }
-
-        private void HighlightErrors()
-=======
         public void HighlightErrors()
->>>>>>> a21487673bef53802795d1a7c1d573617fdb8f04
         {
             var red = Brushes.Red;
 
@@ -112,28 +101,11 @@ namespace Diplom
             Owner.Topmost = false;
         }
 
-<<<<<<< HEAD
 		public void VisualTree(object sender, Visibility visible)
 		{
 			if (sender is FrameworkElement obj)
 			{
 				int count = VisualTreeHelper.GetChildrenCount(obj);
-=======
-        private void OpenCloseTree(object item, bool state)
-        {
-            if (!(item is TreeViewItem node))
-                return;
-            node.IsExpanded = state;
-            foreach (var child in node.Items)
-                OpenCloseTree(child, state);
-        }
-
-        public void VisualTree(object sender, Visibility visible)
-        {
-            if (sender is FrameworkElement obj)
-            {
-                int count = VisualTreeHelper.GetChildrenCount(obj);
->>>>>>> a21487673bef53802795d1a7c1d573617fdb8f04
 
                 if (sender as TextBlock != null && (sender as TextBlock).Tag?.ToString() == "changedElement")
                     obj.Visibility = visible;
@@ -146,17 +118,10 @@ namespace Diplom
             }
         }
 
-<<<<<<< HEAD
 		private void RefreshParams(object sender, RoutedEventArgs e)
 		{
 			FrameworkElement obj = sender as FrameworkElement;
 			ContextMenu menu = obj.Parent as ContextMenu;
-=======
-        private void RefreshParams(object sender, RoutedEventArgs e)
-        {
-            FrameworkElement obj = sender as FrameworkElement;
-            ContextMenu menu = obj.Parent as ContextMenu;
->>>>>>> a21487673bef53802795d1a7c1d573617fdb8f04
 
             if (_currentStation.Data.State == "включено")
             {
@@ -212,7 +177,15 @@ namespace Diplom
             wnd.ShowDialog();
         }
 
-        public static bool IsParametersOpened(StationControl station) =>
-            Application.Current.Windows.OfType<ParamsWindow>().Any(w => w._currentStation == station);
+        public static bool IsParametersOpened(StationControl station)
+        {
+            var wnd = Application.Current.Windows.OfType<ParamsWindow>().FirstOrDefault(w => w._currentStation == station);
+            if (wnd == null)
+                return false;
+            wnd.Topmost = true;
+            wnd.Topmost = false;
+            return true;
+        }
+            
     }
 }
