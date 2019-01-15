@@ -59,11 +59,7 @@
         <Style TargetType="TreeViewItem">
             <Setter Property="Margin" Value="0 4"/>
             <Setter Property="Background" Value="LightGray"/>
-        </Style>
-
-        <Style x:Key="focusText">
-            <Setter Property="TextBlock.VerticalAlignment" Value="Center"/>
-            <Setter Property="TextBlock.Foreground" Value="Blue"/>
+            <Setter Property="IsExpanded" Value="{DynamicResource TreeOpen}"/>
         </Style>
 
         <Style TargetType="TextBlock">
@@ -103,7 +99,6 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        
     </Window.Resources>
     <Grid>
         <TreeView Name="MainTree">

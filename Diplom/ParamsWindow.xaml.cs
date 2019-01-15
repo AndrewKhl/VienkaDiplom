@@ -15,10 +15,13 @@ namespace Diplom
         {
 			_currentStation = station;
             InitializeComponent();
+
+            Resources.Add("TreeOpen", true);
             VisibilityParams();
+            StateStation.Visibility = Visibility.Visible;
+
             PPUFreqNumberTextBlock.Text = _currentStation.Data.Period.ToString() + " МГц";
-			DataContext = _currentStation.Data;
-			StateStation.Visibility = Visibility.Visible;
+			DataContext = _currentStation.Data;	
 
             Closing += ParamsWindowClosing;
             Closed += ParamsWindowClosed;
@@ -33,6 +36,11 @@ namespace Diplom
             {
                 Resources["VisibilityParams"] = Visibility.Visible;
             }
+        }
+
+        private void TreeOpenFunc(bool open)
+        {
+            Resources["TreeOpen"] = open;
         }
 
         private void HighlightErrors()
@@ -93,15 +101,6 @@ namespace Diplom
             Owner.Topmost = false;
         }
 
-        private void OpenCloseTree(object item, bool state)
-        {
-            if (!(item is TreeViewItem node))
-                return;
-            node.IsExpanded = state;
-            foreach (var child in node.Items)
-                OpenCloseTree(child, state);
-        }
-
 		public void VisualTree(object sender, Visibility visible)
 		{
 			if (sender is FrameworkElement obj)
@@ -119,7 +118,7 @@ namespace Diplom
 			}
 		}
 
-		async private void RefreshParams(object sender, RoutedEventArgs e)
+		private void RefreshParams(object sender, RoutedEventArgs e)
 		{
 			FrameworkElement obj = sender as FrameworkElement;
 			ContextMenu menu = obj.Parent as ContextMenu;
