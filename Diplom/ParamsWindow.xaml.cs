@@ -18,7 +18,7 @@ namespace Diplom
             _currentStation = station;
             InitializeComponent();
 
-            Resources.Add("TreeOpen", true);
+            Resources.Add("TreeOpen", false);
             VisibilityParams();
             StateStation.Visibility = Visibility.Visible;
 
