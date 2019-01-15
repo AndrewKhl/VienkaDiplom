@@ -404,7 +404,7 @@ namespace Diplom
                     manager.Port = ManagerControl.LastPort;
 
                     CancelConnection();
-                    MapChanged();
+                    //MapChanged();
                     break;
             }
         }
@@ -439,7 +439,7 @@ namespace Diplom
                     manager.Port = ManagerControl.LastPort;
 
                     CancelConnection();
-                    MapChanged();
+                    //MapChanged();
                     break;
             }
         }
@@ -461,12 +461,14 @@ namespace Diplom
                 if (station.IsConnectedToManager())
                 {
                     another.IsUpdated = false;
+                    another.CloseParameterWindow();
                     station.Data.errorType = ErrorType.None;
                     station.UpdateLook();
                 }
                 else if (another.IsConnectedToManager())
                 {
                     station.IsUpdated = false;
+                    station.CloseParameterWindow();
                     another.Data.errorType = ErrorType.None;
                     another.UpdateLook();
                 }
@@ -484,10 +486,13 @@ namespace Diplom
             {
                 (station.stationLine.firstControl as StationControl).IsUpdated = false;
                 (station.stationLine.secondControl as StationControl).IsUpdated = false;
+                (station.stationLine.firstControl as StationControl).CloseParameterWindow();
+                (station.stationLine.secondControl as StationControl).CloseParameterWindow();
             }
             else
             {
                 station.IsUpdated = false;
+                station.CloseParameterWindow();
             }
             manager.Port = null;
             canvas.Children.Remove(line.line);

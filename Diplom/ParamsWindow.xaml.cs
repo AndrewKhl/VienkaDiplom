@@ -1,6 +1,7 @@
 ﻿using Diplom.Models;
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -9,16 +10,17 @@ namespace Diplom
 {
     public partial class ParamsWindow : Window
     {
-		private StationControl _currentStation;
+        private StationControl _currentStation;
+        public StationControl CurrentStation => _currentStation;
 
         public ParamsWindow(StationControl station)
         {
-			_currentStation = station;
+            _currentStation = station;
             InitializeComponent();
             VisibilityParams();
             PPUFreqNumberTextBlock.Text = _currentStation.Data.Period.ToString() + " МГц";
-			DataContext = _currentStation.Data;
-			StateStation.Visibility = Visibility.Visible;
+            DataContext = _currentStation.Data;
+            StateStation.Visibility = Visibility.Visible;
 
             Closing += ParamsWindowClosing;
             Closed += ParamsWindowClosed;
@@ -35,7 +37,7 @@ namespace Diplom
             }
         }
 
-        private void HighlightErrors()
+        public void HighlightErrors()
         {
             var red = Brushes.Red;
 
@@ -61,13 +63,13 @@ namespace Diplom
                     PPUFreqNumberTextBlock.Foreground = red;
                     PPUtextBlock.Foreground = red;
                     break;
-                
+
                 default:
                     break;
             }
         }
 
-        private void ClearErrors()
+        public void ClearErrors()
         {
             var black = Brushes.Black;
 
@@ -102,27 +104,27 @@ namespace Diplom
                 OpenCloseTree(child, state);
         }
 
-		public void VisualTree(object sender, Visibility visible)
-		{
-			if (sender is FrameworkElement obj)
-			{
-				int count = VisualTreeHelper.GetChildrenCount(obj);
+        public void VisualTree(object sender, Visibility visible)
+        {
+            if (sender is FrameworkElement obj)
+            {
+                int count = VisualTreeHelper.GetChildrenCount(obj);
 
-				if (sender as TextBlock != null && (sender as TextBlock).Tag?.ToString() == "changedElement")
-					obj.Visibility = visible;
+                if (sender as TextBlock != null && (sender as TextBlock).Tag?.ToString() == "changedElement")
+                    obj.Visibility = visible;
 
-				for (int i = 0; i < count; ++i)
-				{
-					var item = VisualTreeHelper.GetChild(sender as DependencyObject, i);
-					VisualTree(item, visible);
-				}
-			}
-		}
+                for (int i = 0; i < count; ++i)
+                {
+                    var item = VisualTreeHelper.GetChild(sender as DependencyObject, i);
+                    VisualTree(item, visible);
+                }
+            }
+        }
 
-		private void RefreshParams(object sender, RoutedEventArgs e)
-		{
-			FrameworkElement obj = sender as FrameworkElement;
-			ContextMenu menu = obj.Parent as ContextMenu;
+        private void RefreshParams(object sender, RoutedEventArgs e)
+        {
+            FrameworkElement obj = sender as FrameworkElement;
+            ContextMenu menu = obj.Parent as ContextMenu;
 
             if (_currentStation.Data.State == "включено")
             {
@@ -136,46 +138,49 @@ namespace Diplom
                 return;
             }
 
-			if (_currentStation.Data.firstRefreshStation == DateTime.MinValue)
-			{
-				UASexit.Text = "0";
-				timeCalculated.Text = "0";
-				_currentStation.Data.firstRefreshStation = DateTime.Now;
-			}
-			else
-			{
-				TimeSpan period = DateTime.Now - _currentStation.Data.firstRefreshStation;
+            if (_currentStation.Data.firstRefreshStation == DateTime.MinValue)
+            {
+                UASexit.Text = "0";
+                timeCalculated.Text = "0";
+                _currentStation.Data.firstRefreshStation = DateTime.Now;
+            }
+            else
+            {
+                TimeSpan period = DateTime.Now - _currentStation.Data.firstRefreshStation;
 
-				UASexit.Text = (period.Hours * 3600 + period.Minutes * 60 + period.Seconds).ToString();
-				timeCalculated.Text = (period.Hours * 3600 + period.Minutes * 60 + period.Seconds).ToString();
-			}
+                UASexit.Text = (period.Hours * 3600 + period.Minutes * 60 + period.Seconds).ToString();
+                timeCalculated.Text = (period.Hours * 3600 + period.Minutes * 60 + period.Seconds).ToString();
+            }
 
             MessageBox.Show("Параметры успешно обновлены", "Уведомление",
-			MessageBoxButton.OK, MessageBoxImage.Information);
-		}
+            MessageBoxButton.OK, MessageBoxImage.Information);
+        }
 
-		private void SetNewPeriodStation(object sender, RoutedEventArgs e)
-		{
+        private void SetNewPeriodStation(object sender, RoutedEventArgs e)
+        {
             SetPeriodWindow wnd = new SetPeriodWindow(_currentStation) { Owner = this };
             wnd.ShowDialog();
-		}
+        }
 
-		private void SetNewMainStatusStation(object sender, RoutedEventArgs e)
-		{
+        private void SetNewMainStatusStation(object sender, RoutedEventArgs e)
+        {
             SetMainStationWindow wnd = new SetMainStationWindow(_currentStation) { Owner = this };
             wnd.ShowDialog();
-		}
+        }
 
-		private void SetNewSynhronizationStation(object sender, RoutedEventArgs e)
-		{
+        private void SetNewSynhronizationStation(object sender, RoutedEventArgs e)
+        {
             SetSynhronizationStation wnd = new SetSynhronizationStation(_currentStation) { Owner = this };
             wnd.ShowDialog();
-		}
+        }
 
-		private void SetNewStateStation(object sender, RoutedEventArgs e)
-		{
+        private void SetNewStateStation(object sender, RoutedEventArgs e)
+        {
             OnOffStation wnd = new OnOffStation(_currentStation) { Owner = this };
             wnd.ShowDialog();
-		}
+        }
+
+        public static bool IsParametersOpened(StationControl station) =>
+            Application.Current.Windows.OfType<ParamsWindow>().Any(w => w._currentStation == station);
     }
 }

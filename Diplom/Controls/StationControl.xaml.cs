@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
@@ -147,9 +148,35 @@ namespace Diplom.Models
 
 		public void ShowParametrWindow(object sender, RoutedEventArgs e)
 		{
-            ParamsWindow wnd = new ParamsWindow(this) { Owner = Stock.workWindow };
-            wnd.ShowDialog();
+            if (!ParamsWindow.IsParametersOpened(this))
+            {
+                ParamsWindow wnd = new ParamsWindow(this) { Owner = Stock.workWindow };
+                wnd.Show();
+            }
 		}
+
+        private ParamsWindow FindParameterWindow()
+        {
+            return Application.Current.Windows.OfType<ParamsWindow>()
+                .Where(w => w.CurrentStation == this).FirstOrDefault();
+        }
+
+        public void UpdateParameterWindow()
+        {
+            ParamsWindow window = FindParameterWindow();
+            if (window != null)
+            {
+                window.ClearErrors();
+                window.HighlightErrors();
+            }
+        }
+
+        public void CloseParameterWindow()
+        {
+            ParamsWindow window = FindParameterWindow();
+            if (window != null)
+                window.Close();
+        }
 
         private void RadioConnect_Click(object sender, RoutedEventArgs e)
         {
@@ -260,7 +287,6 @@ namespace Diplom.Models
         public void CheckErrors(bool isUpdated)
         {
             StationControl another = stationLine?.GetAnotherStation(this);
-            //if (isUpdated && (!IsConnectedToManager() && IsConnectedToStation() && another.IsUpdated) || (IsConnectedToManager() && IsConnectedToStation() && another.IsUpdated))
             if (isUpdated && IsConnectedToStation() && another.IsUpdated)
             {
                 if (!IsFrequenciesEquals(this, another))
@@ -291,11 +317,13 @@ namespace Diplom.Models
 
                     stationLine.HasErrors = false;
                 }
+                another.UpdateParameterWindow();
             }
             else if (stationLine != null)
                 stationLine.HasErrors = false;
             else
                 UpdateLook();
+            UpdateParameterWindow();
         }
 
         public void UpdateLook()
